@@ -84,7 +84,7 @@ export function DownloadCTA() {
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
             <a
-              href="https://github.com/brenoLucasN/db_modeling/tree/main/vscode-extension"
+              href="https://github.com/dbmodeling/dbml/tree/main/vscode-extension"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between px-2.5 py-2 rounded-sm hover:bg-secondary text-foreground transition-colors"

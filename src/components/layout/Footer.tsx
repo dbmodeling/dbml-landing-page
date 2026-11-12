@@ -9,7 +9,7 @@ export function Footer() {
             </span>
             <span className="text-muted-foreground">&middot;</span>
             <span className="text-muted-foreground">
-              github.com/brenoLucasN/db_modeling
+              github.com/dbmodeling/dbml
             </span>
           </div>
           <div className="text-[11px] text-muted-foreground">
@@ -19,7 +19,7 @@ export function Footer() {
 
         <div className="flex flex-wrap items-center gap-5 text-[11px]">
           <a
-            href="https://github.com/brenoLucasN/db_modeling"
+            href="https://github.com/dbmodeling/dbml"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-signal underline-offset-4 hover:underline transition-colors"
@@ -27,7 +27,7 @@ export function Footer() {
             Repository
           </a>
           <a
-            href="https://github.com/brenoLucasN/db_modeling/releases"
+            href="https://github.com/dbmodeling/dbml/releases"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-signal underline-offset-4 hover:underline transition-colors"
@@ -43,7 +43,7 @@ export function Footer() {
             DBML Spec
           </a>
           <a
-            href="https://github.com/brenoLucasN/db_modeling/blob/main/LICENSE"
+            href="https://github.com/dbmodeling/dbml/blob/main/LICENSE"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-signal underline-offset-4 hover:underline transition-colors"

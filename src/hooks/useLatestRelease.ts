@@ -7,8 +7,8 @@ export interface ReleaseData {
   isLoading: boolean;
 }
 
-const REPO_OWNER = "brenoLucasN";
-const REPO_NAME = "db_modeling";
+const REPO_OWNER = "dbmodeling";
+const REPO_NAME = "dbml";
 
 export function useLatestRelease(): ReleaseData {
   const [data, setData] = useState<ReleaseData>({

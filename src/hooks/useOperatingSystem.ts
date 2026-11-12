@@ -11,7 +11,7 @@ export interface OSConfig {
   downloadUrl: string;
 }
 
-const RELEASES_BASE = "https://github.com/brenoLucasN/db_modeling/releases/latest/download";
+const RELEASES_BASE = "https://github.com/dbmodeling/dbml/releases/latest/download";
 
 export const OS_CONFIGS: Record<OSTarget, OSConfig> = {
   windows: {

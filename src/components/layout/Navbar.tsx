@@ -93,7 +93,7 @@ export function Navbar() {
               className="w-64 bg-popover border border-border p-1 font-mono text-xs rounded-md"
             >
               <DropdownMenuLabel className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground px-2.5 py-1.5">
-                brenoLucasN/db_modeling &middot; {version}
+                dbmodeling/dbml &middot; {version}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild className="cursor-pointer">
@@ -234,11 +234,11 @@ export function Navbar() {
 
           {/* GitHub Repository + Star / Version Counter */}
           <a
-            href="https://github.com/brenoLucasN/db_modeling"
+            href="https://github.com/dbmodeling/dbml"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors px-1.5 py-1 rounded-md hover:bg-secondary"
-            aria-label="View brenoLucasN/db_modeling on GitHub"
+            aria-label="View dbmodeling/dbml on GitHub"
           >
             <Github className="w-4 h-4 text-foreground" />
             <span className="hidden sm:inline-flex items-center gap-1 text-[11px] tabular-nums">

@@ -93,7 +93,7 @@ export function OpenSourceHub() {
 
             <p className="text-xs sm:text-[13px] text-muted-foreground leading-relaxed">
               Every core capability of{" "}
-              <code className="font-mono text-foreground">brenoLucasN/db_modeling</code>{" "}
+              <code className="font-mono text-foreground">dbmodeling/dbml</code>{" "}
               is isolated into a headless Rust crate verified with{" "}
               <code className="font-mono text-foreground">insta</code> snapshot
               tests and <code className="font-mono text-foreground">proptest</code>.
@@ -114,7 +114,7 @@ export function OpenSourceHub() {
             <div className="flex flex-wrap items-center gap-2.5">
               <Button asChild variant="default" size="default">
                 <a
-                  href="https://github.com/brenoLucasN/db_modeling"
+                  href="https://github.com/dbmodeling/dbml"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -125,7 +125,7 @@ export function OpenSourceHub() {
 
               <Button asChild variant="outline" size="default">
                 <a
-                  href="https://github.com/brenoLucasN/db_modeling/issues"
+                  href="https://github.com/dbmodeling/dbml/issues"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
