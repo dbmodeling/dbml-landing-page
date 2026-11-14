@@ -1,4 +1,8 @@
+import { useState } from "react";
+import { Check, Copy } from "lucide-react";
+
 interface Capability {
+  copyable?: boolean;
   index: string;
   label: string;
   meta: string;
@@ -39,6 +43,7 @@ const CAPABILITIES: Capability[] = [
     title: "SVG, PNG (2x), and Mermaid from the same layout",
     body: "Export exactly what is on the canvas as a vector SVG, a high-resolution PNG, or a Mermaid ER diagram for your docs, with optional title, color legend, and light or dark theme.",
     command: "Ctrl+K  →  Export diagram",
+    copyable: false,
   },
   {
     index: "05",
@@ -59,6 +64,19 @@ const CAPABILITIES: Capability[] = [
 ];
 
 export function Capabilities() {
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const copy = (item: Capability) => {
+    const text = item.command.replace(/^\$\s+/, "");
+    void navigator.clipboard.writeText(text).then(() => {
+      setCopied(item.index);
+      window.setTimeout(
+        () => setCopied((current) => (current === item.index ? null : current)),
+        1500,
+      );
+    });
+  };
+
   return (
     <section id="capabilities" className="border-b border-border bg-background">
       <div className="px-6 py-12 sm:py-16 border-b border-border text-center">
@@ -94,9 +112,28 @@ export function Capabilities() {
             <p className="text-xs text-muted-foreground leading-relaxed flex-1">
               {item.body}
             </p>
-            <pre className="p-3 rounded border border-border bg-card font-mono text-[11px] text-foreground overflow-x-auto">
-              <code>{item.command}</code>
-            </pre>
+            <div className="flex items-stretch rounded border border-border bg-card font-mono text-[11px] text-foreground">
+              <pre className="flex-1 min-w-0 p-3 overflow-x-auto">
+                <code>{item.command}</code>
+              </pre>
+              {item.copyable !== false && (
+                <button
+                  type="button"
+                  onClick={() => copy(item)}
+                  aria-label={
+                    copied === item.index ? "Copied" : `Copy: ${item.label}`
+                  }
+                  title={copied === item.index ? "Copied" : "Copy"}
+                  className="shrink-0 px-2.5 border-l border-border text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal rounded-r"
+                >
+                  {copied === item.index ? (
+                    <Check className="w-3.5 h-3.5 text-signal" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                </button>
+              )}
+            </div>
           </div>
         ))}
       </div>
