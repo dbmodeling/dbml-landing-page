@@ -2,6 +2,7 @@ const ARCHITECTURE_TREE = `┌────────────────�
 │               Rust Core Crates               │
 │  schema · dbml-syntax (Rowan CST) · layout   │
 │  dbml-analysis (lint/complete) · dbml-edit   │
+│  sql-import · db-introspect · diagram-export │
 └───────┬──────────────────────────────┬───────┘
         │ Native Rust                  │ WebAssembly
         ▼                              ▼
@@ -151,9 +152,10 @@ export function GpuiArchitecture() {
                 &lt;file&gt;.dbml.layout.json
               </code>{" "}
               with sorted keys for clean Git diffs, and diagrams export to{" "}
-              <strong className="text-foreground">PNG (2x)</strong> and{" "}
-              <strong className="text-foreground">SVG</strong> with optional title
-              and color legend.
+              <strong className="text-foreground">PNG (2x)</strong>,{" "}
+              <strong className="text-foreground">SVG</strong>, and{" "}
+              <strong className="text-foreground">Mermaid</strong> with optional
+              title and color legend.
             </p>
           </div>
 
@@ -161,7 +163,7 @@ export function GpuiArchitecture() {
             <span className="text-signal font-semibold">
               &rarr; Synchronized build: ./scripts/sync-build.sh --release
             </span>
-            <span className="text-muted-foreground text-[11px]">v0.1.2 &middot; MIT</span>
+            <span className="text-muted-foreground text-[11px]">v0.1.4 &middot; MIT</span>
           </div>
         </div>
       </div>

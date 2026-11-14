@@ -33,17 +33,14 @@ export function Hero() {
             <strong className="font-semibold text-foreground">
               VS Code Extension
             </strong>{" "}
-            from one shared Rust core.
+            from one shared Rust core. Connect to a live database, import or
+            export SQL, and export diagrams to SVG, PNG, and Mermaid.
           </p>
 
           <div
             id="downloads"
             className="pt-2 flex flex-wrap items-center gap-2.5"
           >
-            <Button asChild variant="default" size="default">
-              <a href="#showcase">Try it in your browser</a>
-            </Button>
-
             <DownloadCTA />
 
             <Button asChild variant="outline" size="default">

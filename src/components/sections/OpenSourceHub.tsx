@@ -41,6 +41,18 @@ const CRATES: CrateInfo[] = [
     testCmd: "cargo test -p layout",
   },
   {
+    name: "crates/sql-import & db-introspect",
+    desc: "SQL DDL lexer/parser (Postgres, MySQL, SQLite, SQL Server, Oracle) and read-only live catalog introspection, both emitting DBML.",
+    role: "Import & Connect",
+    testCmd: "cargo test -p sql-import -p db-introspect",
+  },
+  {
+    name: "crates/diagram-export",
+    desc: "Renders the computed layout to SVG, PNG (2x raster), and Mermaid ER diagrams with title, legend, and theme options.",
+    role: "SVG, PNG & Mermaid",
+    testCmd: "cargo test -p diagram-export",
+  },
+  {
     name: "crates/dbml-wasm",
     desc: "wasm-bindgen module exposing parse_and_analyze, apply_command, compute_scene, and 8px rounded SVG path generation.",
     role: "Wasm Bridge",

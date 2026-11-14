@@ -112,13 +112,18 @@ export function Navbar() {
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
+                <a href="#capabilities" className="px-2.5 py-1.5 flex items-center justify-between">
+                  <span>04 &middot; Connect, Import &amp; Export</span>
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer">
                 <a href="#architecture" className="px-2.5 py-1.5 flex items-center justify-between">
-                  <span>04 &middot; Desktop, CLI &amp; VS Code</span>
+                  <span>05 &middot; Desktop, CLI &amp; VS Code</span>
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
                 <a href="#opensource" className="px-2.5 py-1.5 flex items-center justify-between">
-                  <span>05 &middot; Rust Crates &amp; Wasm</span>
+                  <span>06 &middot; Rust Crates &amp; Wasm</span>
                 </a>
               </DropdownMenuItem>
             </DropdownMenuContent>

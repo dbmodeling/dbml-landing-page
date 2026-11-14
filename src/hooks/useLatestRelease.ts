@@ -12,7 +12,7 @@ const REPO_NAME = "dbml";
 
 export function useLatestRelease(): ReleaseData {
   const [data, setData] = useState<ReleaseData>({
-    version: "v0.1.2",
+    version: "v0.1.4",
     publishedAt: null,
     hasPublishedReleases: false,
     isLoading: true,
