@@ -1,4 +1,6 @@
-const ARCHITECTURE_TREE = `┌──────────────────────────────────────────────┐
+import { CommandBlock } from "@/components/ui/CommandBlock";
+
+const ARCHITECTURE_TREE =`┌──────────────────────────────────────────────┐
 │               Rust Core Crates               │
 │  schema · dbml-syntax (Rowan CST) · layout   │
 │  dbml-analysis (lint/complete) · dbml-edit   │
@@ -63,11 +65,10 @@ export function GpuiArchitecture() {
               <code className="font-mono text-foreground">.dmg</code>, and{" "}
               <code className="font-mono text-foreground">.exe/.msi</code>.
             </p>
-            <pre className="p-3 rounded border border-border bg-card font-mono text-[11px] text-foreground overflow-x-auto">
-              <code>
-                {"$ cargo run -p app --release -- path/to/schema.dbml"}
-              </code>
-            </pre>
+            <CommandBlock
+              command="$ cargo run -p app --release -- path/to/schema.dbml"
+              copyLabel="Copy: run the desktop app"
+            />
           </div>
 
           {/* Target 2: Interactive Web CLI */}
@@ -89,11 +90,10 @@ export function GpuiArchitecture() {
               <code className="font-mono text-foreground">.dbml.layout.json</code>{" "}
               sidecar.
             </p>
-            <pre className="p-3 rounded border border-border bg-card font-mono text-[11px] text-foreground overflow-x-auto">
-              <code>
-                {"$ cargo run -p dbml-cli -- path/to/schema.dbml --port 3000 --theme dark"}
-              </code>
-            </pre>
+            <CommandBlock
+              command="$ cargo run -p dbml-cli -- path/to/schema.dbml --port 3000 --theme dark"
+              copyLabel="Copy: run the web CLI"
+            />
           </div>
 
           {/* Target 3: VS Code Extension */}
@@ -114,11 +114,10 @@ export function GpuiArchitecture() {
               <code className="font-mono text-foreground">crates/dbml-wasm</code>{" "}
               and <code className="font-mono text-foreground">@dbmodeling/canvas-web</code>.
             </p>
-            <pre className="p-3 rounded border border-border bg-card font-mono text-[11px] text-foreground overflow-x-auto">
-              <code>
-                {"$ cd vscode-extension && npm run compile && npx @vscode/vsce package"}
-              </code>
-            </pre>
+            <CommandBlock
+              command="$ cd vscode-extension && npm run compile && npx @vscode/vsce package"
+              copyLabel="Copy: package the VS Code extension"
+            />
           </div>
         </div>
 
