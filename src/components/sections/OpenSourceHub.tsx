@@ -86,7 +86,7 @@ export function OpenSourceHub() {
             Workspace architecture
           </span>
         </div>
-        <span className="font-mono text-[11px] text-muted-foreground hidden sm:inline">
+        <span className="font-mono text-xs text-muted-foreground hidden sm:inline">
           insta 1.49 snapshots &middot; proptest 1.12
         </span>
       </div>

@@ -12,7 +12,7 @@ Backend engineers, database architects, and full-stack developers who model, rev
 
 ## Product Purpose
 
-DB Modeling (`github.com/brenoLucasN/db_modeling`, `v0.1.2`) is a visual relational database modeling workbench powered by DBML and a shared Rust 2024 core. It delivers a 1:1 identical experience across a **Native Desktop App (`crates/app` via GPUI)**, an **Interactive Web CLI (`crates/cli` via Axum + WebSockets)**, and a **VS Code Extension (`vscode-extension` Custom Editor VSIX)**, compiled to both native machine code and WebAssembly (`crates/dbml-wasm`).
+DB Modeling (`github.com/dbmodeling/dbml`, `v0.1.4`) is a visual relational database modeling workbench powered by DBML and a shared Rust 2024 core. It delivers a 1:1 identical experience across a **Native Desktop App (`crates/app` via GPUI)**, an **Interactive Web CLI (`crates/cli` via Axum + WebSockets)**, and a **VS Code Extension (`vscode-extension` Custom Editor VSIX)**, compiled to both native machine code and WebAssembly (`crates/dbml-wasm`).
 
 ## Positioning
 
@@ -38,7 +38,7 @@ Developers run the native desktop app (`cargo run -p app --release -- schema.dbm
 
 ## Evidence on Hand
 
-- Real workspace crates in `brenoLucasN/db_modeling`: `crates/schema`, `crates/dbml-syntax` (`logos` 0.16.1 + `rowan` 0.18.0-alpha.2), `crates/dbml-analysis`, `crates/dbml-edit`, `crates/layout`, `crates/app` (`gpui-kit` 0.8.0), `crates/dbml-wasm`, `crates/cli` (`axum` 0.8 + `notify` 8), `packages/canvas-web`, and `vscode-extension`.
+- Real workspace crates in `dbmodeling/dbml`: `crates/schema`, `crates/dbml-syntax` (`logos` 0.16.1 + `rowan` 0.18.0-alpha.2), `crates/dbml-analysis`, `crates/dbml-edit`, `crates/layout`, `crates/app` (`gpui-kit` 0.8.0), `crates/dbml-wasm`, `crates/cli` (`axum` 0.8 + `notify` 8), `packages/canvas-web`, and `vscode-extension`.
 - Official e-commerce schema (`crates/app/assets/sample.dbml`) with `users` (`[headercolor: #8b5cf6]`), `products`, `orders`, `order_items`, `reviews`, `TableGroup sales [color: #3b82f6]`, and `TableGroup catalog [color: #22c55e]`.
 - Real `TextPatch` and `SceneGeometry` serialization structures from `crates/dbml-wasm/src/types.rs`.
 

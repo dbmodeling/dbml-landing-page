@@ -12,12 +12,15 @@ export function Footer() {
               github.com/dbmodeling/dbml
             </span>
           </div>
-          <div className="text-[11px] text-muted-foreground">
+          <div className="text-xs text-muted-foreground">
             Native Desktop (GPUI) &middot; Interactive Web CLI (Axum + WS) &middot; VS Code Extension (Wasm).
+          </div>
+          <div className="text-xs text-muted-foreground">
+            &copy; {new Date().getFullYear()} db-modeling &middot; MIT licensed
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-5 text-[11px]">
+        <div className="flex flex-wrap items-center gap-5 text-xs">
           <a
             href="https://github.com/dbmodeling/dbml"
             target="_blank"

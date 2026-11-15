@@ -34,13 +34,13 @@ export function ProblemSplit() {
         {/* Right Cell: Sequential Workflow Ledger + Signal Resolution Bar */}
         <div className="lg:col-span-6 flex flex-col justify-between bg-card/40">
           <div>
-            <div className="px-6 sm:px-8 pt-6 pb-3 font-mono text-[11px] tracking-[0.18em] uppercase text-muted-foreground">
+            <div className="px-6 sm:px-8 pt-6 pb-3 font-mono text-xs tracking-[0.18em] uppercase text-muted-foreground">
               ROUND-TRIPPING SCHEMAS BY HAND, TODAY
             </div>
 
             <ol className="divide-y divide-border border-t border-border text-xs sm:text-[13px]">
               <li className="px-6 sm:px-8 py-3.5 flex items-center gap-4">
-                <span className="font-mono text-[11px] text-muted-foreground tabular-nums">
+                <span className="font-mono text-xs text-muted-foreground tabular-nums">
                   01
                 </span>
                 <span className="text-foreground">
@@ -49,19 +49,19 @@ export function ProblemSplit() {
               </li>
 
               <li className="px-6 sm:px-8 py-3.5 flex items-center gap-4">
-                <span className="font-mono text-[11px] text-muted-foreground tabular-nums">
+                <span className="font-mono text-xs text-muted-foreground tabular-nums">
                   02
                 </span>
                 <span className="text-foreground flex flex-wrap items-center gap-1.5">
                   <span>Watch proprietary coordinate comments pollute</span>
-                  <code className="px-1.5 py-0.5 rounded bg-secondary border border-border font-mono text-[11px] text-foreground">
+                  <code className="px-1.5 py-0.5 rounded bg-secondary border border-border font-mono text-xs text-foreground">
                     schema.dbml
                   </code>
                 </span>
               </li>
 
               <li className="px-6 sm:px-8 py-3.5 flex items-center gap-4">
-                <span className="font-mono text-[11px] text-muted-foreground tabular-nums">
+                <span className="font-mono text-xs text-muted-foreground tabular-nums">
                   03
                 </span>
                 <span className="text-foreground">
@@ -70,7 +70,7 @@ export function ProblemSplit() {
               </li>
 
               <li className="px-6 sm:px-8 py-3.5 flex items-center gap-4">
-                <span className="font-mono text-[11px] text-muted-foreground tabular-nums">
+                <span className="font-mono text-xs text-muted-foreground tabular-nums">
                   04
                 </span>
                 <span className="text-foreground">

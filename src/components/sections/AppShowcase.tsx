@@ -48,7 +48,7 @@ export function AppShowcase() {
             <span className="font-medium text-foreground">
               db-modeling &middot; example.dbml
             </span>
-            <span className="text-[11px] text-muted-foreground hidden sm:inline">
+            <span className="text-xs text-muted-foreground hidden sm:inline">
               (Native GPUI Desktop)
             </span>
           </div>
@@ -56,7 +56,7 @@ export function AppShowcase() {
           <button
             type="button"
             onClick={togglePlayback}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-border bg-card hover:bg-secondary text-[11px] text-foreground transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-border bg-card hover:bg-secondary text-xs text-foreground transition-colors"
             aria-label={isPlaying ? "Pause demo video" : "Play demo video"}
           >
             {isPlaying ? (
@@ -100,7 +100,7 @@ export function AppShowcase() {
             <code className="font-mono text-foreground">db-modeling</code>{" "}
             running natively on Fedora Linux (GPUI).
           </span>
-          <span className="font-mono text-[11px] hidden sm:inline">
+          <span className="font-mono text-xs hidden sm:inline">
             Click any capture to inspect full-screen
           </span>
         </div>
@@ -132,7 +132,7 @@ export function AppShowcase() {
               <h3 className="text-sm font-bold text-foreground tracking-tight">
                 ER Canvas &amp; Orthogonal Routing
               </h3>
-              <span className="font-mono text-[11px] text-muted-foreground">
+              <span className="font-mono text-xs text-muted-foreground">
                 example.dbml
               </span>
             </div>
@@ -172,7 +172,7 @@ export function AppShowcase() {
               <h3 className="text-sm font-bold text-foreground tracking-tight">
                 DBML Editor &amp; Table Inspector
               </h3>
-              <span className="font-mono text-[11px] text-muted-foreground">
+              <span className="font-mono text-xs text-muted-foreground">
                 Ctrl+E &middot; Ctrl+I
               </span>
             </div>
