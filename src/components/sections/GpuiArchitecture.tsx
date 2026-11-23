@@ -115,6 +115,13 @@ export function GpuiArchitecture() {
               command="dbml path/to/schema.dbml --port 3000 --theme dark"
               copyLabel="Copy: run the web CLI"
             />
+            <p className="text-xs text-muted-foreground">
+              Or self-host with Docker, no Rust or Node.js needed:
+            </p>
+            <CommandBlock
+              command={'docker pull ghcr.io/dbmodeling/dbml && docker run -p 3000:3000 -v "$(pwd):/workspace" ghcr.io/dbmodeling/dbml'}
+              copyLabel="Copy: run the web server with Docker"
+            />
           </div>
 
           {/* Target 3: VS Code Extension */}

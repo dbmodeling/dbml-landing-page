@@ -95,7 +95,7 @@ export function DownloadCTA() {
                 <Terminal className="w-3.5 h-3.5 text-muted-foreground" />
                 <div className="flex flex-col">
                   <span className="font-sans font-medium text-xs">Interactive Web CLI</span>
-                  <span className="text-[10px] text-muted-foreground">cargo run -p dbml-cli</span>
+                  <span className="text-[10px] text-muted-foreground">dbml schema.dbml · docker</span>
                 </div>
               </div>
               <span className="text-[11px] font-mono text-signal font-medium">HTTP+WS</span>
