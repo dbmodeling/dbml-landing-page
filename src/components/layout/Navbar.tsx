@@ -25,7 +25,7 @@ const QUICK_JUMP_ITEMS: QuickJumpItem[] = [
   { label: "Multi-Target Architecture (Desktop · CLI · VS Code)", category: "Targets", href: "#architecture", keywords: "gpui-kit axum websocket wasm vscode vsix sync-build" },
   { label: "crates/dbml-syntax & crates/dbml-edit", category: "Rust Core", href: "#opensource", keywords: "logos rowan cst patch format swap_lines" },
   { label: "crates/layout & crates/dbml-wasm", category: "Layout & Wasm", href: "#opensource", keywords: "layered clustered route wasm-bindgen" },
-  { label: "Installers (.deb · .rpm · .dmg · .exe · .vsix)", category: "Releases", href: "#downloads", keywords: "download linux debian fedora macos windows vscode" },
+  { label: "Installers (.deb · .rpm · .exe · .vsix · macOS via curl)", category: "Releases", href: "#downloads", keywords: "download linux debian fedora macos windows vscode" },
 ];
 
 export function Navbar() {

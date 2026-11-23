@@ -65,6 +65,25 @@ export function DownloadCTA() {
           ))}
           <DropdownMenuSeparator />
           <DropdownMenuLabel className="text-[10px] uppercase text-muted-foreground tracking-wider px-2.5 py-1.5">
+            Install via curl (macOS, Linux, Windows)
+          </DropdownMenuLabel>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <a
+              href="#architecture"
+              className="flex items-center justify-between px-2.5 py-2 rounded-sm hover:bg-secondary text-foreground transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <Terminal className="w-3.5 h-3.5 text-muted-foreground" />
+                <div className="flex flex-col">
+                  <span className="font-sans font-medium text-xs">macOS</span>
+                  <span className="text-[10px] text-muted-foreground">Apple Silicon · curl one-liner</span>
+                </div>
+              </div>
+              <span className="text-[11px] font-mono text-signal font-medium">curl</span>
+            </a>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel className="text-[10px] uppercase text-muted-foreground tracking-wider px-2.5 py-1.5">
             Web CLI &amp; VS Code Extension
           </DropdownMenuLabel>
           <DropdownMenuItem asChild className="cursor-pointer">

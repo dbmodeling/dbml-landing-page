@@ -41,10 +41,10 @@ export const OS_CONFIGS: Record<OSTarget, OSConfig> = {
   macos: {
     id: "macos",
     name: "macOS",
-    distro: "Apple Silicon (M1/M2/M3/M4)",
-    ext: ".dmg",
-    label: "Download for macOS (.dmg)",
-    downloadUrl: `${RELEASES_BASE}/db-modeling-macos-arm64.dmg`,
+    distro: "Install via curl",
+    ext: "curl",
+    label: "Install for macOS via curl",
+    downloadUrl: "#architecture",
   },
 };
 
@@ -72,6 +72,7 @@ export function useOperatingSystem(): {
 
   return {
     currentOS,
-    allOS: Object.values(OS_CONFIGS),
+    // macOS has no direct download: installable via curl only
+    allOS: Object.values(OS_CONFIGS).filter((os) => os.id !== "macos"),
   };
 }

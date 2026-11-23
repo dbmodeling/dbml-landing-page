@@ -83,10 +83,10 @@ export function GpuiArchitecture() {
             </p>
             <CommandBlock
               command="curl -fsSL https://github.com/dbmodeling/dbml/releases/latest/download/db-modeling-install.sh | bash"
-              copyLabel="Copy: install on Linux"
+              copyLabel="Copy: install via curl"
             />
             <p className="text-xs text-muted-foreground">
-              Or grab the .dmg, .exe, .deb, or .rpm from Releases. From source:
+              Works on macOS, Linux and Windows (macOS is curl-only). Or grab the .exe, .deb, or .rpm from Releases. From source:
             </p>
             <CommandBlock
               command="cargo run -p app --release -- path/to/schema.dbml"
