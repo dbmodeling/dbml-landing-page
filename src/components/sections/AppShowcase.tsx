@@ -1,9 +1,19 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Maximize2, Pause, Play, X } from "lucide-react";
 
 export function AppShowcase() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
+  // On mobile the video is a pure looping preview: no native or custom controls.
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
   const [lightboxSrc, setLightboxSrc] = useState<{
     src: string;
     title: string;
@@ -56,7 +66,7 @@ export function AppShowcase() {
           <button
             type="button"
             onClick={togglePlayback}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-border bg-card hover:bg-secondary text-xs text-foreground transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-border bg-card hover:bg-secondary text-xs text-foreground transition-colors"
             aria-label={isPlaying ? "Pause demo video" : "Play demo video"}
           >
             {isPlaying ? (
@@ -83,7 +93,7 @@ export function AppShowcase() {
               loop
               muted
               playsInline
-              controls
+              controls={!isMobile}
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
               className="w-full h-auto block"
