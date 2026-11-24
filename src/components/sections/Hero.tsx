@@ -44,9 +44,24 @@ export function Hero() {
             <DownloadCTA />
 
             <Button asChild variant="outline" size="default">
+              <a
+                href="https://dbml-sandbox.onrender.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Try the sandbox
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </Button>
+
+            <Button asChild variant="ghost" size="default">
               <a href="#architecture">How it works</a>
             </Button>
           </div>
+          <p className="text-xs text-muted-foreground">
+            The sandbox runs on a free tier and sleeps when idle. The first load
+            can take up to ~30s to wake up.
+          </p>
         </div>
       </div>
     </section>
