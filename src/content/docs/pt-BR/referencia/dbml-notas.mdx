@@ -1,0 +1,44 @@
+---
+titulo: DBML, notas
+descricao: "Onde escrever notas no DBML: projeto, tabela, coluna e valor de enum, strings de várias linhas e a nota de nível superior."
+secao: referencia
+ordem: 90
+modalidades: [desktop, web, vscode]
+---
+
+## Onde há notas
+
+| Local | Sintaxe | Uso pelo produto |
+|---|---|---|
+| Projeto | `Note: '...'` dentro de `Project` | Vai para o SQL exportado e para `dbml docs`. |
+| Tabela | `[note: '...']` no cabeçalho, ou `Note: '...'` / `Note { '...' }` dentro do bloco | Exibida no Inspector e nos documentos gerados; vira `COMMENT ON TABLE` no PostgreSQL. |
+| Coluna | `[note: '...']` nas configurações | Exibida no Inspector; vira `COMMENT ON COLUMN`. |
+| Valor de enum | `[note: '...']` depois do valor | Guardada no modelo. |
+| Nível superior | `Note nome { '...' }` | Aceita e preservada, mas **não é exibida nem exportada**. |
+
+Para editar a nota de uma tabela pelo app Desktop, use <Atalho acao="EditTableNote" />.
+
+## Strings
+
+- Aspas simples para uma linha: `'texto'`.
+- Aspas triplas para várias linhas:
+
+```dbml
+Table pedidos {
+  Note: '''
+    Pedidos da loja.
+    Um pedido tem vários itens.
+  '''
+}
+```
+
+A indentação dentro das aspas triplas é mantida no texto da nota. Alinhe o conteúdo à esquerda se não quiser espaços extras.
+
+## Exemplo
+
+<ExemploDbml arquivo="ref-notas" />
+
+## Observações
+
+- Uma nota vazia (`''`) é tratada como ausência de nota.
+- A nota de nível superior equivale ao *sticky note* do DBML oficial. O arquivo continua válido, mas o canvas não desenha nada. Veja [Não suportado ainda](dbml-nao-suportado).

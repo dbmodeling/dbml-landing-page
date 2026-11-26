@@ -1,0 +1,2076 @@
+{
+  "gerado_de": [
+    "crates/app/src/actions.rs",
+    "packages/canvas-web/src/actions.ts"
+  ],
+  "acoes": [
+    {
+      "id": "AddPresetBigIntPk",
+      "grupo": "editar",
+      "grupo_rotulo": {
+        "pt-BR": "Editar",
+        "en": "Edit"
+      },
+      "rotulo": {
+        "pt-BR": "Adicionar predefinição de coluna: BigInt PK",
+        "en": "Add column preset: BigInt PK"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "AddPresetSoftDelete",
+      "grupo": "editar",
+      "grupo_rotulo": {
+        "pt-BR": "Editar",
+        "en": "Edit"
+      },
+      "rotulo": {
+        "pt-BR": "Adicionar predefinição de coluna: Soft Delete",
+        "en": "Add column preset: Soft Delete"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "AddPresetTimestamps",
+      "grupo": "editar",
+      "grupo_rotulo": {
+        "pt-BR": "Editar",
+        "en": "Edit"
+      },
+      "rotulo": {
+        "pt-BR": "Adicionar predefinição de coluna: Timestamps",
+        "en": "Add column preset: Timestamps"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "AddPresetUuidPk",
+      "grupo": "editar",
+      "grupo_rotulo": {
+        "pt-BR": "Editar",
+        "en": "Edit"
+      },
+      "rotulo": {
+        "pt-BR": "Adicionar predefinição de coluna: UUID PK",
+        "en": "Add column preset: UUID PK"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "CheckForUpdates",
+      "grupo": "ajuda",
+      "grupo_rotulo": {
+        "pt-BR": "Ajuda",
+        "en": "Help"
+      },
+      "rotulo": {
+        "pt-BR": "Verificar atualizações",
+        "en": "Check for updates"
+      },
+      "atalhos": {
+        "desktop": null
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "CloseTab",
+      "grupo": "arquivo",
+      "grupo_rotulo": {
+        "pt-BR": "Arquivo",
+        "en": "File"
+      },
+      "rotulo": {
+        "pt-BR": "Fechar aba",
+        "en": "Close tab"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+W",
+          "macos": "Ctrl+W"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "ConnectDatabase",
+      "grupo": "arquivo",
+      "grupo_rotulo": {
+        "pt-BR": "Arquivo",
+        "en": "File"
+      },
+      "rotulo": {
+        "pt-BR": "Conectar ao banco…",
+        "en": "Connect to database…"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Alt+C",
+          "macos": "Ctrl+Alt+C"
+        },
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "CycleFocusDepth",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Modo Foco: alternar 1-hop / 2-hop",
+        "en": "Modo Foco: alternar 1-hop / 2-hop"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Shift+F",
+          "macos": "Shift+F"
+        },
+        "web": {
+          "padrao": "Shift+F",
+          "macos": "Shift+F"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "DeleteSelection",
+      "grupo": "tabelas",
+      "grupo_rotulo": {
+        "pt-BR": "Tabelas",
+        "en": "Tables"
+      },
+      "rotulo": {
+        "pt-BR": "Excluir tabelas selecionadas",
+        "en": "Delete selected tables"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Del",
+          "macos": "Del"
+        },
+        "web": {
+          "padrao": "Del",
+          "macos": "Del"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "Deselect",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Limpar seleção",
+        "en": "Clear selection"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Esc",
+          "macos": "Esc"
+        },
+        "web": {
+          "padrao": "Esc",
+          "macos": "Esc"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "DuplicateTable",
+      "grupo": "tabelas",
+      "grupo_rotulo": {
+        "pt-BR": "Tabelas",
+        "en": "Tables"
+      },
+      "rotulo": {
+        "pt-BR": "Duplicar tabela",
+        "en": "Duplicate table"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+D",
+          "macos": "Ctrl+D"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "EditTableNote",
+      "grupo": "tabelas",
+      "grupo_rotulo": {
+        "pt-BR": "Tabelas",
+        "en": "Tables"
+      },
+      "rotulo": {
+        "pt-BR": "Editar nota da tabela",
+        "en": "Edit table note"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Alt+N",
+          "macos": "Ctrl+Alt+N"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "ExportDbml",
+      "grupo": "arquivo",
+      "grupo_rotulo": {
+        "pt-BR": "Arquivo",
+        "en": "File"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar DBML (.dbml)",
+        "en": "Export DBML (.dbml)"
+      },
+      "atalhos": {
+        "web": null
+      },
+      "modalidades": [
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportDocsHtml",
+      "grupo": "exportar-codigo",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar código",
+        "en": "Export code"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar documentação: HTML (.html)",
+        "en": "Exportar documentação: HTML (.html)"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportDocsMarkdown",
+      "grupo": "exportar-codigo",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar código",
+        "en": "Export code"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar documentação: Markdown (.md)",
+        "en": "Exportar documentação: Markdown (.md)"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportJpeg",
+      "grupo": "exportar-imagem",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar imagem",
+        "en": "Export image"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar imagem: JPEG",
+        "en": "Export image: JPEG"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportMermaid",
+      "grupo": "exportar-codigo",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar código",
+        "en": "Export code"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar código: Mermaid erDiagram (.mmd)",
+        "en": "Export code: Mermaid erDiagram (.mmd)"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportPng",
+      "grupo": "exportar-imagem",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar imagem",
+        "en": "Export image"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar imagem: PNG",
+        "en": "Export image: PNG"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportSqlMysql",
+      "grupo": "exportar-codigo",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar código",
+        "en": "Export code"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar código: MySQL (.sql)",
+        "en": "Export code: MySQL (.sql)"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportSqlOracle",
+      "grupo": "exportar-codigo",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar código",
+        "en": "Export code"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar código: Oracle (.sql)",
+        "en": "Export code: Oracle (.sql)"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportSqlPostgres",
+      "grupo": "exportar-codigo",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar código",
+        "en": "Export code"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar código: PostgreSQL (.sql)",
+        "en": "Export code: PostgreSQL (.sql)"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportSqlSqlServer",
+      "grupo": "exportar-codigo",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar código",
+        "en": "Export code"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar código: SQL Server (.sql)",
+        "en": "Export code: SQL Server (.sql)"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportSqlSqlite",
+      "grupo": "exportar-codigo",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar código",
+        "en": "Export code"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar código: SQLite (.sql)",
+        "en": "Export code: SQLite (.sql)"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ExportSvg",
+      "grupo": "exportar-imagem",
+      "grupo_rotulo": {
+        "pt-BR": "Exportar imagem",
+        "en": "Export image"
+      },
+      "rotulo": {
+        "pt-BR": "Exportar imagem: SVG vetorial",
+        "en": "Export image: SVG vector"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "FilterExplorer",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Alternar filtro do esquema",
+        "en": "Toggle schema filter"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+F",
+          "macos": "Ctrl+Shift+F"
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+F",
+          "macos": "Ctrl+Shift+F"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "FitView",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Ajustar à tela",
+        "en": "Fit to screen"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Shift+1",
+          "macos": "Shift+1"
+        },
+        "web": {
+          "padrao": "Shift+1",
+          "macos": "Shift+1"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "FormatDocument",
+      "grupo": "editor",
+      "grupo_rotulo": {
+        "pt-BR": "Editor",
+        "en": "Editor"
+      },
+      "rotulo": {
+        "pt-BR": "Formatar documento",
+        "en": "Format document"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Alt+Shift+F",
+          "macos": "Alt+Shift+F"
+        },
+        "web": {
+          "padrao": "Alt+Shift+F",
+          "macos": "Alt+Shift+F"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "GroupSelection",
+      "grupo": "tabelas",
+      "grupo_rotulo": {
+        "pt-BR": "Tabelas",
+        "en": "Tables"
+      },
+      "rotulo": {
+        "pt-BR": "Agrupar tabelas selecionadas",
+        "en": "Group selected tables"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+G",
+          "macos": "Ctrl+G"
+        },
+        "web": {
+          "padrao": "Ctrl+G",
+          "macos": "Ctrl+G"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ImportSqlDdl",
+      "grupo": "arquivo",
+      "grupo_rotulo": {
+        "pt-BR": "Arquivo",
+        "en": "File"
+      },
+      "rotulo": {
+        "pt-BR": "Importar SQL DDL…",
+        "en": "Import SQL DDL…"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Alt+I",
+          "macos": "Ctrl+Alt+I"
+        },
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "LangEnglish",
+      "grupo": "aparencia",
+      "grupo_rotulo": {
+        "pt-BR": "Aparência",
+        "en": "Appearance"
+      },
+      "rotulo": {
+        "pt-BR": "Language: English",
+        "en": "Language: English"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ],
+      "aliases": [
+        "LanguageEnglish"
+      ]
+    },
+    {
+      "id": "LangPortuguese",
+      "grupo": "aparencia",
+      "grupo_rotulo": {
+        "pt-BR": "Aparência",
+        "en": "Appearance"
+      },
+      "rotulo": {
+        "pt-BR": "Idioma: Português (Brasil)",
+        "en": "Idioma: Português (Brasil)"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ],
+      "aliases": [
+        "LanguagePortuguese"
+      ]
+    },
+    {
+      "id": "MoveLineDown",
+      "grupo": "editor",
+      "grupo_rotulo": {
+        "pt-BR": "Editor",
+        "en": "Editor"
+      },
+      "rotulo": {
+        "pt-BR": "Mover linha para baixo",
+        "en": "Move line down"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Alt+↓",
+          "macos": "Alt+↓"
+        },
+        "web": {
+          "padrao": "Alt+↓",
+          "macos": "Alt+↓"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "MoveLineUp",
+      "grupo": "editor",
+      "grupo_rotulo": {
+        "pt-BR": "Editor",
+        "en": "Editor"
+      },
+      "rotulo": {
+        "pt-BR": "Mover linha para cima",
+        "en": "Move line up"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Alt+↑",
+          "macos": "Alt+↑"
+        },
+        "web": {
+          "padrao": "Alt+↑",
+          "macos": "Alt+↑"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "NewEnum",
+      "grupo": "tabelas",
+      "grupo_rotulo": {
+        "pt-BR": "Tabelas",
+        "en": "Tables"
+      },
+      "rotulo": {
+        "pt-BR": "Novo enum",
+        "en": "New enum"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "E",
+          "macos": "E"
+        },
+        "web": {
+          "padrao": "E",
+          "macos": "E"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "NewFile",
+      "grupo": "arquivo",
+      "grupo_rotulo": {
+        "pt-BR": "Arquivo",
+        "en": "File"
+      },
+      "rotulo": {
+        "pt-BR": "Novo arquivo",
+        "en": "New file"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+N",
+          "macos": "Ctrl+N"
+        },
+        "web": {
+          "padrao": "Ctrl+N",
+          "macos": "Ctrl+N"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "NewTable",
+      "grupo": "tabelas",
+      "grupo_rotulo": {
+        "pt-BR": "Tabelas",
+        "en": "Tables"
+      },
+      "rotulo": {
+        "pt-BR": "Nova tabela",
+        "en": "New table"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "T",
+          "macos": "T"
+        },
+        "web": {
+          "padrao": "T",
+          "macos": "T"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "NextDiffChange",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Comparar: próxima mudança",
+        "en": "Compare: next change"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "N",
+          "macos": "N"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "NextTab",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Próxima aba",
+        "en": "Next tab"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Tab",
+          "macos": "Ctrl+Tab"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "OpenFile",
+      "grupo": "arquivo",
+      "grupo_rotulo": {
+        "pt-BR": "Arquivo",
+        "en": "File"
+      },
+      "rotulo": {
+        "pt-BR": "Abrir arquivo .dbml…",
+        "en": "Open .dbml file…"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+O",
+          "macos": "Ctrl+O"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "OpenFolder",
+      "grupo": "arquivo",
+      "grupo_rotulo": {
+        "pt-BR": "Arquivo",
+        "en": "File"
+      },
+      "rotulo": {
+        "pt-BR": "Abrir pasta do projeto…",
+        "en": "Open project folder…"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+O",
+          "macos": "Ctrl+Shift+O"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "OpenPalette",
+      "grupo": "ajuda",
+      "grupo_rotulo": {
+        "pt-BR": "Ajuda",
+        "en": "Help"
+      },
+      "rotulo": {
+        "pt-BR": "Paleta de comandos",
+        "en": "Command palette"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+K",
+          "macos": "Ctrl+K"
+        },
+        "web": {
+          "padrao": "Ctrl+K",
+          "macos": "Ctrl+K"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "PrevDiffChange",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Comparar: mudança anterior",
+        "en": "Compare: previous change"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Shift+N",
+          "macos": "Shift+N"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "PrevTab",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Aba anterior",
+        "en": "Previous tab"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+Tab",
+          "macos": "Ctrl+Shift+Tab"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "QuickSearch",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Busca rápida (tabelas, colunas, enums)",
+        "en": "Busca rápida (tabelas, colunas, enums)"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+F",
+          "macos": "Ctrl+F"
+        },
+        "web": {
+          "padrao": "Ctrl+F",
+          "macos": "Ctrl+F"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "Quit",
+      "grupo": "arquivo",
+      "grupo_rotulo": {
+        "pt-BR": "Arquivo",
+        "en": "File"
+      },
+      "rotulo": {
+        "pt-BR": "Sair",
+        "en": "Quit"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Q",
+          "macos": "Ctrl+Q"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "Redo",
+      "grupo": "editar",
+      "grupo_rotulo": {
+        "pt-BR": "Editar",
+        "en": "Edit"
+      },
+      "rotulo": {
+        "pt-BR": "Refazer",
+        "en": "Redo"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+Z",
+          "macos": "Ctrl+Shift+Z"
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+Z",
+          "macos": "Ctrl+Shift+Z"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "Relayout",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Auto-layout",
+        "en": "Auto-layout"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+L",
+          "macos": "Ctrl+L"
+        },
+        "web": {
+          "padrao": "Ctrl+L",
+          "macos": "Ctrl+L"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "RenameSelected",
+      "grupo": "tabelas",
+      "grupo_rotulo": {
+        "pt-BR": "Tabelas",
+        "en": "Tables"
+      },
+      "rotulo": {
+        "pt-BR": "Renomear tabela",
+        "en": "Rename table"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "F2",
+          "macos": "F2"
+        },
+        "web": {
+          "padrao": "F2",
+          "macos": "F2"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ResetEdgeCurve",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Relationship"
+      },
+      "rotulo": {
+        "pt-BR": "Relação: restaurar curva automática",
+        "en": "Relationship: reset automatic curve"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ResetPanels",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Restaurar largura dos painéis",
+        "en": "Reset panel widths"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Alt+0",
+          "macos": "Ctrl+Alt+0"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "ResetUiZoom",
+      "grupo": "aparencia",
+      "grupo_rotulo": {
+        "pt-BR": "Aparência",
+        "en": "Appearance"
+      },
+      "rotulo": {
+        "pt-BR": "Redefinir escala da interface",
+        "en": "Reset interface scale"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+0",
+          "macos": "Ctrl+Shift+0"
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+0",
+          "macos": "Ctrl+Shift+0"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ResetZoom",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Restaurar zoom (100%)",
+        "en": "Reset zoom (100%)"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Shift+0",
+          "macos": "Shift+0"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "RestartToUpdate",
+      "grupo": "ajuda",
+      "grupo_rotulo": {
+        "pt-BR": "Ajuda",
+        "en": "Help"
+      },
+      "rotulo": {
+        "pt-BR": "Reiniciar para atualizar",
+        "en": "Restart to update"
+      },
+      "atalhos": {
+        "desktop": null
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "RevealInDbml",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Ver tabela no DBML",
+        "en": "Show table in DBML"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Alt+D",
+          "macos": "Ctrl+Alt+D"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "SaveFile",
+      "grupo": "arquivo",
+      "grupo_rotulo": {
+        "pt-BR": "Arquivo",
+        "en": "File"
+      },
+      "rotulo": {
+        "pt-BR": "Salvar",
+        "en": "Save"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+S",
+          "macos": "Ctrl+S"
+        },
+        "web": {
+          "padrao": "Ctrl+S",
+          "macos": "Ctrl+S"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ShowCodeView",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Visão de código (somente editor)",
+        "en": "Code view (editor only)"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Alt+E",
+          "macos": "Ctrl+Alt+E"
+        }
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "ShowDiagramView",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Visão Diagrama",
+        "en": "Diagram view"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+1",
+          "macos": "Ctrl+1"
+        },
+        "web": {
+          "padrao": "Ctrl+1",
+          "macos": "Ctrl+1"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ShowFiles",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Mostrar arquivos do projeto",
+        "en": "Show project files"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+E",
+          "macos": "Ctrl+Shift+E"
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+E",
+          "macos": "Ctrl+Shift+E"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ShowProblems",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Mostrar problemas",
+        "en": "Show problems"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+M",
+          "macos": "Ctrl+Shift+M"
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+M",
+          "macos": "Ctrl+Shift+M"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ShowSchema",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Mostrar esquema (tabelas)",
+        "en": "Show schema (tables)"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+D",
+          "macos": "Ctrl+Shift+D"
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+D",
+          "macos": "Ctrl+Shift+D"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ShowShortcuts",
+      "grupo": "ajuda",
+      "grupo_rotulo": {
+        "pt-BR": "Ajuda",
+        "en": "Help"
+      },
+      "rotulo": {
+        "pt-BR": "Atalhos de teclado",
+        "en": "Keyboard shortcuts"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+/",
+          "macos": "Ctrl+/"
+        },
+        "web": {
+          "padrao": "Ctrl+/",
+          "macos": "Ctrl+/"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ShowSplitView",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Visão Dividido · DBML",
+        "en": "Split view · DBML"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+2",
+          "macos": "Ctrl+2"
+        },
+        "web": {
+          "padrao": "Ctrl+2",
+          "macos": "Ctrl+2"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ShowTour",
+      "grupo": "ajuda",
+      "grupo_rotulo": {
+        "pt-BR": "Ajuda",
+        "en": "Help"
+      },
+      "rotulo": {
+        "pt-BR": "Tour guiado",
+        "en": "Guided tour"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ShowWhatsNew",
+      "grupo": "ajuda",
+      "grupo_rotulo": {
+        "pt-BR": "Ajuda",
+        "en": "Help"
+      },
+      "rotulo": {
+        "pt-BR": "O que há de novo",
+        "en": "What's new"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ThemeDark",
+      "grupo": "aparencia",
+      "grupo_rotulo": {
+        "pt-BR": "Aparência",
+        "en": "Appearance"
+      },
+      "rotulo": {
+        "pt-BR": "Tema: Escuro",
+        "en": "Theme: Dark"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ThemeLight",
+      "grupo": "aparencia",
+      "grupo_rotulo": {
+        "pt-BR": "Aparência",
+        "en": "Appearance"
+      },
+      "rotulo": {
+        "pt-BR": "Tema: Claro",
+        "en": "Theme: Light"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ToggleAutoCollapseInspector",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Recolher inspetor automaticamente sem seleção",
+        "en": "Auto-collapse inspector when nothing is selected"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+I",
+          "macos": "Ctrl+Shift+I"
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+I",
+          "macos": "Ctrl+Shift+I"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ToggleAutoUpdate",
+      "grupo": "ajuda",
+      "grupo_rotulo": {
+        "pt-BR": "Ajuda",
+        "en": "Help"
+      },
+      "rotulo": {
+        "pt-BR": "Alternar atualização automática",
+        "en": "Toggle automatic updates"
+      },
+      "atalhos": {
+        "desktop": null
+      },
+      "modalidades": [
+        "desktop"
+      ]
+    },
+    {
+      "id": "ToggleDiffMode",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Comparar com HEAD (git)",
+        "en": "Compare with HEAD (git)"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Alt+G",
+          "macos": "Ctrl+Alt+G"
+        },
+        "web": {
+          "padrao": "D",
+          "macos": "D"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ],
+      "aliases": [
+        "ToggleDiff"
+      ]
+    },
+    {
+      "id": "ToggleEdgeStraight",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Relationship"
+      },
+      "rotulo": {
+        "pt-BR": "Relação: reta/curva",
+        "en": "Relationship: straight/curved"
+      },
+      "atalhos": {
+        "desktop": null,
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ToggleEditor",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Alternar editor DBML",
+        "en": "Toggle DBML editor"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+E",
+          "macos": "Ctrl+E"
+        },
+        "web": {
+          "padrao": "Ctrl+E",
+          "macos": "Ctrl+E"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ToggleFocusMode",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Modo Foco (vizinhança FK)",
+        "en": "Modo Foco (vizinhança FK)"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "F",
+          "macos": "F"
+        },
+        "web": {
+          "padrao": "F",
+          "macos": "F"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ToggleInspector",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Alternar inspector",
+        "en": "Toggle inspector"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+I",
+          "macos": "Ctrl+I"
+        },
+        "web": {
+          "padrao": "Ctrl+I",
+          "macos": "Ctrl+I"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ToggleLegend",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Alternar legenda",
+        "en": "Toggle legend"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+L",
+          "macos": "Ctrl+Shift+L"
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+L",
+          "macos": "Ctrl+Shift+L"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ToggleMinimap",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Alternar minimapa",
+        "en": "Alternar minimapa"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "M",
+          "macos": "M"
+        },
+        "web": {
+          "padrao": "M",
+          "macos": "M"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "TogglePasswordVisibility",
+      "grupo": "conexao",
+      "grupo_rotulo": {
+        "pt-BR": "Conexão",
+        "en": "Connection"
+      },
+      "rotulo": {
+        "pt-BR": "Mostrar/ocultar senha",
+        "en": "Show/hide password"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+H",
+          "macos": "Ctrl+Shift+H"
+        },
+        "web": null
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ],
+      "aliases": [
+        "ToggleConnectPassword"
+      ]
+    },
+    {
+      "id": "ToggleSidebar",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Alternar painel lateral",
+        "en": "Toggle sidebar"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+B",
+          "macos": "Ctrl+B"
+        },
+        "web": {
+          "padrao": "Ctrl+B",
+          "macos": "Ctrl+B"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ToggleTheme",
+      "grupo": "exibir",
+      "grupo_rotulo": {
+        "pt-BR": "Exibir",
+        "en": "View"
+      },
+      "rotulo": {
+        "pt-BR": "Alternar tema claro/escuro",
+        "en": "Toggle light/dark theme"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+T",
+          "macos": "Ctrl+T"
+        },
+        "web": {
+          "padrao": "Ctrl+T",
+          "macos": "Ctrl+T"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ToolHand",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Ferramenta Mão (mover a vista)",
+        "en": "Hand tool (pan view)"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "H",
+          "macos": "H"
+        },
+        "web": {
+          "padrao": "H",
+          "macos": "H"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ToolSelect",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Ferramenta Selecionar",
+        "en": "Select tool"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "V",
+          "macos": "V"
+        },
+        "web": {
+          "padrao": "V",
+          "macos": "V"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "Undo",
+      "grupo": "editar",
+      "grupo_rotulo": {
+        "pt-BR": "Editar",
+        "en": "Edit"
+      },
+      "rotulo": {
+        "pt-BR": "Desfazer",
+        "en": "Undo"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Z",
+          "macos": "Ctrl+Z"
+        },
+        "web": {
+          "padrao": "Ctrl+Z",
+          "macos": "Ctrl+Z"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "UngroupSelection",
+      "grupo": "tabelas",
+      "grupo_rotulo": {
+        "pt-BR": "Tabelas",
+        "en": "Tables"
+      },
+      "rotulo": {
+        "pt-BR": "Desagrupar tabela",
+        "en": "Ungroup table"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+G",
+          "macos": "Ctrl+Shift+G"
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+G",
+          "macos": "Ctrl+Shift+G"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ZoomIn",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Aumentar zoom",
+        "en": "Zoom in"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+=",
+          "macos": "Ctrl+="
+        },
+        "web": {
+          "padrao": "Ctrl+=",
+          "macos": "Ctrl+="
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ZoomInUi",
+      "grupo": "aparencia",
+      "grupo_rotulo": {
+        "pt-BR": "Aparência",
+        "en": "Appearance"
+      },
+      "rotulo": {
+        "pt-BR": "Aumentar escala da interface (fontes e ícones)",
+        "en": "Increase interface scale (fonts and icons)"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+=",
+          "macos": "Ctrl+Shift+="
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+=",
+          "macos": "Ctrl+Shift+="
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ZoomOut",
+      "grupo": "canvas",
+      "grupo_rotulo": {
+        "pt-BR": "Canvas",
+        "en": "Canvas"
+      },
+      "rotulo": {
+        "pt-BR": "Diminuir zoom",
+        "en": "Zoom out"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+-",
+          "macos": "Ctrl+-"
+        },
+        "web": {
+          "padrao": "Ctrl+-",
+          "macos": "Ctrl+-"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    },
+    {
+      "id": "ZoomOutUi",
+      "grupo": "aparencia",
+      "grupo_rotulo": {
+        "pt-BR": "Aparência",
+        "en": "Appearance"
+      },
+      "rotulo": {
+        "pt-BR": "Diminuir escala da interface (fontes e ícones)",
+        "en": "Decrease interface scale (fonts and icons)"
+      },
+      "atalhos": {
+        "desktop": {
+          "padrao": "Ctrl+Shift+-",
+          "macos": "Ctrl+Shift+-"
+        },
+        "web": {
+          "padrao": "Ctrl+Shift+-",
+          "macos": "Ctrl+Shift+-"
+        }
+      },
+      "modalidades": [
+        "desktop",
+        "web",
+        "vscode"
+      ]
+    }
+  ]
+}

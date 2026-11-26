@@ -1,0 +1,86 @@
+---
+titulo: DBML, Table
+descricao: "Sintaxe de Table: nome, schema, alias, headercolor, note e o bloco de colunas."
+secao: referencia
+ordem: 30
+modalidades: [desktop, web, vscode]
+---
+
+## Sintaxe
+
+```dbml
+Table [schema.]nome [as alias] [headercolor: #RRGGBB, note: 'texto'] {
+  coluna tipo [configurações]
+  ...
+  Note: 'texto'
+  Indexes {
+    ...
+  }
+}
+```
+
+O nome pode ter aspas duplas (`Table "pedido item" { ... }`). As colunas são descritas em [Colunas](dbml-colunas), os índices em [Índices](dbml-indices).
+
+## Configurações da tabela
+
+Ficam entre colchetes, depois do nome, separadas por vírgula.
+
+| Configuração | Valor | Efeito |
+|---|---|---|
+| `headercolor` | cor hexadecimal, como `#2563EB` | Cor do cabeçalho do cartão da tabela no canvas. |
+| `note` | texto entre aspas | Nota da tabela. Equivale a um `Note:` dentro do bloco. |
+
+Outras configurações no cabeçalho são aceitas sem erro e ignoradas.
+
+## Alias
+
+`as alias` cria um apelido que pode ser usado nas relações no lugar do nome completo.
+
+```dbml
+Table clientes as C { id bigint [pk] }
+Ref: pedidos.cliente_id > C.id
+```
+
+O alias é resolvido para a tabela real (com o schema, se houver).
+
+## Schema
+
+`Table financeiro.faturas { ... }` coloca a tabela no schema `financeiro`. Veja [visão geral](dbml-visao-geral#schemas).
+
+## Nota
+
+A nota da tabela pode vir de `[note: '...']` no cabeçalho ou de `Note: '...'` (ou `Note { '...' }`) dentro do bloco. Se houver as duas, vale a do cabeçalho. Veja [Notas](dbml-notas).
+
+## Exemplo
+
+<ExemploDbml arquivo="ref-tabelas" />
+
+## Erros comuns
+
+Duas tabelas com o mesmo nome (no mesmo schema) geram um erro na segunda:
+
+```dbml
+Table clientes {
+  id bigint [pk]
+}
+
+Table clientes {
+  id bigint [pk]
+}
+```
+
+Diagnóstico: ``Duplicate table `clientes` ``. A interface web em pt-BR mostra ``Tabela duplicada `clientes` ``.
+
+Outras mensagens do linter para tabelas:
+
+| Mensagem | Causa |
+|---|---|
+| ``Table without a name`` | `Table { ... }` sem nome. |
+| ``Missing `{` after `Table nome` `` | Faltou a chave de abertura. |
+| ``Table `nome` was not closed with `}` `` | Faltou a chave de fechamento. |
+| `` `nome` has no primary key `` (info) | Nenhuma coluna com `pk` e nenhum índice com `pk`. |
+
+## Observações
+
+- Dentro do bloco, `Note` e `Indexes` são reconhecidos. Outros blocos aninhados (como `checks { ... }`) são ignorados sem erro.
+- Cada coluna ocupa uma linha. Duas colunas na mesma linha geram erro.

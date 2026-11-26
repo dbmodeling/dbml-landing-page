@@ -1,0 +1,90 @@
+---
+titulo: Layout sidecar
+descricao: Format of the schema.dbml.layout.json file, which stores positions, relationship styles and viewport without touching the DBML.
+secao: referencia
+ordem: 110
+modalidades: [desktop, web, vscode]
+---
+
+The `.dbml` stores the **model**. Anything purely visual lives in a JSON file next to it, the sidecar. This keeps the DBML valid and clean in Git, and lets you ignore the layout in version control if your team prefers.
+
+## Name and location
+
+The name is the DBML file name plus `.layout.json`, in the same folder:
+
+```text
+loja.dbml
+loja.dbml.layout.json
+```
+
+The Desktop app, `dbml run` and the VS Code extension use the same file and the same format. If the sidecar does not exist, auto-layout positions the tables.
+
+## Fields
+
+| Field | Type | Meaning |
+|---|---|---|
+| `version` | number, optional | Format version. May be missing. |
+| `tables` | object | Position of each card. The key is the table name (`schema.table` when it has a schema) or `enum:<name>` for an enum. The value is `{ "x": number, "y": number }`. |
+| `colors` | object, optional | Name-to-color map, foreseen in the format. Table and group colors come from the DBML itself (`headercolor` and `color`). |
+| `edges` | object, optional | Style per relationship. The key is `source_table.column->target_table.column`. The value is `{ "straight": boolean, "dx": number, "dy": number }`, all optional. |
+| `viewport` | object, optional | Diagram zoom and pan: `{ "zoom": number, "pan_x": number, "pan_y": number }`. |
+
+Details of `edges`:
+
+- `straight: true` draws the relationship as a straight line instead of a curve (the **Straight/curved relationship** action).
+- `dx` and `dy` shift the curve control points when you adjust the relationship by hand. The reset-curve action removes the adjustment.
+
+Extra fields the app does not know are kept when it rewrites the file. Fields such as `views` or `export` do not exist: if you saw them in older documents, they are not part of the format.
+
+## Real example
+
+This is the sidecar of the sample schema that ships with the Desktop app:
+
+```json
+{
+  "edges": {},
+  "tables": {
+    "order_items": {
+      "x": 396,
+      "y": 32
+    },
+    "orders": {
+      "x": 32,
+      "y": 32
+    },
+    "products": {
+      "x": 824,
+      "y": 32
+    },
+    "reviews": {
+      "x": 1188,
+      "y": 32
+    },
+    "users": {
+      "x": 32,
+      "y": 348
+    }
+  },
+  "viewport": {
+    "pan_x": 72.43307449773151,
+    "pan_y": 454.6130301358731,
+    "zoom": 0.3783341972190226
+  }
+}
+```
+
+A straight relationship looks like this in `edges`:
+
+```json
+{
+  "edges": {
+    "pedidos.cliente_id->clientes.id": { "straight": true }
+  }
+}
+```
+
+## Notes
+
+- The JSON is written with sorted keys and 2-space indentation, for clean Git diffs.
+- Deleting the sidecar is safe: the model does not depend on it. You lose the positions and auto-layout recalculates.
+- To reposition all tables, use **Auto-layout** (<Atalho acao="Relayout" />).

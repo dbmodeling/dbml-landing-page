@@ -1,0 +1,17 @@
+---
+titulo: Extensão VS Code
+descricao: Comandos, configurações e editores da extensão DB Modeling para VS Code, e como ela se comporta em workspaces não confiáveis.
+secao: referencia
+ordem: 140
+modalidades: [vscode]
+---
+
+A extensão abre arquivos `.dbml` no canvas visual, com o mesmo núcleo das outras modalidades (Wasm), e adiciona uma barra lateral **Esquemas DBML**. Ela exige o VS Code 1.85 ou mais novo.
+
+- O editor padrão para `.dbml` é o de texto. Para abrir no canvas, use **Abrir no canvas visual** na barra de título, ou mude `dbmodeling.defaultEditor` para `canvas`.
+- **Conectar ao banco** usa a CLI `dbml` instalada na máquina. A extensão pede a versão 0.1.4 ou mais nova da CLI.
+- O modo **Comparar** usa o `HEAD` do Git.
+- Em **workspaces não confiáveis**, o canvas e o editor funcionam, mas a conexão com o banco e o modo Comparar ficam desativados. Em **workspaces virtuais** (por exemplo, vscode.dev), a conexão com o banco não está disponível. Veja [Problemas conhecidos](../ajuda/problemas-conhecidos#vs-code).
+- A extensão se atualiza pelo Marketplace do VS Code. Veja [Atualizações](../ajuda/atualizacoes).
+
+<RefVscode />

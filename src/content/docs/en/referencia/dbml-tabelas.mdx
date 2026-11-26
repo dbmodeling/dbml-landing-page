@@ -1,0 +1,86 @@
+---
+titulo: DBML Table
+descricao: "Table syntax: name, schema, alias, headercolor, note and the column block."
+secao: referencia
+ordem: 30
+modalidades: [desktop, web, vscode]
+---
+
+## Syntax
+
+```dbml
+Table [schema.]name [as alias] [headercolor: #RRGGBB, note: 'text'] {
+  column type [settings]
+  ...
+  Note: 'text'
+  Indexes {
+    ...
+  }
+}
+```
+
+The name can use double quotes (`Table "pedido item" { ... }`). Columns are described in [Columns](dbml-colunas), indexes in [Indexes](dbml-indices).
+
+## Table settings
+
+They go in square brackets after the name, separated by commas.
+
+| Setting | Value | Effect |
+|---|---|---|
+| `headercolor` | hex color, such as `#2563EB` | Header color of the table card on the canvas. |
+| `note` | quoted text | Table note. Equivalent to a `Note:` inside the block. |
+
+Other header settings are accepted without error and ignored.
+
+## Alias
+
+`as alias` creates a nickname you can use in relationships instead of the full name.
+
+```dbml
+Table clientes as C { id bigint [pk] }
+Ref: pedidos.cliente_id > C.id
+```
+
+The alias resolves to the real table (with its schema, if any).
+
+## Schema
+
+`Table financeiro.faturas { ... }` puts the table in the `financeiro` schema. See the [overview](dbml-visao-geral#schemas).
+
+## Note
+
+The table note can come from `[note: '...']` in the header or from `Note: '...'` (or `Note { '...' }`) inside the block. If both exist, the header one wins. See [Notes](dbml-notas).
+
+## Example
+
+<ExemploDbml arquivo="ref-tabelas" />
+
+## Common error
+
+Two tables with the same name (in the same schema) produce an error on the second one:
+
+```dbml
+Table clientes {
+  id bigint [pk]
+}
+
+Table clientes {
+  id bigint [pk]
+}
+```
+
+Diagnostic: ``Duplicate table `clientes` ``. The web interface in Portuguese shows ``Tabela duplicada `clientes` ``.
+
+Other linter messages for tables:
+
+| Message | Cause |
+|---|---|
+| ``Table without a name`` | `Table { ... }` with no name. |
+| ``Missing `{` after `Table name` `` | The opening brace is missing. |
+| ``Table `name` was not closed with `}` `` | The closing brace is missing. |
+| `` `name` has no primary key `` (info) | No column with `pk` and no index with `pk`. |
+
+## Notes
+
+- Inside the block, `Note` and `Indexes` are recognized. Other nested blocks (such as `checks { ... }`) are ignored without error.
+- Each column takes one line. Two columns on the same line produce an error.

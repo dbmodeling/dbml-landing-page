@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { Menu, Search, Github, Star, ArrowUpRight } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { useLatestRelease } from "@/hooks/useLatestRelease";
@@ -25,10 +26,30 @@ const QUICK_JUMP_ITEMS: QuickJumpItem[] = [
   { label: "Multi-Target Architecture (Desktop · CLI · VS Code)", category: "Targets", href: "#architecture", keywords: "gpui-kit axum websocket wasm vscode vsix sync-build" },
   { label: "crates/dbml-syntax & crates/dbml-edit", category: "Rust Core", href: "#opensource", keywords: "logos rowan cst patch format swap_lines" },
   { label: "crates/layout & crates/dbml-wasm", category: "Layout & Wasm", href: "#opensource", keywords: "layered clustered route wasm-bindgen" },
+  { label: "Documentation: install, guides, DBML & CLI reference", category: "Docs", href: "/docs", keywords: "docs documentation guide reference tutorial dbml cli shortcuts install" },
   { label: "Installers (.deb · .rpm · .exe · .vsix · macOS via curl)", category: "Releases", href: "#downloads", keywords: "download linux debian fedora macos windows vscode" },
 ];
 
-export function Navbar() {
+/** Ao sair da landing, as âncoras `#secao` passam a apontar para `/#secao`. */
+const ROOT_PATH = "/";
+const DOCS_PATH = "/docs";
+
+export interface DocsSearchProps {
+  /** Abre a busca da documentação (substitui o salto rápido da landing). */
+  onOpen: () => void;
+  label: string;
+  placeholder: string;
+  shortcut: string;
+}
+
+interface NavbarProps {
+  variant?: "landing" | "docs";
+  docsSearch?: DocsSearchProps;
+}
+
+export function Navbar({ variant = "landing", docsSearch }: NavbarProps) {
+  const isDocs = variant === "docs";
+  const anchor = (hash: string) => (isDocs ? `${ROOT_PATH}${hash}` : hash);
   const { version } = useLatestRelease();
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -46,6 +67,7 @@ export function Navbar() {
   });
 
   useEffect(() => {
+    if (isDocs) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
@@ -58,7 +80,7 @@ export function Navbar() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [isDocs]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -97,32 +119,32 @@ export function Navbar() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild className="cursor-pointer">
-                <a href="#hero" className="px-2.5 py-1.5 flex items-center justify-between">
+                <a href={anchor("#hero")} className="px-2.5 py-1.5 flex items-center justify-between">
                   <span>01 &middot; Overview &amp; TextPatch</span>
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
-                <a href="#problem" className="px-2.5 py-1.5 flex items-center justify-between">
+                <a href={anchor("#problem")} className="px-2.5 py-1.5 flex items-center justify-between">
                   <span>02 &middot; Pure DBML &amp; Sidecar</span>
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
-                <a href="#showcase" className="px-2.5 py-1.5 flex items-center justify-between">
+                <a href={anchor("#showcase")} className="px-2.5 py-1.5 flex items-center justify-between">
                   <span>03 &middot; 1:1 Workbench &amp; Routing</span>
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
-                <a href="#capabilities" className="px-2.5 py-1.5 flex items-center justify-between">
+                <a href={anchor("#capabilities")} className="px-2.5 py-1.5 flex items-center justify-between">
                   <span>04 &middot; Connect, Import &amp; Export</span>
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
-                <a href="#architecture" className="px-2.5 py-1.5 flex items-center justify-between">
+                <a href={anchor("#architecture")} className="px-2.5 py-1.5 flex items-center justify-between">
                   <span>05 &middot; Desktop, CLI &amp; VS Code</span>
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
-                <a href="#opensource" className="px-2.5 py-1.5 flex items-center justify-between">
+                <a href={anchor("#opensource")} className="px-2.5 py-1.5 flex items-center justify-between">
                   <span>06 &middot; Rust Crates &amp; Wasm</span>
                 </a>
               </DropdownMenuItem>
@@ -130,8 +152,8 @@ export function Navbar() {
           </DropdownMenu>
 
           <a
-            href="#hero"
-            className="inline-flex items-center gap-2 font-mono text-xs sm:text-[13px] tracking-[0.22em] uppercase text-foreground font-medium hover:text-signal transition-colors"
+            href={anchor("#hero")}
+            className="inline-flex items-center gap-2 whitespace-nowrap font-mono text-xs sm:text-[13px] tracking-[0.22em] uppercase text-foreground font-medium hover:text-signal transition-colors"
           >
             {/* Official mark.svg from crates/app/assets/brand/mark.svg */}
             <svg
@@ -171,15 +193,42 @@ export function Navbar() {
             </svg>
             <span>DB-MODELING</span>
           </a>
+
+          {/* Aba Docs: presente na landing e nas páginas da documentação */}
+          <NavLink
+            to={DOCS_PATH}
+            className={({ isActive }) =>
+              `inline-flex items-center h-8 px-2 rounded-md font-mono text-xs tracking-[0.18em] uppercase transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                isActive ? "text-foreground bg-secondary" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+              }`
+            }
+          >
+            Docs
+          </NavLink>
         </div>
 
         {/* Right: Theme Toggle, Pill Search Box, GitHub & Release Star */}
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
 
-          {/* Interactive Pill Search Input */}
+          {isDocs && docsSearch ? (
+            <button
+              type="button"
+              onClick={docsSearch.onOpen}
+              aria-label={docsSearch.label}
+              aria-keyshortcuts={`${docsSearch.shortcut} Control+K Meta+K`}
+              className="flex items-center h-8 w-8 sm:w-56 md:w-64 justify-center sm:justify-start rounded-full bg-secondary/90 border border-border sm:px-3 gap-2 text-muted-foreground hover:border-foreground/40 hover:bg-card transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Search className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              <span className="hidden sm:inline text-xs">{docsSearch.placeholder}</span>
+              <kbd className="hidden md:inline-block ml-auto font-mono text-[10px] text-muted-foreground/80">{docsSearch.shortcut}</kbd>
+            </button>
+          ) : (
           <div ref={searchContainerRef} className="relative">
-            <div className="flex items-center h-8 w-36 sm:w-56 md:w-64 rounded-full bg-secondary/90 border border-border px-3 gap-2 focus-within:border-foreground/40 focus-within:bg-card transition-colors">
+            <div
+              onClick={() => inputRef.current?.focus()}
+              className="flex items-center h-8 w-9 focus-within:w-44 sm:w-56 sm:focus-within:w-56 md:w-64 md:focus-within:w-64 overflow-hidden rounded-full bg-secondary/90 border border-border px-[11px] sm:px-3 gap-2 focus-within:border-foreground/40 focus-within:bg-card transition-[width,colors] duration-150"
+            >
               <Search className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
               <input
                 ref={inputRef}
@@ -192,7 +241,7 @@ export function Navbar() {
                 }}
                 placeholder="Search"
                 aria-label="Search crates, commands, and targets"
-                className="w-full bg-transparent text-xs text-foreground placeholder:text-muted-foreground focus:outline-none"
+                className="w-full min-w-0 bg-transparent text-xs text-foreground placeholder:text-muted-foreground focus:outline-none"
               />
               <kbd className="hidden md:inline-block font-mono text-[10px] text-muted-foreground/80">
                 Ctrl+K
@@ -210,16 +259,14 @@ export function Navbar() {
                   </div>
                 ) : (
                   <div className="max-h-64 overflow-y-auto divide-y divide-border/50">
-                    {filteredItems.map((item) => (
-                      <a
-                        key={item.href + item.label}
-                        href={item.href}
-                        onClick={() => {
-                          setSearchOpen(false);
-                          setQuery("");
-                        }}
-                        className="flex items-center justify-between px-2.5 py-2 text-xs hover:bg-secondary rounded-sm transition-colors group"
-                      >
+                    {filteredItems.map((item) => {
+                      const close = () => {
+                        setSearchOpen(false);
+                        setQuery("");
+                      };
+                      const className = "flex items-center justify-between px-2.5 py-2 text-xs hover:bg-secondary rounded-sm transition-colors group";
+                      const content = (
+                        <>
                         <div>
                           <div className="font-medium text-foreground group-hover:text-signal transition-colors">
                             {item.label}
@@ -229,13 +276,25 @@ export function Navbar() {
                           </div>
                         </div>
                         <ArrowUpRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-signal" />
-                      </a>
-                    ))}
+                        </>
+                      );
+                      return item.href.startsWith("/") ? (
+                        <Link key={item.href + item.label} to={item.href} onClick={close} className={className}>
+                          {content}
+                        </Link>
+                      ) : (
+                        <a key={item.href + item.label} href={item.href} onClick={close} className={className}>
+                          {content}
+                        </a>
+                      );
+                    })}
                   </div>
                 )}
               </div>
             )}
           </div>
+
+          )}
 
           {/* GitHub Repository + Star / Version Counter */}
           <a

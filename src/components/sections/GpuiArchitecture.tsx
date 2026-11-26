@@ -1,5 +1,6 @@
 import { CommandBlock } from "@/components/ui/CommandBlock";
 import { CellHeader } from "@/components/ui/CellHeader";
+import { useLatestRelease } from "@/hooks/useLatestRelease";
 
 const ARCHITECTURE_TREE_NARROW = `Rust core crates
   schema · dbml-syntax
@@ -44,6 +45,8 @@ const ARCHITECTURE_TREE =`┌─────────────────
               └───────────────────┘         └───────────────────┘`;
 
 export function GpuiArchitecture() {
+  const { version } = useLatestRelease();
+
   return (
     <section id="architecture" className="border-b border-border bg-background">
       {/* Centered Mixed-Weight Editorial Header ("The same thing, for real" parallel) */}
@@ -199,7 +202,7 @@ export function GpuiArchitecture() {
             <span className="text-signal font-semibold">
               &rarr; Synchronized build: ./scripts/sync-build.sh --release
             </span>
-            <span className="text-muted-foreground text-xs">v0.1.4 &middot; MIT</span>
+            <span className="text-muted-foreground text-xs">{version} &middot; MIT</span>
           </div>
         </div>
       </div>

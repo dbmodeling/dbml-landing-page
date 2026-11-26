@@ -1,0 +1,64 @@
+---
+titulo: Installation
+descricao: Pick the DB Modeling install channel for your system and your mode.
+secao: comecar
+ordem: 20
+modalidades: [desktop, web, vscode]
+---
+
+Every installer is on the [GitHub Releases](https://github.com/dbmodeling/dbml/releases) page. The tab below opens on your operating system.
+
+<Abas detectarSo>
+<Aba titulo="Windows" so="windows">
+
+Download `db-modeling-windows-setup.exe` and run it. Full guide: [Install on Windows](instalacao-windows).
+
+</Aba>
+<Aba titulo="macOS" so="macos">
+
+Download `db-modeling-macos-arm64.dmg` (or the `.pkg`) for Apple Silicon. Full guide: [Install on macOS](instalacao-macos).
+
+</Aba>
+<Aba titulo="Linux" so="linux">
+
+The shortest path needs no `sudo` and works on any x86_64 distribution:
+
+```bash
+curl -fsSL https://github.com/dbmodeling/dbml/releases/latest/download/db-modeling-install.sh -o install.sh
+bash install.sh
+```
+
+Other options:
+
+- [`install.sh` script](instalacao-linux-script), with and without `--system`.
+- [Ubuntu and Debian (`.deb`)](instalacao-ubuntu-debian).
+- [Fedora (`.rpm`)](instalacao-fedora).
+
+</Aba>
+</Abas>
+
+## Choose by what you want to use
+
+| I want | Channel | Guide |
+|---|---|---|
+| Desktop app on Windows | `.exe` installer | [Windows](instalacao-windows) |
+| Desktop app on macOS | `.dmg` or `.pkg` (Apple Silicon) | [macOS](instalacao-macos) |
+| Desktop app on Linux, no `sudo` | Tarball via `install.sh` | [`install.sh` script](instalacao-linux-script) |
+| Desktop app on Ubuntu/Debian, system-wide | `.deb` | [Ubuntu and Debian](instalacao-ubuntu-debian) |
+| Desktop app on Fedora, system-wide | `.rpm` | [Fedora](instalacao-fedora) |
+| Web server for a team | Docker image | [Docker](instalacao-docker) |
+| Canvas inside VS Code | Extension | [VS Code](instalacao-vscode) |
+
+<Aviso tipo="info">
+The `dbml` CLI ships with the Windows installer and the macOS `.pkg`. The Linux `.deb`, `.rpm` and tarball contain only the Desktop app. On Linux, use the [Docker image](instalacao-docker) to run `dbml run`.
+</Aviso>
+
+## Verify your download
+
+Each release publishes a `SHA256SUMS.txt` with the checksum of every file. `install.sh` checks it for you. For manual downloads, check it yourself. Each guide shows the steps.
+
+## After installing
+
+1. Confirm the version (each guide shows the command).
+2. Follow the [first diagram](primeiro-diagrama).
+3. To see how each channel updates, read [Updates](../ajuda/atualizacoes).

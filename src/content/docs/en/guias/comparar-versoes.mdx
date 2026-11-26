@@ -1,0 +1,131 @@
+---
+titulo: Compare versions
+descricao: See what changed in the schema against git HEAD on the canvas, or compare two DBML files on the command line and in CI with dbml diff.
+secao: guias
+ordem: 60
+modalidades: [desktop, web, vscode]
+---
+
+You compare the schema you are editing with the version from the last commit and see the tables, columns, indexes, enums and relationships that were added, removed and modified. In the terminal, `dbml diff` does the same between two files and returns an exit code that CI understands.
+
+<Captura cena="comparar-canvas" alt="Compare mode on: summary panel with 1 added, 1 removed and 1 modified, and a ghost card of the removed table on the canvas." />
+
+```text
+Tables
+  ~ produtos
+      ~ column preco: decimal(10,2) [not null] -> decimal(12,2) [not null]
+      + column descricao: text
+Summary: 1 added, 0 removed, 1 modified
+```
+
+The symbols are `+` added, `-` removed and `~` modified.
+
+## Prerequisites
+
+- The `.dbml` file is in a git repository, with at least one commit that contains it.
+- `git` is installed and on the `PATH`.
+- For Compare mode: the file is saved.
+- For `dbml diff`: the `dbml` binary installed (see [Installation](../comecar/instalacao)).
+
+## Compare mode on the canvas
+
+The mode is read-only. It does not change the text or the undo history.
+
+1. Save the file with <Atalho acao="SaveFile" />.
+2. Turn the mode on:
+
+   <Modalidade so="desktop">
+   Use <Atalho acao="ToggleDiffMode" /> (palette: **Compare with HEAD (git)**).
+   </Modalidade>
+
+   <Modalidade so="web,vscode">
+   Use <Atalho acao="ToggleDiff" /> (palette: **Compare with git HEAD**) or the **Compare with git HEAD** button on the left sidebar.
+   </Modalidade>
+
+3. The app reads the file version at `HEAD` and opens the summary panel, with the count of added, modified and removed items.
+4. On the Web and in VS Code, removed items appear as ghost cards on the canvas, in free space. On the Desktop, the app shows `Removed since HEAD: <names>`.
+5. Click an item in the summary to select it and move the camera to it.
+
+   <Modalidade so="desktop">
+   Step through the changes with <Atalho acao="NextDiffChange" /> (**Compare: next change**) and <Atalho acao="PrevDiffChange" /> (**Compare: previous change**).
+   </Modalidade>
+
+   <Modalidade so="web,vscode">
+   On the Web and in VS Code, you navigate by clicking the summary. The next and previous change shortcuts exist only on the Desktop.
+   </Modalidade>
+
+6. Keep editing: the summary recalculates against `HEAD` as you change the text.
+7. Leave the mode with the same shortcut (or **Exit Compare mode**). On the Desktop, `Esc` also leaves.
+
+<Modalidade so="vscode">
+The extension reads `HEAD` through the `git` on your machine. In VS Code for the Web (vscode.dev), Compare mode is not available.
+</Modalidade>
+
+## Compare on the command line
+
+`dbml diff` compares two `.dbml` files by structure (tables, columns, indexes, enums and relationships), not by text.
+
+```bash
+dbml diff before.dbml after.dbml
+```
+
+For the full difference as JSON, use `--format json`:
+
+```bash
+dbml diff before.dbml after.dbml --format json
+```
+
+### Exit codes
+
+| Code | Meaning |
+|---|---|
+| `0` | The schemas are equal. The output is `No differences.` |
+| `1` | There are differences. The output lists each one. |
+| `2` | Error: unreadable file or DBML syntax error (the message names the file). |
+
+### In CI
+
+Compare the branch schema with the main branch one and let the exit code decide:
+
+```bash
+git show origin/main:db/schema.dbml > /tmp/base.dbml
+dbml diff /tmp/base.dbml db/schema.dbml
+```
+
+- To **only report** the difference, treat code `1` as success and fail only on `2`:
+
+  ```bash
+  dbml diff /tmp/base.dbml db/schema.dbml; code=$?
+  [ "$code" -le 1 ] || exit "$code"
+  ```
+
+- To **require** that the schema does not change, let code `1` fail the step.
+
+Make sure the checkout brings the history (for example, `fetch-depth: 0` on GitHub Actions), otherwise `origin/main` does not exist.
+
+## If something goes wrong
+
+### On the canvas
+
+| Message | Likely cause | What to do |
+|---|---|---|
+| `Save the file to compare it with git HEAD` (Desktop) | The file has not been saved yet. | Save with <Atalho acao="SaveFile" />. |
+| `git not found on PATH` (Desktop) / `Cannot compare: git is not installed or not on PATH.` (Web) | `git` is not installed. | Install git and reopen the app. |
+| `The file is not in a git repository` (Desktop) / `Cannot compare: the file is not in a git repository.` (Web) | The folder is not a repository. | Run `git init` and make a commit. |
+| `The repository has no commits yet` (Desktop) / `Cannot compare: the repository has no commits yet.` (Web) | There is no `HEAD`. | Make the first commit. |
+| `New or untracked file: it does not exist in HEAD` (Desktop) / `New file: it does not exist in git HEAD yet, so there is no earlier version to compare.` (Web) | The file was never committed. | Run `git add` and commit the file. |
+| `Cannot compare: the git HEAD version is not UTF-8 text.` (Web) | The file at `HEAD` is not UTF-8. | Save the file as UTF-8 and commit. |
+| `The git HEAD version has DBML errors and cannot be compared.` (Web) | `HEAD` has invalid DBML. | Compare with another commit through the CLI (`dbml diff`). |
+| `The current document has DBML errors. Fix them to compare.` (Web) | The current text has a syntax error. | Fix the items in **Problems**. |
+| `No differences from HEAD` (Desktop) / `No differences from git HEAD.` (Web) | Nothing changed. | Nothing to do. |
+| `This environment does not support Compare mode.` (Web) | The canvas is not served by `dbml run`. | Open the diagram with `dbml run`. |
+| `Compare mode needs git and is not available in VS Code for the Web.` (VS Code for the Web) | vscode.dev cannot run git. | Use VS Code desktop. |
+
+### In the CLI
+
+| Message | Likely cause | What to do |
+|---|---|---|
+| ``error: failed to read `<file>`: No such file or directory (os error 2)`` (code `2`) | Wrong path. | Check the paths. |
+| `error: <file>:<line>:<column>: invalid DBML: <detail>` (code `2`) | The file has a syntax error. | Fix the indicated spot; the message names the file and the position. |
+
+If `git show` fails in CI because the file does not exist yet on the base branch, handle that case in the script before calling `dbml diff`.

@@ -1,0 +1,125 @@
+---
+titulo: Install on Linux with install.sh
+descricao: Install the Desktop app on any x86_64 Linux with install.sh, without sudo or with --system.
+secao: comecar
+ordem: 70
+modalidades: [desktop]
+---
+
+`install.sh` has two modes. The default needs no `sudo` and updates itself. `--system` installs the `.deb` or `.rpm` and does not update itself.
+
+| | Default (no `--system`) | `--system` |
+|---|---|---|
+| Who can use it | Any x86_64 distribution | Ubuntu, Debian, Fedora and derivatives |
+| `sudo` | No | Yes |
+| Where it installs | `~/.local/db-modeling.app` | System package (`/usr/bin/db-modeling`) |
+| Updates | From the app (**Restart to update**) | Manual, with `apt` or `dnf` |
+
+## Requirements
+
+- **x86_64** Linux, a graphical session (Wayland or X11) and Vulkan.
+- `curl` and `tar`. For the app to update itself, also `rsync`.
+- In the default mode, the system libraries (fontconfig, freetype, xkbcommon, Vulkan, xcb) must already be installed. The script warns if any is missing. With `--system`, the package manager installs everything.
+
+## Install
+
+1. Download the script. Downloading first lets you read it before running it:
+
+   ```bash
+   curl -fsSL https://github.com/dbmodeling/dbml/releases/latest/download/db-modeling-install.sh -o install.sh
+   ```
+
+2. Run the mode you want.
+
+   **Without `sudo` (default):**
+
+   ```bash
+   bash install.sh
+   ```
+
+   The script downloads `db-modeling-linux-x86_64.tar.gz`, checks its SHA-256 against the same release's `SHA256SUMS.txt` and aborts on a mismatch. Then it installs:
+
+   - the app in `~/.local/db-modeling.app`;
+   - the `~/.local/bin/db-modeling` command;
+   - the menu entry, icons and `.dbml` MIME type for your user.
+
+   If `~/.local/bin` is not in your `PATH`, the script warns you. Add this line to `~/.bashrc` or `~/.zshrc`:
+
+   ```bash
+   export PATH="$HOME/.local/bin:$PATH"
+   ```
+
+   **With `--system` (needs `sudo`):**
+
+   ```bash
+   bash install.sh --system
+   ```
+
+   The script detects your distribution. On Ubuntu, Debian and derivatives, it installs the dependencies and the `.deb` with `apt`. On Fedora, RHEL, CentOS, Rocky and Alma, it installs the `.rpm` with `dnf`. On others, it exits with a message asking for a manual install.
+
+3. To pin a version or use another prefix, set environment variables:
+
+   ```bash
+   DBML_VERSION=v0.4.2 bash install.sh
+   DBML_PREFIX=/opt/my-apps bash install.sh
+   ```
+
+   `DBML_VERSION` is the release tag (default: the latest). `DBML_PREFIX` is the prefix for the no-`sudo` mode (default: `~/.local`).
+
+You can also pass an already downloaded file (`.tar.gz`, `.deb` or `.rpm`): `bash install.sh ./db-modeling-linux-x86_64.tar.gz`. In that case the script does **not** check the SHA-256. Check it first, as the next section shows.
+
+## Check the SHA-256 manually
+
+If you downloaded the tarball without the script:
+
+```bash
+curl -fLO https://github.com/dbmodeling/dbml/releases/latest/download/db-modeling-linux-x86_64.tar.gz
+curl -fLO https://github.com/dbmodeling/dbml/releases/latest/download/SHA256SUMS.txt
+sha256sum -c SHA256SUMS.txt --ignore-missing
+```
+
+Expected output:
+
+```text
+db-modeling-linux-x86_64.tar.gz: OK
+```
+
+## Check that it worked
+
+```bash
+db-modeling --version
+```
+
+Expected output, with the version you installed:
+
+```text
+db-modeling X.Y.Z
+```
+
+If the terminal says `command not found`, use the full path (`~/.local/bin/db-modeling --version`) and fix your `PATH`. The app also shows up in your application menu.
+
+## Update
+
+- **Without `--system`.** The app checks at startup and every hour, installs the new version and shows **Restart to update**. To check right away, use **Check for updates** in the command palette (<Atalho acao="OpenPalette" />). It needs `tar` and `rsync` in `PATH`. You can also run `bash install.sh` again, which replaces the app folder with the latest version.
+- **With `--system`.** This channel **does not update itself**. Run `bash install.sh --system` again, or download the new `.deb`/`.rpm` and use `apt` or `dnf` (see [Ubuntu and Debian](instalacao-ubuntu-debian) and [Fedora](instalacao-fedora)).
+
+See also [Updates](../ajuda/atualizacoes).
+
+## Uninstall
+
+```bash
+bash install.sh --uninstall            # no-sudo install
+bash install.sh --uninstall --system   # .deb/.rpm install (asks for sudo)
+```
+
+The first command removes `~/.local/db-modeling.app`, the `~/.local/bin/db-modeling` symlink, the menu entry, icons and MIME type. The second runs `apt remove` or `dnf remove` on `db-modeling`. Your preferences in `~/.config/db-modeling/` and your `.dbml` files stay.
+
+## Known issues
+
+- **"Only the install.sh installation updates itself".** The app shows this message when it is not in `~/.local/db-modeling.app` (for example, in `/usr/bin`). Install with the default mode to get automatic updates.
+- **`rsync` missing.** The app installs but cannot update itself. Install it with `sudo apt install rsync` or `sudo dnf install rsync`.
+- **Missing libraries.** The script lists what is missing. Install them with your package manager or use `--system`.
+- **`~/.local/bin/db-modeling` already exists and is not a symlink.** The script leaves the file alone and warns you. Remove it or use the app's full path.
+- **x86_64 only.** There is no tarball for ARM.
+- **No `dbml` CLI.** The script installs only the Desktop app, even though its closing message mentions `dbml run`. For the web server, use the [Docker image](instalacao-docker).
+- More cases: [Known issues](../ajuda/problemas-conhecidos).

@@ -1,0 +1,23 @@
+Project loja {
+  Note: 'Nota do projeto.'
+}
+
+// Nota na configuração da tabela.
+Table clientes [note: 'Cadastro de clientes.'] {
+  id bigint [pk, increment]
+  nome varchar(120) [note: 'Nome completo.']
+}
+
+// Nota em bloco dentro da tabela (aceita várias linhas com aspas triplas).
+Table pedidos {
+  id bigint [pk, increment]
+  Note: '''
+    Pedidos da loja.
+    Um pedido tem vários itens.
+  '''
+}
+
+// Nota de nível superior.
+Note aviso_geral {
+  'Este esquema é um exemplo.'
+}

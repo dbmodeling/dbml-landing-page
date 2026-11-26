@@ -1,0 +1,159 @@
+---
+titulo: Host for your team
+descricao: Run dbml run on a server or container with a fixed token, allowed hosts and a connection limit, and know what never to expose unprotected.
+secao: guias
+ordem: 90
+modalidades: [web]
+---
+
+You start the editor on a team machine and people open the link in the browser, with nothing to install. When the server is up, the terminal shows the address with the token (the warning text is printed in Portuguese):
+
+```text
+  File:     /srv/schemas
+  Sidecar:  /srv/schemas.layout.json
+  Server:   http://127.0.0.1:3000/?token=<your-token>
+
+  AVISO: O servidor escuta em 0.0.0.0, acessível pela rede. Quem tiver a URL com o token de sessão pode ler e editar os arquivos do workspace. Use apenas em redes confiáveis.
+```
+
+The warning says: the server listens on 0.0.0.0, reachable from the network; anyone with the URL and the session token can read and edit the workspace files; use only on trusted networks.
+
+<Aviso tipo="perigo">
+**Never expose the server without a token.** Anyone who can reach the server reads and writes the workspace files and can use the database connection. `--public-demo` turns the token off and exists only for throwaway demos, with a folder that holds no real data. Do not use it on a work server, not even "just for a day".
+</Aviso>
+
+## How the protection works
+
+By default the server listens only on `127.0.0.1` and generates a **random 128-bit token** on every run. The `/ws` and `/api/*` routes answer `401` without the token. The server also checks the `Host` and `Origin` headers to block DNS rebinding attacks.
+
+| Flag | Variable | What it does |
+|---|---|---|
+| `--host ADDRESS` | | Listen address. The default is `127.0.0.1`. Use `0.0.0.0` to accept the network. |
+| `--token TOKEN` | `DBML_TOKEN` | Fixed token instead of the random one. At least 16 characters, only `A-Z a-z 0-9 - _ . ~`. |
+| `--allowed-host HOST` | `DBML_ALLOWED_HOSTS` | Extra `Host` accepted besides loopback. Repeat the flag or separate with commas. |
+| `--max-connections N` | `DBML_MAX_CONNECTIONS` | Maximum WebSocket connections (one per open tab). Default: 256. |
+| `--public-demo` | `DBML_PUBLIC_DEMO` | **Dangerous.** Turns the token off. |
+| `--no-open` | | Does not open the browser. Use it on servers. |
+| `--no-watch` | | Does not watch for external file changes. |
+| `-p, --port` | | Port. The default is `3000`. |
+
+The full reference is in [CLI](../referencia/cli).
+
+## Prerequisites
+
+- The `dbml` binary on the server (see [Installation](../comecar/instalacao)) or Docker.
+- A folder with the team's `.dbml` files.
+- For access from outside the machine, a trusted network (VPN, company network) or a reverse proxy with HTTPS. The server speaks plain HTTP.
+
+## Steps
+
+### 1. Generate a token
+
+```bash
+export DBML_TOKEN="$(openssl rand -hex 16)"
+```
+
+The token has 32 characters. Keep it as a secret: anyone with the URL that carries the token edits your files.
+
+### 2. Start the server
+
+```bash
+dbml run /srv/schemas --host 0.0.0.0 --port 3000 --no-open \
+  --token "$DBML_TOKEN" --allowed-host 192.168.1.5:3000
+```
+
+- The folder you pass (`/srv/schemas`) becomes the workspace. Each `.dbml` in it shows up in the sidebar.
+- `--allowed-host` must list **exactly** how people will reach the server. See the next table.
+
+| How people reach it | What to pass in `--allowed-host` |
+|---|---|
+| `http://192.168.1.5:3000` | `192.168.1.5:3000` (with the port) |
+| `https://dbml.example.com`, through a reverse proxy on port 443 | `dbml.example.com` (without the port) |
+| `http://localhost:3000` on the server itself | Nothing: loopback is already allowed |
+
+Without the right entry, the browser gets `forbidden host or origin` (`403`). Wildcards (`*`) are ignored on purpose.
+
+### 3. Share the link
+
+Send `http://192.168.1.5:3000/?token=<your-token>` over a private channel. When opened, the app stores the token in the browser session and removes the parameter from the address bar.
+
+With `--token`, the link stays valid when the server restarts. Without `--token`, the token changes on every run.
+
+### 4. Check health
+
+`GET /health` answers `{"status":"ok"}` without requiring a token. Use it for monitoring and load balancers.
+
+### 5. Stop the server
+
+`Ctrl+C` or `SIGTERM` (for example, `docker stop`). The server finishes pending writes and exits.
+
+## Docker
+
+The `ghcr.io/dbmodeling/dbml:latest` image runs as the `dbml` user (UID 1000), exposes port `3000` and uses the `/workspace` folder. The image default command is:
+
+```text
+dbml /workspace --host 0.0.0.0 --port 3000 --no-open
+```
+
+That command **does not set a token**: the server generates a random token and prints it in the logs (`docker logs`). For a team server, set the token and hosts through environment variables.
+
+```bash
+docker run -d --name dbml \
+  -p 127.0.0.1:3000:3000 \
+  -e DBML_TOKEN="$DBML_TOKEN" \
+  -e DBML_ALLOWED_HOSTS=dbml.example.com \
+  -v "$PWD/schemas:/workspace" \
+  ghcr.io/dbmodeling/dbml:latest
+```
+
+With Compose:
+
+```yaml
+services:
+  dbml-web:
+    image: ghcr.io/dbmodeling/dbml:latest
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      DBML_TOKEN: ${DBML_TOKEN}
+      DBML_ALLOWED_HOSTS: dbml.example.com
+    volumes:
+      - ./schemas:/workspace
+    restart: unless-stopped
+```
+
+Points of attention:
+
+- `127.0.0.1:3000:3000` publishes the port only on the host loopback, for the reverse proxy in front. The repository `docker-compose.yml` publishes `3000` on all interfaces (`"${DBML_PORT:-3000}:3000"`): if you use it, set `DBML_TOKEN` and `DBML_ALLOWED_HOSTS`.
+- The folder mounted at `/workspace` must allow writes for UID 1000, otherwise edits are not saved.
+- The container has a `HEALTHCHECK` on `/health`.
+
+### Reverse proxy
+
+Put Nginx, Caddy or Traefik in front to get HTTPS. The proxy must:
+
+- Preserve the `Host` header (the same value as `--allowed-host`).
+- Allow WebSocket on `/ws`.
+
+## Who can see what
+
+- Anyone with the token reads and writes **all** the `.dbml` files in the folder. There are no per-person or per-file permissions.
+- The **Connect to database** window runs on the server: anyone with the token can try connections from the server network. See [Connect to a database](../guias/conectar-banco).
+- Each open tab uses one WebSocket connection. Above the limit, new tabs get `too many open connections (limit <N>); close another tab`. Raise it with `--max-connections`.
+
+## If something goes wrong
+
+| Message | Likely cause | What to do |
+|---|---|---|
+| `missing or invalid session token` (`401`) | The URL has no token, or the token changed after a restart. | Use the full link with `?token=`. For stable links, set `--token`. |
+| `forbidden host or origin` (`403`) | The address used in the browser is not in `--allowed-host`. | Add the exact `Host` (with the port, if any). See the table in step 2. |
+| `too many open connections (limit <N>); close another tab` (`503`) | Too many open tabs. | Close tabs or raise `--max-connections`. |
+| `Error: --token/DBML_TOKEN needs at least 16 characters` | Short token. | Use 16 characters or more, for example `openssl rand -hex 16`. |
+| `Error: --token/DBML_TOKEN accepts only A-Z a-z 0-9 - _ . ~` | The token has a space or a symbol. | Use only the allowed characters. |
+| `Error: --max-connections/DBML_MAX_CONNECTIONS must be at least 1` | Value zero. | Use 1 or more. |
+| `Error: No .dbml file or folder specified and no previous session found. Usage: dbml <file.dbml \| folder>` | The folder or file is missing. | Pass the folder: `dbml run /srv/schemas`. |
+| ``Error: no free port for `<host>` between <N> and <M>`` | All ports in the range are taken. | Free the port or pick another with `--port`. |
+| `Error: could not listen on <address>` | The system denied the address or port (for example, ports below 1024 without privilege). | Use a higher port. |
+| The server came up on another port and the link gives `403` | The requested port was taken and the server used the next free one. | Use the port shown in `Server:` and adjust `--allowed-host`. In production, free the requested port. |
+| The server answers, but edits do not persist (Docker) | The mounted folder is not writable for UID 1000. | Fix the folder owner or permissions. |
+| `Disconnected from the server. Edits will not be saved.` | The server went down or the proxy does not forward the WebSocket. | Check the process and the proxy configuration for `/ws`. |

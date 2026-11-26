@@ -1,0 +1,64 @@
+---
+titulo: Instalação
+descricao: Escolha o canal de instalação do DB Modeling para o seu sistema e a sua modalidade.
+secao: comecar
+ordem: 20
+modalidades: [desktop, web, vscode]
+---
+
+Todos os instaladores ficam nas [Releases do GitHub](https://github.com/dbmodeling/dbml/releases). A aba abaixo já abre no seu sistema operacional.
+
+<Abas detectarSo>
+<Aba titulo="Windows" so="windows">
+
+Baixe `db-modeling-windows-setup.exe` e execute. Guia completo: [Instalação no Windows](instalacao-windows).
+
+</Aba>
+<Aba titulo="macOS" so="macos">
+
+Baixe `db-modeling-macos-arm64.dmg` (ou o `.pkg`) para Apple Silicon. Guia completo: [Instalação no macOS](instalacao-macos).
+
+</Aba>
+<Aba titulo="Linux" so="linux">
+
+O caminho mais curto, sem `sudo`, funciona em qualquer distribuição x86_64:
+
+```bash
+curl -fsSL https://github.com/dbmodeling/dbml/releases/latest/download/db-modeling-install.sh -o install.sh
+bash install.sh
+```
+
+Outras opções:
+
+- [Script `install.sh`](instalacao-linux-script), com e sem `--system`.
+- [Ubuntu e Debian (`.deb`)](instalacao-ubuntu-debian).
+- [Fedora (`.rpm`)](instalacao-fedora).
+
+</Aba>
+</Abas>
+
+## Escolha pelo que você quer usar
+
+| Quero usar | Canal | Guia |
+|---|---|---|
+| App Desktop no Windows | Instalador `.exe` | [Windows](instalacao-windows) |
+| App Desktop no macOS | `.dmg` ou `.pkg` (Apple Silicon) | [macOS](instalacao-macos) |
+| App Desktop no Linux, sem `sudo` | Tarball via `install.sh` | [Script `install.sh`](instalacao-linux-script) |
+| App Desktop no Ubuntu/Debian, para o sistema todo | `.deb` | [Ubuntu e Debian](instalacao-ubuntu-debian) |
+| App Desktop no Fedora, para o sistema todo | `.rpm` | [Fedora](instalacao-fedora) |
+| Servidor Web para o time | Imagem Docker | [Docker](instalacao-docker) |
+| Canvas dentro do VS Code | Extensão | [VS Code](instalacao-vscode) |
+
+<Aviso tipo="info">
+A CLI `dbml` vem junto com o instalador do Windows e com o `.pkg` do macOS. Os pacotes `.deb`, `.rpm` e o tarball do Linux entregam só o app Desktop. No Linux, use a [imagem Docker](instalacao-docker) para rodar `dbml run`.
+</Aviso>
+
+## Conferir o download
+
+Cada release publica um `SHA256SUMS.txt` com a soma de cada arquivo. O `install.sh` faz essa conferência sozinho. Nos downloads manuais, faça você mesmo. O passo a passo está em cada guia.
+
+## Depois de instalar
+
+1. Confirme a versão (cada guia mostra o comando).
+2. Siga o [primeiro diagrama](primeiro-diagrama).
+3. Para saber como cada canal se atualiza, veja [Atualizações](../ajuda/atualizacoes).

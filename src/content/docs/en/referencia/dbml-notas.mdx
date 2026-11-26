@@ -1,0 +1,44 @@
+---
+titulo: DBML notes
+descricao: "Where to write notes in DBML: project, table, column and enum value, multi-line strings and the top-level note."
+secao: referencia
+ordem: 90
+modalidades: [desktop, web, vscode]
+---
+
+## Where notes go
+
+| Place | Syntax | Product use |
+|---|---|---|
+| Project | `Note: '...'` inside `Project` | Goes into the exported SQL and into `dbml docs`. |
+| Table | `[note: '...']` in the header, or `Note: '...'` / `Note { '...' }` inside the block | Shown in the Inspector and in generated documents; becomes `COMMENT ON TABLE` on PostgreSQL. |
+| Column | `[note: '...']` in the settings | Shown in the Inspector; becomes `COMMENT ON COLUMN`. |
+| Enum value | `[note: '...']` after the value | Stored in the model. |
+| Top level | `Note name { '...' }` | Accepted and preserved, but **neither displayed nor exported**. |
+
+To edit a table note in the Desktop app, use <Atalho acao="EditTableNote" />.
+
+## Strings
+
+- Single quotes for one line: `'text'`.
+- Triple quotes for several lines:
+
+```dbml
+Table pedidos {
+  Note: '''
+    Store orders.
+    An order has several items.
+  '''
+}
+```
+
+Indentation inside the triple quotes is kept in the note text. Align the content to the left if you do not want extra spaces.
+
+## Example
+
+<ExemploDbml arquivo="ref-notas" />
+
+## Notes
+
+- An empty note (`''`) is treated as no note.
+- The top-level note is the official DBML *sticky note*. The file stays valid, but the canvas draws nothing. See [Not supported yet](dbml-nao-suportado).

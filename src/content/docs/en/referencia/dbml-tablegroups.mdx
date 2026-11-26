@@ -1,0 +1,58 @@
+---
+titulo: DBML TableGroup
+descricao: Group tables with TableGroup, pick the group color and see the diagnostics for malformed groups.
+secao: referencia
+ordem: 80
+modalidades: [desktop, web, vscode]
+---
+
+## Syntax
+
+```dbml
+TableGroup name [color: #RRGGBB] {
+  table_a
+  schema.table_b
+}
+```
+
+The name can use double quotes (`TableGroup "contas a receber" { ... }`). Each line in the block is a table, with `schema.` when it has a schema.
+
+## Settings
+
+| Setting | Value | Effect |
+|---|---|---|
+| `color` | hex color, such as `#2563EB` | Group color on the canvas. |
+
+Other settings (such as `note`) are accepted and ignored.
+
+## Example
+
+<ExemploDbml arquivo="ref-tablegroups" />
+
+On the canvas, the group's tables appear inside an outline with the group name and color. To group and ungroup without editing the text, use <Atalho acao="GroupSelection" /> and <Atalho acao="UngroupSelection" />.
+
+## Common error: missing table
+
+```dbml
+Table pedidos {
+  id bigint [pk]
+}
+
+TableGroup compras {
+  pedidos
+  fornecedores
+}
+```
+
+Diagnostic: ``Table `fornecedores` listed in group `compras` does not exist``. The file `ref-tablegroups.erro.dbml` reproduces the case.
+
+## Other linter messages
+
+| Message | Cause |
+|---|---|
+| `TableGroup without a name` | `TableGroup { ... }` with no name. |
+| ``TableGroup `name` was not closed with `}` `` | The closing brace is missing. |
+
+## Notes
+
+- Table names are checked against the `Table` blocks in the file, aliases included.

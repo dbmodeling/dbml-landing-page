@@ -1,0 +1,9 @@
+Project loja {
+  database_type: 'PostgreSQL'
+  Note: 'Esquema de exemplo da loja. A nota do projeto vai para o SQL exportado.'
+}
+
+Table clientes {
+  id bigint [pk, increment]
+  nome varchar(120) [not null]
+}

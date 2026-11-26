@@ -1,0 +1,98 @@
+---
+titulo: Atualizações
+descricao: "Como cada modalidade se atualiza: auto-update do Desktop, Marketplace do VS Code, install.sh e pacotes .deb e .rpm."
+secao: ajuda
+ordem: 20
+modalidades: [desktop, web, vscode]
+---
+
+Cada modalidade se atualiza de um jeito.
+
+| Modalidade | Como atualiza |
+|---|---|
+| App Desktop | Sozinho, pelo próprio app (detalhes abaixo). |
+| Extensão VS Code | Pelo Marketplace do VS Code, como qualquer extensão. |
+| CLI `dbml` | Não se atualiza sozinha. Reinstale com o `install.sh`, o instalador ou o `.pkg`. |
+
+## App Desktop
+
+O app procura versão nova **ao abrir** e **a cada hora**. Havendo uma, ele baixa, confere e instala os arquivos em segundo plano e mostra **Reiniciar para atualizar** na barra de título. A versão nova só roda depois de reiniciar (no Windows, sair do app também conclui a troca). Depois do reinício, o app mostra "Atualizado para X", com link para as notas da versão.
+
+Para checar na hora, use **Verificar atualizações** na paleta de comandos (<Atalho acao="OpenPalette" />). Os estados na barra de título são: "Verificando atualizações…", "Baixando atualização…", "Instalando atualização…", "Atualizado", "Reiniciar para atualizar" e "Falha ao atualizar".
+
+### Ligar e desligar
+
+| Modo | Como | Efeito |
+|---|---|---|
+| Automático (padrão) | `auto_update=true` | Checa ao abrir e a cada hora. |
+| Manual | Configurações, **Atualizar automaticamente** desligado (ou `auto_update=false` em `settings.txt`, ou a ação **Alternar atualização automática**) | Nenhuma requisição automática. **Verificar atualizações** continua funcionando. |
+| Desativado | Variável de ambiente `DBM_UPDATE_EXPLANATION` com um texto qualquer | Nenhuma checagem, nem manual. O texto aparece no lugar da ação, com link para as Releases. |
+
+A mudança vale na hora, sem reiniciar. Para evitar até a primeira checagem, defina `auto_update=false` antes da primeira abertura. Veja [Configurações do Desktop](../referencia/configuracoes-desktop).
+
+### O que sai da sua máquina
+
+Só requisições HTTPS ao GitHub: o manifesto (`latest.json`), a assinatura dele e, havendo versão nova, o instalador. O único identificador enviado é o `User-Agent` `db-modeling-updater/<versão>`. O app não envia sistema, arquitetura, identificador de máquina ou de usuário, caminhos nem conteúdo de esquema. O GitHub vê, como em qualquer download, o seu endereço IP. O app respeita `HTTPS_PROXY`.
+
+### Segurança
+
+O manifesto é assinado (minisign) e o app só confia nele se a assinatura bater com uma das chaves embutidas. O SHA-256 do arquivo é conferido ao baixar e de novo antes de instalar. O app nunca instala uma versão igual ou mais antiga.
+
+### Por sistema
+
+<Abas detectarSo>
+<Aba titulo="Windows" so="windows">
+
+- Atualiza a instalação **por usuário**. O instalador roda em silêncio e um programa auxiliar troca os arquivos ao reiniciar.
+- Instalação em `Program Files` (para todos os usuários), ou pasta sem permissão de escrita: o app não atualiza e mostra o motivo. Baixe o instalador novo. O app nunca pede privilégio de administrador.
+- Se o `dbml run` estiver aberto, a atualização falha de forma limpa e mantém a versão atual.
+
+</Aba>
+<Aba titulo="macOS" so="macos">
+
+- Só **Apple Silicon**. As releases não publicam build para Mac Intel.
+- O app precisa estar fora de uma pasta isolada: se aparecer "Mova o app para a pasta Aplicativos para atualizar", arraste-o para `Aplicativos`.
+- O app substitui o próprio `DB Modeling.app`. Sem permissão de escrita na pasta que contém o app, ele mostra "Sem permissão de escrita na pasta do app; atualize manualmente".
+
+</Aba>
+<Aba titulo="Linux" so="linux">
+
+- **Tarball em `~/.local`** (o `install.sh` sem `--system`): o app troca a pasta `db-modeling.app` sozinho. Precisa de `tar` e `rsync` no `PATH`. Não usa `sudo`.
+- **`.deb`/`.rpm`** (`install.sh --system`): o app baixa o pacote novo, confere a assinatura e o SHA-256 e o instala com `pkexec dpkg -i` (Debian e Ubuntu) ou `pkexec dnf install -y` (Fedora). O polkit pede a sua senha; o app nunca a vê. Sem `pkexec`, o app indica a página de Releases. Você também pode atualizar com `apt` ou `dnf`.
+- Um build de desenvolvimento ou um executável fora desses layouts não se atualiza.
+
+</Aba>
+</Abas>
+
+## Extensão do VS Code
+
+A extensão se atualiza pelo mecanismo do próprio VS Code (Marketplace, publicador `dbmodeling`). Um `.vsix` instalado à mão (gerado com `npm run package` em `vscode-extension`) não se atualiza sozinho. A extensão não verifica nem atualiza a CLI `dbml`: a conexão com banco usa a CLI instalada (versão 0.1.4 ou mais nova).
+
+## `install.sh`
+
+O script oficial instala, atualiza e desinstala no Linux e no macOS:
+
+```bash
+bash install.sh              # instala a última release
+bash install.sh --system     # Linux: instala o .deb ou .rpm, com sudo
+bash install.sh --uninstall  # remove a instalação do usuário
+bash install.sh --uninstall --system
+```
+
+No Linux, o padrão é **sem `sudo`**: instala o tarball em `~/.local/db-modeling.app`, cria o link `~/.local/bin/db-modeling`, o atalho `.desktop`, os ícones e o tipo MIME. É a instalação que o app atualiza sozinho. Com `--system`, o script instala o `.deb` ou o `.rpm` (e as dependências gráficas) com `sudo`.
+
+O script confere o SHA-256 do download contra o `SHA256SUMS.txt` da mesma release antes de instalar. Se divergir, aborta. Variáveis opcionais:
+
+| Variável | Efeito | Padrão |
+|---|---|---|
+| `DBML_VERSION` | Tag a instalar, como `v0.4.3`. | A última release. |
+| `DBML_PREFIX` | Prefixo da instalação do usuário. | `~/.local` |
+| `DBML_REPO` | Repositório `dono/nome`. | `dbmodeling/dbml` |
+
+Rode o script de novo para trazer uma versão específica ou para reinstalar por cima.
+
+## Atualizar à mão
+
+Baixe o instalador da versão desejada em [Releases](https://github.com/dbmodeling/dbml/releases) e instale por cima. Foi o caso de quem estava na 0.3.x: a 0.4.0 foi a primeira versão com auto-update, então a 0.3.x precisou ser trocada uma vez à mão.
+
+Se uma atualização automática falhar, veja [Problemas conhecidos](problemas-conhecidos#atualizacoes-do-desktop).

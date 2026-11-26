@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { ROUTE_DOCS } from "@/docs/constants";
+
 export function Footer() {
   return (
     <footer className="border-t border-border bg-background text-xs text-muted-foreground font-mono">
@@ -21,6 +24,12 @@ export function Footer() {
         </div>
 
         <div className="flex flex-wrap items-center gap-5 text-xs">
+          <Link
+            to={ROUTE_DOCS}
+            className="hover:text-signal underline-offset-4 hover:underline transition-colors"
+          >
+            Docs
+          </Link>
           <a
             href="https://github.com/dbmodeling/dbml"
             target="_blank"

@@ -1,0 +1,88 @@
+---
+titulo: Generate documentation
+descricao: Generate schema documentation as a single-page HTML file or as Markdown with a Mermaid diagram, with dbml docs or from the app.
+secao: guias
+ordem: 80
+modalidades: [desktop, web, vscode]
+---
+
+You turn the `.dbml` into documentation your team can read without installing anything: an HTML page with the diagram embedded, or a `README.md` with a table index, a Mermaid diagram and one section per table.
+
+<Captura cena="documentacao-html" alt="Generated HTML page for the store: title, count summary, diagram of the tables and the section of the pedidos table with columns, indexes and relationships." />
+
+## Prerequisites
+
+- A `.dbml` file with no syntax errors.
+- For the CLI, the `dbml` binary (see [Installation](../comecar/instalacao)).
+
+## Pick the format
+
+| | HTML | Markdown |
+|---|---|---|
+| Generated file | `index.html` | `README.md` |
+| Content | Single page, no external dependencies, with the diagram as SVG | Summary, table index by group, a Mermaid `erDiagram` block and one section per table and enum |
+| Best for | Publishing on a static server, attaching to a ticket, opening offline | Versioning in the repository; GitHub and GitLab render the Mermaid |
+
+The generated text (headings such as **Table Index** and **Tables**) is in English in both formats. The content comes from your schema: names, types, notes, indexes and relationships.
+
+## Steps
+
+### In the CLI
+
+1. Generate the HTML (the default format):
+
+   ```bash
+   dbml docs schema.dbml -o docs/
+   ```
+
+   The command creates `docs/index.html`.
+
+2. Generate the Markdown:
+
+   ```bash
+   dbml docs schema.dbml --format md -o docs/
+   ```
+
+   The command creates `docs/README.md`.
+
+3. Give the documentation a title (by default, it is the file name):
+
+   ```bash
+   dbml docs schema.dbml --title "Store Database" -o docs/
+   ```
+
+Rules for `-o`:
+
+- If the target is a folder, ends in `/` or has no extension, the command creates the folder (if missing) and writes `index.html` or `README.md` inside it.
+- If the target has an extension (for example, `loja.html`), the command writes exactly that file.
+- Without `-o`, the content goes to standard output.
+- An existing file is not overwritten. Use `--force`.
+
+`--format markdown` is also accepted in place of `md`.
+
+### In the app
+
+1. Open **Export code** in the toolbar, or the palette (<Atalho acao="OpenPalette" />).
+2. Pick **Exportar documentação: HTML (.html)** or **Exportar documentação: Markdown (.md)**.
+3. Choose where to save.
+
+### In CI
+
+Regenerate the documentation on every schema change and publish the folder:
+
+```bash
+dbml docs db/schema.dbml --format md -o docs/database/ --force
+```
+
+To warn the team about schema changes, see [`dbml diff` in CI](../guias/comparar-versoes).
+
+## If something goes wrong
+
+| Message | Likely cause | What to do |
+|---|---|---|
+| ``Error: failed to read `<file>` `` followed by `No such file or directory` | The `.dbml` path is wrong. | Check the path. |
+| `output file ... already exists (pass --force to overwrite)` | The destination already exists. | Use `--force` or another name. |
+| ``Error: failed to create directory <folder> `` | No permission to create the folder. | Pick another folder. |
+| ``Error: failed to write output file `<file>` `` | No permission or disk full. | Pick another destination. |
+| `error: invalid value '<x>' for '--format <FORMAT>'` | Unknown format. | Use `html` or `md`. |
+| Mermaid does not show in the Markdown | The viewer does not render Mermaid. | Use GitHub or GitLab, or open the HTML. |

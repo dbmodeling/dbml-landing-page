@@ -1,0 +1,60 @@
+// Base do modo Comparar: sem produtos.estoque e com cupons (removida depois).
+Project loja {
+  database_type: 'PostgreSQL'
+  Note: 'Schema de exemplo usado em toda a documentação.'
+}
+
+Enum status_pedido {
+  pendente
+  pago
+  enviado
+  cancelado
+}
+
+Table clientes {
+  id bigint [pk, increment]
+  nome varchar(120) [not null]
+  email varchar(255) [not null, unique]
+  criado_em timestamp [not null, default: `now()`]
+}
+
+Table produtos {
+  id bigint [pk, increment]
+  nome varchar(160) [not null]
+  preco decimal(10, 2) [not null]
+}
+
+Table pedidos {
+  id bigint [pk, increment]
+  cliente_id bigint [not null, ref: > clientes.id]
+  status status_pedido [not null, default: 'pendente']
+  criado_em timestamp [not null, default: `now()`]
+
+  Indexes {
+    (cliente_id, criado_em)
+  }
+}
+
+Table itens_pedido {
+  pedido_id bigint [not null]
+  produto_id bigint [not null]
+  quantidade int [not null]
+  preco_unitario decimal(10, 2) [not null]
+
+  Indexes {
+    (pedido_id, produto_id) [pk]
+  }
+}
+
+Ref: itens_pedido.pedido_id > pedidos.id [delete: cascade]
+Ref: itens_pedido.produto_id > produtos.id
+
+Table cupons {
+  codigo varchar(20) [pk]
+  desconto decimal(5, 2) [not null]
+}
+
+TableGroup vendas [color: #2563EB] {
+  pedidos
+  itens_pedido
+}

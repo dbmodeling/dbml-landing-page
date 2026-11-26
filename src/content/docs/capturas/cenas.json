@@ -1,0 +1,179 @@
+{
+  "cenas": [
+    {
+      "id": "canvas-inicial",
+      "modalidade": "web",
+      "exemplo": "loja",
+      "acoes": ["FitView"],
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": false,
+      "descricao": "Canvas com o schema da loja ajustado à tela.",
+      "por_idioma": {
+        "en": { "exemplo_arquivo": "capturas/entradas/en/store.dbml", "nome_workspace": "store" }
+      }
+    },
+    {
+      "id": "primeiro-diagrama-aberto",
+      "modalidade": "web",
+      "exemplo": "loja",
+      "acoes": ["FitView"],
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": false,
+      "descricao": "As 4 tabelas da loja e suas relações.",
+      "por_idioma": {
+        "en": { "exemplo_arquivo": "capturas/entradas/en/store.dbml", "nome_workspace": "store" }
+      }
+    },
+    {
+      "id": "primeiro-diagrama-exportar",
+      "modalidade": "web",
+      "exemplo": "loja",
+      "acoes": ["OpenPalette"],
+      "digitar": "SVG",
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": false,
+      "descricao": "Paleta de comandos filtrada por \"SVG\".",
+      "por_idioma": {
+        "en": { "exemplo_arquivo": "capturas/entradas/en/store.dbml", "nome_workspace": "store" }
+      }
+    },
+    {
+      "id": "editar-dividido",
+      "modalidade": "web",
+      "exemplo": "loja",
+      "acoes": ["ShowSplitView"],
+      "selecionar": "pedidos",
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": false,
+      "descricao": "Editor DBML ao lado do diagrama, com pedidos selecionada e o inspector aberto.",
+      "por_idioma": {
+        "en": { "exemplo_arquivo": "capturas/entradas/en/store.dbml", "nome_workspace": "store", "selecionar": "orders" }
+      }
+    },
+    {
+      "id": "importar-sql-previa",
+      "modalidade": "web",
+      "exemplo": "loja",
+      "acoes": ["ImportSqlDdl"],
+      "colar": "capturas/entradas/pg.sql",
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": false,
+      "descricao": "Modal de importação com SQL PostgreSQL colado e prévia DBML.",
+      "por_idioma": {
+        "en": {
+          "exemplo_arquivo": "capturas/entradas/en/store.dbml",
+          "nome_workspace": "store",
+          "colar": "capturas/entradas/en/pg.sql"
+        }
+      }
+    },
+    {
+      "id": "conectar-dialogo",
+      "modalidade": "web",
+      "exemplo": "loja",
+      "acoes": ["ConnectDatabase"],
+      "preencher": { "tipo": "postgres", "host": "localhost", "porta": "5432", "banco": "loja", "usuario": "leitor", "senha": "exemplo-mascarado" },
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": false,
+      "descricao": "Diálogo de conexão PostgreSQL preenchido, senha mascarada. Sem testar conexão (sem banco real na captura).",
+      "por_idioma": {
+        "en": {
+          "exemplo_arquivo": "capturas/entradas/en/store.dbml",
+          "nome_workspace": "store",
+          "preencher": { "tipo": "postgres", "host": "localhost", "porta": "5432", "banco": "store", "usuario": "reader", "senha": "masked-example" }
+        }
+      }
+    },
+    {
+      "id": "organizar-grupos",
+      "modalidade": "web",
+      "exemplo": "guia-organizar",
+      "acoes": ["FitView"],
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": false,
+      "descricao": "Dois TableGroups coloridos.",
+      "por_idioma": {
+        "en": { "exemplo_arquivo": "capturas/entradas/en/guide-organize.dbml", "nome_workspace": "guide-organize" }
+      }
+    },
+    {
+      "id": "organizar-foco",
+      "modalidade": "web",
+      "exemplo": "guia-organizar",
+      "selecionar": "emprestimos",
+      "acoes": ["ToggleFocusMode", "ToggleInspector", "FitView"],
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": false,
+      "descricao": "Modo Foco: vizinhos por FK em destaque, o resto esmaecido.",
+      "por_idioma": {
+        "en": {
+          "exemplo_arquivo": "capturas/entradas/en/guide-organize.dbml",
+          "nome_workspace": "guide-organize",
+          "selecionar": "loans"
+        }
+      }
+    },
+    {
+      "id": "comparar-canvas",
+      "modalidade": "web",
+      "exemplo": "loja",
+      "git_base": "capturas/entradas/loja-base.dbml",
+      "acoes": ["ToggleDiffMode", "FitView"],
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": false,
+      "descricao": "Modo Comparar contra o HEAD de um repositório temporário (base = loja-base.dbml), com resumo e cartão fantasma.",
+      "por_idioma": {
+        "en": {
+          "exemplo_arquivo": "capturas/entradas/en/store.dbml",
+          "nome_workspace": "store",
+          "git_base": "capturas/entradas/en/store-base.dbml"
+        }
+      }
+    },
+    {
+      "id": "documentacao-html",
+      "modalidade": "web",
+      "exemplo": "loja",
+      "comando": ["docs", "{exemplo}", "--format", "html", "-o", "{saida}/index.html"],
+      "abrir": "{saida}/index.html",
+      "acoes": [],
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": false,
+      "descricao": "Página HTML gerada por dbml docs.",
+      "por_idioma": {
+        "en": { "exemplo_arquivo": "capturas/entradas/en/store.dbml", "nome_workspace": "store" }
+      }
+    },
+    {
+      "id": "desktop-visao-geral",
+      "modalidade": "desktop",
+      "exemplo": "loja",
+      "acoes": ["ShowSplitView", "FitView"],
+      "viewport": [1440, 900],
+      "recorte": null,
+      "animacao": false,
+      "manual": true,
+      "descricao": "App Desktop com editor e diagrama lado a lado (captura manual, ver roteiro.md)."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+// espera: Unrecognized construct: `TablePartial`
+TablePartial campos_comuns {
+  criado_em timestamp
+}
+
+Table clientes {
+  id bigint [pk]
+}

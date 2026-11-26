@@ -1,0 +1,725 @@
+{
+  "binario": "dbml",
+  "versao": "0.4.3",
+  "ajuda": "DB Modeling CLI - Interactive database schema viewer and editor",
+  "posicionais": [
+    {
+      "nome": "FILE",
+      "obrigatorio": false,
+      "ajuda": "Path to the .dbml file (when executed directly as `dbml schema.dbml`)"
+    }
+  ],
+  "global": [
+    {
+      "nome": "--allowed-host",
+      "curto": null,
+      "valor": "HOST",
+      "padrao": null,
+      "env": "DBML_ALLOWED_HOSTS",
+      "aliases": [],
+      "ajuda": "Extra `Host` accepted besides loopback/bind (with or without port; repeatable or comma-separated). Needed behind a reverse proxy, e.g. `meu-app.onrender.com`",
+      "obrigatorio": false,
+      "valores": []
+    },
+    {
+      "nome": "--host",
+      "curto": null,
+      "valor": "HOST",
+      "padrao": "127.0.0.1",
+      "env": null,
+      "aliases": [],
+      "ajuda": "Bind address",
+      "obrigatorio": false,
+      "valores": []
+    },
+    {
+      "nome": "--max-connections",
+      "curto": null,
+      "valor": "N",
+      "padrao": null,
+      "env": "DBML_MAX_CONNECTIONS",
+      "aliases": [],
+      "ajuda": "Max simultaneous WebSocket connections (one per open tab; default 256)",
+      "obrigatorio": false,
+      "valores": []
+    },
+    {
+      "nome": "--no-open",
+      "curto": null,
+      "valor": null,
+      "padrao": null,
+      "env": null,
+      "aliases": [],
+      "ajuda": "Do not open browser automatically on startup",
+      "obrigatorio": false,
+      "valores": []
+    },
+    {
+      "nome": "--no-watch",
+      "curto": null,
+      "valor": null,
+      "padrao": null,
+      "env": null,
+      "aliases": [],
+      "ajuda": "Disable watching for external file changes",
+      "obrigatorio": false,
+      "valores": []
+    },
+    {
+      "nome": "--port",
+      "curto": "-p",
+      "valor": "PORT",
+      "padrao": "3000",
+      "env": null,
+      "aliases": [],
+      "ajuda": "Local web server port",
+      "obrigatorio": false,
+      "valores": []
+    },
+    {
+      "nome": "--public-demo",
+      "curto": null,
+      "valor": null,
+      "padrao": null,
+      "env": "DBML_PUBLIC_DEMO",
+      "aliases": [],
+      "ajuda": "DANGEROUS: no session token required. Anyone who can reach the server can read and write the workspace and use the database-connection feature. Only for throwaway public demos",
+      "obrigatorio": false,
+      "valores": []
+    },
+    {
+      "nome": "--token",
+      "curto": null,
+      "valor": "TOKEN",
+      "padrao": null,
+      "env": "DBML_TOKEN",
+      "aliases": [],
+      "ajuda": "Fixed session token instead of a random one per start (min 16 chars)",
+      "obrigatorio": false,
+      "valores": []
+    },
+    {
+      "nome": "--version",
+      "curto": "-V",
+      "valor": null,
+      "padrao": null,
+      "env": null,
+      "aliases": [],
+      "ajuda": "Print version",
+      "obrigatorio": false,
+      "valores": []
+    }
+  ],
+  "subcomandos": [
+    {
+      "nome": "diff",
+      "aliases": [],
+      "ajuda": "Compare two .dbml files structurally (tables, columns, indexes, enums, refs)",
+      "posicionais": [
+        {
+          "nome": "OLD",
+          "obrigatorio": true,
+          "ajuda": "Baseline .dbml file"
+        },
+        {
+          "nome": "NEW",
+          "obrigatorio": true,
+          "ajuda": ".dbml file to compare against the baseline"
+        }
+      ],
+      "opcoes": [
+        {
+          "nome": "--format",
+          "curto": null,
+          "valor": "FORMAT",
+          "padrao": "text",
+          "env": null,
+          "aliases": [],
+          "ajuda": "Output format (`text` or `json`)",
+          "obrigatorio": false,
+          "valores": [
+            {
+              "nome": "text",
+              "aliases": [],
+              "ajuda": "Human-readable text (`+` added, `-` removed, `~` modified)"
+            },
+            {
+              "nome": "json",
+              "aliases": [],
+              "ajuda": "The serialized `SchemaDiff` as JSON"
+            }
+          ]
+        }
+      ],
+      "subcomandos": []
+    },
+    {
+      "nome": "docs",
+      "aliases": [],
+      "ajuda": "Generate static navigable documentation (HTML or Markdown) from a .dbml file",
+      "posicionais": [
+        {
+          "nome": "FILE",
+          "obrigatorio": true,
+          "ajuda": "Path to the input .dbml file"
+        }
+      ],
+      "opcoes": [
+        {
+          "nome": "--force",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Overwrite an existing output file",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--format",
+          "curto": null,
+          "valor": "FORMAT",
+          "padrao": "html",
+          "env": null,
+          "aliases": [],
+          "ajuda": "Documentation format (`html` or `md`)",
+          "obrigatorio": false,
+          "valores": [
+            {
+              "nome": "html",
+              "aliases": [],
+              "ajuda": "Self-contained single-page static HTML documentation"
+            },
+            {
+              "nome": "md",
+              "aliases": [
+                "markdown"
+              ],
+              "ajuda": "Structured Markdown documentation with Mermaid `erDiagram`"
+            }
+          ]
+        },
+        {
+          "nome": "--output",
+          "curto": "-o",
+          "valor": "OUTPUT",
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Output file or directory path (writes to stdout if omitted)",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--title",
+          "curto": null,
+          "valor": "TITLE",
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Optional documentation title (defaults to the input filename)",
+          "obrigatorio": false,
+          "valores": []
+        }
+      ],
+      "subcomandos": []
+    },
+    {
+      "nome": "export",
+      "aliases": [],
+      "ajuda": "Export a .dbml file to SQL DDL",
+      "posicionais": [
+        {
+          "nome": "FILE",
+          "obrigatorio": true,
+          "ajuda": "Path to the input .dbml file"
+        }
+      ],
+      "opcoes": [
+        {
+          "nome": "--dialect",
+          "curto": null,
+          "valor": "DIALECT",
+          "padrao": "postgres",
+          "env": null,
+          "aliases": [],
+          "ajuda": "Target SQL dialect",
+          "obrigatorio": false,
+          "valores": [
+            {
+              "nome": "postgres",
+              "aliases": [
+                "postgresql",
+                "pg"
+              ],
+              "ajuda": "PostgreSQL"
+            },
+            {
+              "nome": "mysql",
+              "aliases": [],
+              "ajuda": "MySQL"
+            },
+            {
+              "nome": "sqlite",
+              "aliases": [
+                "sqlite3"
+              ],
+              "ajuda": "SQLite"
+            },
+            {
+              "nome": "sqlserver",
+              "aliases": [
+                "mssql",
+                "tsql"
+              ],
+              "ajuda": "Microsoft SQL Server / T-SQL"
+            },
+            {
+              "nome": "oracle",
+              "aliases": [
+                "ora"
+              ],
+              "ajuda": "Oracle Database"
+            }
+          ]
+        },
+        {
+          "nome": "--force",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Overwrite an existing output file",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--format",
+          "curto": null,
+          "valor": "FORMAT",
+          "padrao": "sql",
+          "env": null,
+          "aliases": [],
+          "ajuda": "Export format",
+          "obrigatorio": false,
+          "valores": [
+            {
+              "nome": "sql",
+              "aliases": [],
+              "ajuda": "SQL DDL (`CREATE TABLE`, `FOREIGN KEY`, `CREATE INDEX`)"
+            }
+          ]
+        },
+        {
+          "nome": "--output",
+          "curto": "-o",
+          "valor": "OUTPUT",
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Optional output file path (writes to stdout if omitted)",
+          "obrigatorio": false,
+          "valores": []
+        }
+      ],
+      "subcomandos": []
+    },
+    {
+      "nome": "import",
+      "aliases": [],
+      "ajuda": "Import a SQL DDL file, or the live catalog of a database (`--url`), into DBML",
+      "posicionais": [
+        {
+          "nome": "FILE",
+          "obrigatorio": false,
+          "ajuda": "Path to the input .sql file"
+        }
+      ],
+      "opcoes": [
+        {
+          "nome": "--dialect",
+          "curto": null,
+          "valor": "DIALECT",
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Source SQL dialect (required with FILE)",
+          "obrigatorio": false,
+          "valores": [
+            {
+              "nome": "postgres",
+              "aliases": [
+                "postgresql",
+                "pg"
+              ],
+              "ajuda": "PostgreSQL"
+            },
+            {
+              "nome": "mysql",
+              "aliases": [
+                "mariadb"
+              ],
+              "ajuda": "MySQL / MariaDB"
+            },
+            {
+              "nome": "sqlite",
+              "aliases": [
+                "sqlite3"
+              ],
+              "ajuda": "SQLite"
+            },
+            {
+              "nome": "sqlserver",
+              "aliases": [
+                "mssql",
+                "tsql"
+              ],
+              "ajuda": "Microsoft SQL Server / T-SQL"
+            },
+            {
+              "nome": "oracle",
+              "aliases": [
+                "ora"
+              ],
+              "ajuda": "Oracle Database"
+            }
+          ]
+        },
+        {
+          "nome": "--force",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Overwrite the output file if it already exists",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--output",
+          "curto": "-o",
+          "valor": "OUTPUT",
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Optional output .dbml file path (writes to stdout if omitted)",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--password-stdin",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "With --url: read the password from the first line of stdin",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--schema",
+          "curto": null,
+          "valor": "SCHEMA",
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "With --url: only read this schema (repeatable). Default: every user schema",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--test",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "With --url: only test the connection and print `{\"server\":..,\"schemas\":[..]}` as JSON",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--tls",
+          "curto": null,
+          "valor": "TLS",
+          "padrao": "auto",
+          "env": null,
+          "aliases": [],
+          "ajuda": "With --url: TLS mode (`auto`, `verify`, `require`, `disable`)",
+          "obrigatorio": false,
+          "valores": [
+            {
+              "nome": "auto",
+              "aliases": [],
+              "ajuda": "Verified TLS on remote hosts; driver default on loopback"
+            },
+            {
+              "nome": "verify",
+              "aliases": [],
+              "ajuda": "Require TLS and verify server certificate and hostname"
+            },
+            {
+              "nome": "require",
+              "aliases": [],
+              "ajuda": "Require TLS without verifying the server certificate (self-signed)"
+            },
+            {
+              "nome": "disable",
+              "aliases": [],
+              "ajuda": "Disable TLS (clear text — explicit opt-out)"
+            }
+          ]
+        },
+        {
+          "nome": "--url",
+          "curto": null,
+          "valor": "URL",
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Read the schema from a live database (read-only): `postgres://`, `mysql://`, `sqlserver://` (add `?trustServerCertificate=true` for self-signed certificates) or a SQLite file path / `sqlite:` URL. Oracle is not available yet. The password is never printed; keep it out of the URL with `--password-stdin` or `DBML_PASSWORD`",
+          "obrigatorio": false,
+          "valores": []
+        }
+      ],
+      "subcomandos": []
+    },
+    {
+      "nome": "run",
+      "aliases": [],
+      "ajuda": "Start the local server and open the visual canvas in the browser",
+      "posicionais": [
+        {
+          "nome": "FILE",
+          "obrigatorio": false,
+          "ajuda": "Path to the .dbml file or project folder"
+        }
+      ],
+      "opcoes": [
+        {
+          "nome": "--allowed-host",
+          "curto": null,
+          "valor": "HOST",
+          "padrao": null,
+          "env": "DBML_ALLOWED_HOSTS",
+          "aliases": [],
+          "ajuda": "Extra `Host` accepted besides loopback/bind (with or without port; repeatable or comma-separated). Needed behind a reverse proxy, e.g. `meu-app.onrender.com`",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--host",
+          "curto": null,
+          "valor": "HOST",
+          "padrao": "127.0.0.1",
+          "env": null,
+          "aliases": [],
+          "ajuda": "Bind address",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--max-connections",
+          "curto": null,
+          "valor": "N",
+          "padrao": null,
+          "env": "DBML_MAX_CONNECTIONS",
+          "aliases": [],
+          "ajuda": "Max simultaneous WebSocket connections (one per open tab; default 256)",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--no-open",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Do not open browser automatically",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--no-watch",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Disable watching for external file changes",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--port",
+          "curto": "-p",
+          "valor": "PORT",
+          "padrao": "3000",
+          "env": null,
+          "aliases": [],
+          "ajuda": "Local web server port",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--public-demo",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": "DBML_PUBLIC_DEMO",
+          "aliases": [],
+          "ajuda": "DANGEROUS: no session token required. Anyone who can reach the server can read and write the workspace and use the database-connection feature. Only for throwaway public demos",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--token",
+          "curto": null,
+          "valor": "TOKEN",
+          "padrao": null,
+          "env": "DBML_TOKEN",
+          "aliases": [],
+          "ajuda": "Fixed session token instead of a random one per start (min 16 chars)",
+          "obrigatorio": false,
+          "valores": []
+        }
+      ],
+      "subcomandos": []
+    },
+    {
+      "nome": "serve",
+      "aliases": [],
+      "ajuda": "Alias to start the web server",
+      "posicionais": [
+        {
+          "nome": "FILE",
+          "obrigatorio": false,
+          "ajuda": "Path to the .dbml file or project folder"
+        }
+      ],
+      "opcoes": [
+        {
+          "nome": "--allowed-host",
+          "curto": null,
+          "valor": "HOST",
+          "padrao": null,
+          "env": "DBML_ALLOWED_HOSTS",
+          "aliases": [],
+          "ajuda": "Extra `Host` accepted besides loopback/bind (with or without port; repeatable or comma-separated). Needed behind a reverse proxy, e.g. `meu-app.onrender.com`",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--host",
+          "curto": null,
+          "valor": "HOST",
+          "padrao": "127.0.0.1",
+          "env": null,
+          "aliases": [],
+          "ajuda": "Bind address",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--max-connections",
+          "curto": null,
+          "valor": "N",
+          "padrao": null,
+          "env": "DBML_MAX_CONNECTIONS",
+          "aliases": [],
+          "ajuda": "Max simultaneous WebSocket connections (one per open tab; default 256)",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--no-open",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Do not open browser automatically",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--no-watch",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": null,
+          "aliases": [],
+          "ajuda": "Disable watching for external file changes",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--port",
+          "curto": "-p",
+          "valor": "PORT",
+          "padrao": "3000",
+          "env": null,
+          "aliases": [],
+          "ajuda": "Local web server port",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--public-demo",
+          "curto": null,
+          "valor": null,
+          "padrao": null,
+          "env": "DBML_PUBLIC_DEMO",
+          "aliases": [],
+          "ajuda": "DANGEROUS: no session token required. Anyone who can reach the server can read and write the workspace and use the database-connection feature. Only for throwaway public demos",
+          "obrigatorio": false,
+          "valores": []
+        },
+        {
+          "nome": "--token",
+          "curto": null,
+          "valor": "TOKEN",
+          "padrao": null,
+          "env": "DBML_TOKEN",
+          "aliases": [],
+          "ajuda": "Fixed session token instead of a random one per start (min 16 chars)",
+          "obrigatorio": false,
+          "valores": []
+        }
+      ],
+      "subcomandos": []
+    }
+  ],
+  "codigos_saida": [
+    {
+      "comando": "*",
+      "codigo": 0,
+      "significado": "Success"
+    },
+    {
+      "comando": "*",
+      "codigo": 1,
+      "significado": "Error (the message goes to stderr)"
+    },
+    {
+      "comando": "diff",
+      "codigo": 0,
+      "significado": "No differences"
+    },
+    {
+      "comando": "diff",
+      "codigo": 1,
+      "significado": "Differences found"
+    },
+    {
+      "comando": "diff",
+      "codigo": 2,
+      "significado": "Error: unreadable file or DBML syntax error"
+    }
+  ]
+}

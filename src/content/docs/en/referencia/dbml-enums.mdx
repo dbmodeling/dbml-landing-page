@@ -1,0 +1,61 @@
+---
+titulo: DBML Enum
+descricao: Enum declarations with values and notes, use as a column type and enums with a schema.
+secao: referencia
+ordem: 70
+modalidades: [desktop, web, vscode]
+---
+
+## Syntax
+
+```dbml
+Enum [schema.]name {
+  value
+  value [note: 'text']
+  "value with space"
+}
+```
+
+One value per line. Values with spaces or special characters use double quotes.
+
+| Item | Effect |
+|---|---|
+| `value` | An enum value, in the written order. |
+| `[note: '...']` | Value note. |
+| `schema.name` | Enum inside a schema. |
+
+## Use as a type
+
+The enum name is the column type. With a schema, write the qualified name.
+
+```dbml
+Table pedidos {
+  status status_pedido [not null, default: 'pendente']
+  moeda financeiro.moeda
+}
+```
+
+An enum `default` goes in single quotes, as text.
+
+## Example
+
+<ExemploDbml arquivo="ref-enums" />
+
+On the canvas, each enum appears as a compact card with an `ENUM` badge and the list of values. You can create the enum (<Atalho acao="NewEnum" />), rename it and edit its values in the Inspector. The card position is stored in the [sidecar](sidecar-layout) (key `enum:<name>`), never in the `.dbml`.
+
+## Common error: undeclared enum
+
+```dbml
+Table pedidos {
+  id bigint [pk]
+  status status_pedido
+}
+```
+
+Diagnostic: ``Unknown type `status_pedido` on column `status` ``. Declare the `Enum` (anywhere in the file) or use a known type. The file `ref-enums.erro.dbml` reproduces the case.
+
+## Notes
+
+- The enum can be declared before or after the tables that use it.
+- In SQL export for PostgreSQL, the enum becomes `CREATE TYPE ... AS ENUM` (with `CREATE SCHEMA IF NOT EXISTS` when there is a schema).
+- Other settings in the enum header are accepted and ignored.

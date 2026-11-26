@@ -1,0 +1,46 @@
+---
+titulo: O que é o DB Modeling
+descricao: Editor de diagramas de banco de dados em DBML, com canvas e texto sincronizados, em três modalidades.
+secao: comecar
+ordem: 10
+modalidades: [desktop, web, vscode]
+---
+
+O DB Modeling é um editor de diagramas de banco de dados. Você descreve o esquema em [DBML](../referencia/dbml-visao-geral) e edita o mesmo esquema no texto ou no canvas. As duas visões ficam sincronizadas.
+
+<Captura cena="canvas-inicial" alt="Canvas do DB Modeling mostrando o diagrama da loja de exemplo" />
+
+## O que você faz com ele
+
+- Modelar tabelas, colunas, relações, índices, enums e grupos no canvas ou no código.
+- Importar um esquema existente de um arquivo SQL ou de um banco em execução.
+- Exportar para SQL, PNG, JPEG, SVG, Mermaid `erDiagram` e documentação em HTML ou Markdown.
+- Comparar o esquema atual com a versão do Git.
+
+## As três modalidades
+
+O núcleo é o mesmo nas três. Escolha pelo lugar onde você já trabalha.
+
+| Modalidade | O que é | Use quando |
+|---|---|---|
+| **Desktop** | Aplicativo nativo para Windows, macOS e Linux. | Você quer o editor completo, rápido, sem navegador e com atualização automática. |
+| **CLI Web (`dbml run`)** | Servidor local que abre o canvas no navegador. Também exporta, compara e importa pela linha de comando. | Você quer usar no navegador, automatizar em scripts ou hospedar para o time (veja [Hospedar para o time](../guias/hospedar-para-o-time)). |
+| **Extensão VS Code** | Editor visual para arquivos `.dbml` dentro do VS Code. | Você já vive no VS Code e quer o canvas ao lado do código. |
+
+<Aviso tipo="info">
+Algumas ações existem só em parte das modalidades. Por exemplo, a atualização automática é só do Desktop. Cada página diz onde o conteúdo se aplica, e o seletor de modalidade do site filtra o que não vale para a sua.
+</Aviso>
+
+## O arquivo é a fonte da verdade
+
+O seu esquema é um arquivo de texto `.dbml`. Ele continua sendo DBML válido: qualquer outra ferramenta de DBML abre o arquivo.
+
+- **Edições no canvas viram mudanças mínimas no texto.** Mover um campo ou renomear uma tabela altera só as linhas afetadas. Seus comentários e sua formatação ficam como estão.
+- **Dados de aparência ficam ao lado, em outro arquivo.** Posição das tabelas, cores, estilo das relações e zoom são gravados em `<esquema>.dbml.layout.json`, na mesma pasta. Apagar esse arquivo só reinicia o layout. O esquema não muda.
+- **Versione os dois arquivos.** Commite o `.dbml` sempre. Commite o `.layout.json` se o time quiser compartilhar o mesmo layout.
+
+## Próximos passos
+
+1. [Instale](instalacao) na sua plataforma.
+2. Siga o [primeiro diagrama](primeiro-diagrama) em cinco minutos.
+3. Já tem um banco? Use [Importar SQL](../guias/importar-sql) ou [Conectar a um banco](../guias/conectar-banco).

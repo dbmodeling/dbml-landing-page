@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ChevronDown, Download, Terminal, Code2 } from "lucide-react";
 import { useOperatingSystem } from "@/hooks/useOperatingSystem";
 import {
@@ -102,10 +103,8 @@ export function DownloadCTA() {
             </a>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
-            <a
-              href="https://github.com/dbmodeling/dbml/tree/main/vscode-extension"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/docs/en/comecar/instalacao-vscode"
               className="flex items-center justify-between px-2.5 py-2 rounded-sm hover:bg-secondary text-foreground transition-colors"
             >
               <div className="flex items-center gap-2">
@@ -116,7 +115,7 @@ export function DownloadCTA() {
                 </div>
               </div>
               <span className="text-[11px] font-mono text-signal font-medium">.vsix</span>
-            </a>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

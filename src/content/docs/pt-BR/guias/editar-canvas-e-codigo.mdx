@@ -1,0 +1,118 @@
+---
+titulo: Editar no canvas e no código
+descricao: Edite o esquema pelo diagrama ou pelo texto DBML; os dois lados ficam sincronizados, com undo, formatação e busca.
+secao: guias
+ordem: 20
+modalidades: [desktop, web, vscode]
+---
+
+Você edita o mesmo esquema de dois jeitos: arrastando e clicando no diagrama, ou escrevendo DBML. Cada mudança de um lado aparece no outro na hora.
+
+<ExemploDbml arquivo="loja" abas={["codigo", "diagrama"]} />
+
+## Como funciona
+
+- O arquivo `.dbml` é a fonte da verdade. O canvas não guarda um modelo próprio.
+- Uma edição no canvas vira um patch mínimo no texto. Comentários, ordem e formatação do resto do arquivo ficam como estavam.
+- Posição das tabelas, estilo das relações e zoom ficam no arquivo ao lado, `<schema>.dbml.layout.json`. O DBML continua válido para qualquer outra ferramenta.
+
+## Pré-requisitos
+
+- Um arquivo `.dbml` aberto. Se ainda não tem um, veja [Instalação](../comecar/instalacao).
+- Para ver código e diagrama lado a lado, use a visão **Dividido**.
+
+## Passos
+
+### 1. Escolha a visão
+
+1. Ative a visão Dividido com <Atalho acao="ShowSplitView" /> (paleta: **Visão Dividido · DBML**). O editor aparece ao lado do diagrama.
+2. Use <Atalho acao="ShowDiagramView" /> (**Visão Diagrama**) para ficar só com o canvas.
+3. Use <Atalho acao="ToggleEditor" /> (**Alternar editor DBML**) para abrir e fechar o editor sem trocar de visão.
+
+<Modalidade so="desktop">
+Só no Desktop existe a visão de código puro: <Atalho acao="ShowCodeView" /> (**Visão de código (somente editor)**).
+</Modalidade>
+
+<Modalidade so="vscode">
+No VS Code, o arquivo abre no editor de texto por padrão. Para abrir o canvas, use o botão na barra de título do editor ou o comando **Abrir no canvas visual**. A configuração `dbmodeling.defaultEditor` muda esse padrão para `canvas`.
+</Modalidade>
+
+<Captura cena="editar-dividido" alt="Visão dividida: editor DBML à esquerda e diagrama da loja à direita, com a tabela pedidos selecionada." />
+
+### 2. Edite no canvas
+
+1. Crie uma tabela com <Atalho acao="NewTable" /> (**Nova tabela**) e um enum com <Atalho acao="NewEnum" /> (**Novo enum**).
+2. Clique em uma tabela para abrir o inspector. Alterne o painel com <Atalho acao="ToggleInspector" /> (**Alternar inspector**).
+3. No inspector, edite o nome, a cor, o grupo e a nota da tabela. Em **COLUNAS**, abra uma coluna para mudar tipo, flags (PK, FK, not null, unique), valor padrão, check e nota. Em **ÍNDICES**, adicione índices e escolha o tipo.
+4. Crie uma relação arrastando de uma coluna até outra tabela. Para apagar, selecione a relação e use `Del`: isso remove a linha e a coluna FK.
+5. Renomeie a tabela selecionada com <Atalho acao="RenameSelected" /> (**Renomear tabela**). Exclua com <Atalho acao="DeleteSelection" /> (**Excluir tabelas selecionadas**).
+
+<Modalidade so="desktop">
+Duplique a tabela selecionada com <Atalho acao="DuplicateTable" /> (**Duplicar tabela**). Esse comando só existe no Desktop.
+</Modalidade>
+
+### 3. Use os presets de coluna
+
+Com uma tabela selecionada, adicione colunas prontas pela paleta ou pelos botões abaixo da lista de colunas no inspector:
+
+| Preset | Comando da paleta |
+|---|---|
+| UUID PK | **Adicionar predefinição de coluna: UUID PK** |
+| BigInt PK | **Adicionar predefinição de coluna: BigInt PK** |
+| Timestamps | **Adicionar predefinição de coluna: Timestamps** |
+| Soft Delete | **Adicionar predefinição de coluna: Soft Delete** |
+
+Os presets não têm atalho de teclado. Se as colunas já existem, o produto avisa e não duplica.
+
+### 4. Edite no código
+
+1. Escreva DBML no editor. O diagrama atualiza enquanto você digita.
+2. Formate o documento com <Atalho acao="FormatDocument" /> (**Formatar documento**).
+3. Mova a linha atual com <Atalho acao="MoveLineUp" /> e <Atalho acao="MoveLineDown" /> (**Mover linha para cima** e **Mover linha para baixo**).
+4. Abra **Problemas** com <Atalho acao="ShowProblems" /> (**Mostrar problemas**) para ver os diagnósticos do linter, com a linha de cada um.
+
+<Modalidade so="desktop">
+Para ir do diagrama ao texto, selecione uma tabela e use <Atalho acao="RevealInDbml" /> (**Ver tabela no DBML**). Só Desktop.
+</Modalidade>
+
+### 5. Desfaça e refaça
+
+- <Atalho acao="Undo" /> (**Desfazer**) e <Atalho acao="Redo" /> (**Refazer**) valem para edições do canvas e do código, no mesmo histórico.
+
+### 6. Encontre e execute qualquer coisa
+
+- <Atalho acao="QuickSearch" /> (**Busca rápida (tabelas, colunas, enums)**) procura tabelas, colunas e enums pelo nome.
+- <Atalho acao="OpenPalette" /> (**Paleta de comandos**) lista todos os comandos. Digite parte do nome e use as setas e `Enter`.
+- <Atalho acao="ShowShortcuts" /> (**Atalhos de teclado**) mostra a lista completa no app. A lista também está em [Atalhos](../referencia/atalhos).
+
+### 7. Salve
+
+- <Atalho acao="SaveFile" /> (**Salvar**) grava o `.dbml` e o sidecar de layout.
+
+<Modalidade so="web">
+Na Web, o servidor `dbml run` grava o arquivo no disco. Se outro programa alterar o arquivo, o servidor detecta a mudança (a menos que você use `--no-watch`).
+</Modalidade>
+
+<Aviso tipo="dica">
+Todo comando também está na paleta e tem atalho de teclado, quando faz sentido. Se não achar o botão, busque o nome com <Atalho acao="OpenPalette" />.
+</Aviso>
+
+## Diferenças entre modalidades
+
+| Recurso | Desktop | Web | VS Code |
+|---|---|---|---|
+| Visão só de código | Sim | Não | Use o editor de texto do VS Code |
+| Duplicar tabela | Sim | Não | Não |
+| Ver tabela no DBML | Sim | Não | Não |
+| Editar nota da tabela por atalho | Sim (<Atalho acao="EditTableNote" />) | Pelo campo **Nota** do inspector | Pelo campo **Nota** do inspector |
+
+## Se algo der errado
+
+| O que você vê | Causa provável | O que fazer |
+|---|---|---|
+| `Nome de tabela inválido: use letras, números e _.` | O nome tem espaço ou símbolo. | Use letras, números e `_`. O mesmo vale para colunas (`Nome de coluna inválido: use letras, números e _.`) e valores de enum. |
+| `Tabela '<nome>' não encontrada` | A tabela foi renomeada ou removida no texto. | Selecione a tabela de novo e repita a ação. |
+| `<tabela>: as colunas já existem` | O preset já foi aplicado. | Nada a fazer; o produto não duplica colunas. |
+| `O arquivo mudou no disco. Salve manualmente para confirmar.` | Outro programa alterou o arquivo. | Compare o conteúdo e salve com <Atalho acao="SaveFile" /> para sobrescrever, ou reabra o arquivo. |
+| `Sem conexão com o servidor. Edições não serão salvas.` (Web e VS Code) | O servidor `dbml run` parou ou a rede caiu. | Reinicie `dbml run`. O app tenta reconectar sozinho (`Reconectando ao servidor…`). |
+| Um erro de DBML no painel **Problemas** | O texto não segue a sintaxe. | Veja [Tabelas e colunas](../referencia/dbml-tabelas) e [Problemas conhecidos](../ajuda/problemas-conhecidos). |

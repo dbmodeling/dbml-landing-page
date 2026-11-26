@@ -1,0 +1,117 @@
+---
+titulo: First diagram
+descricao: In five minutes, open a schema, edit it on the canvas and in text, and export an image.
+secao: comecar
+ordem: 100
+modalidades: [desktop, web, vscode]
+---
+
+In this tutorial you use the schema of an online store. It has customers, products, orders and order items.
+
+<ExemploDbml arquivo="loja" />
+
+## 1. Open the schema
+
+Copy the code from the **Code** tab above into a file named `loja.dbml`.
+
+<Modalidade so="desktop">
+
+1. Open DB Modeling.
+2. Open the file with <Atalho acao="OpenFile" /> (or use **Open folder** to see the whole folder in the sidebar).
+
+</Modalidade>
+<Modalidade so="web">
+
+1. Open a terminal in the file's folder.
+2. Run:
+
+   ```bash
+   dbml run loja.dbml
+   ```
+
+3. Your browser opens at `http://127.0.0.1:3000/?token=...`. If it does not, copy the address the terminal prints.
+
+</Modalidade>
+<Modalidade so="vscode">
+
+1. Open the folder that contains `loja.dbml` in VS Code.
+2. Click the file in the sidebar. It opens in the text editor.
+3. Click **Abrir no canvas visual** (open in the visual canvas) in the editor title bar.
+
+To start from an empty file, use the **Novo esquema DBML** (new DBML schema) command in the palette and paste the code.
+
+</Modalidade>
+
+<Captura cena="primeiro-diagrama-aberto" alt="Store schema open on the canvas, with the four tables and their relationships" />
+
+## 2. See the whole diagram
+
+- Zoom to fit everything on screen: <Atalho acao="FitView" />.
+- Rearrange the tables automatically: <Atalho acao="Relayout" />.
+- Drag a table to move it. The position goes to the `loja.dbml.layout.json` file, not to the `.dbml`.
+
+Use <Atalho acao="OpenPalette" /> to open the command palette and find any action by name.
+
+## 3. Edit on the canvas
+
+1. Create a table: <Atalho acao="NewTable" />.
+2. Rename it to `avaliacoes`: <Atalho acao="RenameSelected" />.
+3. Look at the text. Only the new lines appeared. The comments and formatting in the rest of the file are untouched.
+
+Every step can be undone: <Atalho acao="Undo" />.
+
+## 4. Edit in text
+
+1. In the code, add a column to the `produtos` table:
+
+   ```dbml
+   Table produtos {
+     id bigint [pk, increment]
+     nome varchar(160) [not null]
+     preco decimal(10, 2) [not null]
+     estoque int [not null, default: 0]
+     ativo boolean [not null, default: true]
+   }
+   ```
+
+2. The canvas shows the `ativo` column right away.
+3. Tidy the document formatting: <Atalho acao="FormatDocument" />.
+
+<Modalidade so="desktop">
+
+To see code and diagram side by side, use the split view: <Atalho acao="ShowSplitView" />.
+
+</Modalidade>
+
+## 5. Follow relationships with Focus mode
+
+Select `pedidos` and turn on Focus mode: <Atalho acao="ToggleFocusMode" />. The canvas highlights the table and its neighbors linked by foreign keys. Toggle again to leave. To find a table or column by name, use <Atalho acao="QuickSearch" />.
+
+## 6. Save
+
+<Modalidade so="desktop,vscode">
+
+Save with <Atalho acao="SaveFile" />.
+
+</Modalidade>
+<Modalidade so="web">
+
+The server writes changes to `loja.dbml` and `loja.dbml.layout.json`, in the folder where you ran the command. To save explicitly, use <Atalho acao="SaveFile" />.
+
+</Modalidade>
+
+Next to `loja.dbml` there is now a `loja.dbml.layout.json` with positions, colors and zoom. Commit both if you want to share the layout.
+
+## 7. Export an image
+
+1. Open the palette: <Atalho acao="OpenPalette" />.
+2. Type **SVG** and pick the SVG export action. PNG and JPEG are in the same list, along with SQL, Mermaid and documentation.
+
+<Captura cena="primeiro-diagrama-exportar" alt="Command palette filtered by SVG, showing the image export options" />
+
+## Next steps
+
+- Already have a database? [Import SQL](../guias/importar-sql) or [connect to a database](../guias/conectar-banco).
+- See every way to [export](../guias/exportar).
+- Share with your team: [Host it for your team](../guias/hospedar-para-o-time).
+- Look up every shortcut in [Shortcuts and commands](../referencia/atalhos).

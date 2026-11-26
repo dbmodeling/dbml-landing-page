@@ -1,0 +1,20 @@
+// Tabela simples, com alias, cor de cabeçalho e nota.
+Table clientes as C [headercolor: #2563EB, note: 'Pessoas que compram na loja.'] {
+  id bigint [pk, increment]
+  nome varchar(120) [not null]
+}
+
+// O alias vale nas relações (C.id).
+Table pedidos {
+  id bigint [pk, increment]
+  cliente_id bigint [not null]
+  Note: 'Um pedido pertence a um cliente.'
+}
+
+Ref: pedidos.cliente_id > C.id
+
+// Tabela dentro de um schema.
+Table financeiro.faturas {
+  id bigint [pk, increment]
+  pedido_id bigint [not null, ref: > pedidos.id]
+}

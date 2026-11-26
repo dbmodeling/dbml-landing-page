@@ -1,0 +1,11 @@
+CREATE TABLE autores (
+  id BIGSERIAL PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL
+);
+
+CREATE TABLE livros (
+  id BIGSERIAL PRIMARY KEY,
+  autor_id BIGINT NOT NULL REFERENCES autores(id),
+  titulo VARCHAR(200) NOT NULL,
+  publicado_em DATE
+);

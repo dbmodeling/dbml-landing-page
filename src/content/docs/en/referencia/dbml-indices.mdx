@@ -1,0 +1,54 @@
+---
+titulo: DBML Indexes
+descricao: "The Indexes block inside Table: single, composite and expression indexes, unique, pk, name and type."
+secao: referencia
+ordem: 60
+modalidades: [desktop, web, vscode]
+---
+
+## Syntax
+
+The `Indexes` block goes inside a `Table`. Each line is one index.
+
+```dbml
+Table usuarios {
+  id bigint [pk]
+  email varchar(255)
+
+  Indexes {
+    email [unique, name: 'idx_usuarios_email']
+    (nome, atualizado_em)
+    `lower(nome)` [type: hash]
+  }
+}
+```
+
+| Form | Meaning |
+|---|---|
+| `column` | Single-column index. |
+| `(a, b)` | Composite index, in the written order. |
+| `` `expression` `` | Functional index. The expression in backticks is exported as-is. |
+
+## Settings
+
+They go in square brackets after the target, separated by commas.
+
+| Setting | Effect |
+|---|---|
+| `unique` | Unique index. |
+| `pk` | Primary key made of the index columns. Counts as `pk` for the table-without-primary-key notice. |
+| `name: 'name'` | Index name. |
+| `type: value` | Index method: `btree`, `hash`, `gin` or `gist` (case-insensitive). Any other value is ignored. |
+
+Other settings (such as `note`) are accepted and ignored.
+
+## Example
+
+<ExemploDbml arquivo="ref-indices" />
+
+## Notes
+
+- The `Indexes` keyword is case-insensitive.
+- A `unique` or `pk` index on a single column makes that column a valid `Ref` target, without the `Referenced column ... is neither pk nor unique` warning.
+- Index edits made through the interface become minimal changes to the `Indexes` block, without rewriting the rest of the table.
+- SQL export creates the indexes (`CREATE INDEX`, `CREATE UNIQUE INDEX`) and writes `USING <type>` when `type` is set. Unnamed indexes get a generated name (`idx_<table>_<n>`).

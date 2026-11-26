@@ -1,0 +1,134 @@
+---
+titulo: Importar SQL DDL
+descricao: Converta um arquivo SQL (PostgreSQL, MySQL, SQLite, SQL Server ou Oracle) em DBML, pelo app ou pelo comando dbml import.
+secao: guias
+ordem: 30
+modalidades: [desktop, web, vscode]
+---
+
+Você cola ou escolhe um arquivo `.sql` com `CREATE TABLE` e recebe o esquema em DBML, com o diagrama pronto. Este é o resultado de importar um dump PostgreSQL de duas tabelas:
+
+```dbml
+Table clientes {
+  id bigint [pk]
+  nome varchar(120) [not null]
+  email varchar(255) [not null]
+}
+
+Table pedidos {
+  id bigint [pk]
+  cliente_id bigint [not null]
+  criado_em timestamp [not null, default: `now()`]
+}
+
+Ref: pedidos.cliente_id > clientes.id
+```
+
+<Captura cena="importar-sql-previa" alt="Janela Importar SQL DDL com um dump PostgreSQL colado à esquerda e a prévia em DBML à direita." />
+
+## Suporte por dialeto
+
+| Dialeto | Como obter o DDL | Importar DDL | Exportar DDL | Conexão direta |
+|---|---|---|---|---|
+| PostgreSQL | `pg_dump --schema-only` | Sim | Sim | Sim |
+| MySQL / MariaDB | `mysqldump --no-data` | Sim | Sim (MySQL) | Sim |
+| SQLite | `.schema` no `sqlite3` | Sim | Sim | Sim |
+| SQL Server | Script de esquema (T-SQL) | Sim | Sim | Sim |
+| Oracle | Script de esquema (`"IDENT"`, `VARCHAR2`, `NUMBER`) | Sim | Sim | Em breve |
+
+Os dialetos valem nas três modalidades e na CLI. Conectar direto ao banco, sem arquivo SQL, está em [Conectar a um banco](../guias/conectar-banco).
+
+## Pré-requisitos
+
+- Um arquivo SQL ou o texto do DDL na área de transferência. Limite: 5 MB por importação.
+- Para a CLI, o binário `dbml` instalado (veja [Instalação](../comecar/instalacao)).
+
+## Como obter o DDL
+
+Gere só a estrutura, sem dados. O importador lê instruções `CREATE TABLE`, `ALTER TABLE ... ADD CONSTRAINT`, índices e enums.
+
+<Abas>
+<Aba titulo="PostgreSQL">
+```bash
+pg_dump --schema-only --no-owner -h localhost -U app loja > loja.sql
+```
+</Aba>
+<Aba titulo="MySQL / MariaDB">
+```bash
+mysqldump --no-data -h localhost -u app -p loja > loja.sql
+```
+</Aba>
+<Aba titulo="SQLite">
+```bash
+sqlite3 loja.db .schema > loja.sql
+```
+</Aba>
+<Aba titulo="SQL Server">
+No SQL Server Management Studio, use **Tasks > Generate Scripts** e marque só o esquema. Salve o script como `loja.sql`.
+</Aba>
+<Aba titulo="Oracle">
+No SQL Developer, use **Export DDL**, ou `DBMS_METADATA.GET_DDL` para cada tabela. Salve o resultado como `loja.sql`.
+</Aba>
+</Abas>
+
+## Passos
+
+### Pelo app (Desktop, Web e VS Code)
+
+1. Abra a janela com <Atalho acao="ImportSqlDdl" /> (paleta: **Importar SQL DDL…**; menu **Arquivo**).
+2. Escolha o dialeto do seu SQL (PostgreSQL, MySQL, SQLite, SQL Server ou Oracle).
+3. Cole o SQL na caixa, ou escolha **Escolher arquivo .sql…**.
+
+   <Modalidade so="web,vscode">
+   Você também pode soltar um arquivo `.sql` na caixa.
+   </Modalidade>
+
+4. Confira a **Prévia DBML**. Ela atualiza enquanto você digita. A janela mostra quantas tabelas e relações foram detectadas e lista os avisos.
+5. Escolha o que fazer com o resultado:
+   - **Substituir** troca o esquema atual (o botão pede um segundo clique: **Confirmar substituição?**).
+   - **Inserir** acrescenta as tabelas ao esquema atual. Se uma tabela já existe, o app avisa com `Já existem no modelo: <nomes>.`
+6. Rode **Auto-layout** com <Atalho acao="Relayout" /> para organizar as tabelas novas.
+
+### Pela CLI
+
+```bash
+dbml import loja.sql --dialect postgres -o loja.dbml
+```
+
+- `--dialect` aceita `postgres`, `mysql`, `sqlite`, `sqlserver` e `oracle`. Também vale `pg`, `mariadb`, `sqlite3`, `mssql`, `tsql` e `ora`.
+- Sem `-o`, o DBML vai para a saída padrão. Com `-o`, o comando recusa sobrescrever um arquivo existente; use `--force` para permitir.
+- Os avisos saem em `stderr`, no formato `arquivo:linha:coluna: warning: mensagem`.
+
+Depois, abra o resultado:
+
+```bash
+dbml run loja.dbml
+```
+
+## O que o importador deixa de fora
+
+O importador não inventa o que o DBML não representa. Ele pula o trecho e avisa. Exemplos reais de aviso:
+
+```text
+loja.sql:2:44: warning: table constraint cannot be represented in DBML and was skipped
+loja.sql:3:1: warning: skipped unsupported statement: CREATE VIEW
+loja.sql:4:45: warning: foreign key on `b` references unknown table `zzz`; dropped
+loja.sql:5:19: warning: ALTER TABLE `a` ADD COLUMN is not applied
+```
+
+Revise a prévia antes de substituir o esquema. Colunas `CHECK` com lista de valores viram enum, e o importador avisa: ``enum values of column `status` were inferred from its CHECK constraint``.
+
+## Se algo der errado
+
+| Mensagem | Causa provável | O que fazer |
+|---|---|---|
+| `A entrada excede o limite de 5 MB; divida o dump em arquivos menores.` | O dump passou de 5 MB. | Gere o DDL só da estrutura (sem `INSERT`) ou divida por schema. |
+| `Cole um SQL para ver a prévia` | A caixa está vazia. | Cole o SQL ou escolha um arquivo. |
+| `O importador SQL (Wasm) ainda não foi carregado.` (Web e VS Code) | A página ainda carrega o motor de análise. | Espere um instante e tente de novo; se persistir, recarregue a página. |
+| `error: invalid value 'foo' for '--dialect <DIALECT>'` (CLI) | Dialeto desconhecido. | Use um dos cinco dialetos listados em `[possible values: postgres, mysql, sqlite, sqlserver, oracle]`. |
+| `output file ... already exists (pass --force to overwrite)` (CLI) | O arquivo de saída já existe. | Use outro nome ou `--force`. |
+| `failed to read SQL file ...` (CLI) | O caminho está errado ou sem permissão. | Confira o caminho do `.sql`. |
+| `warning: table ... is not terminated; kept the items read so far` | O `CREATE TABLE` está cortado (falta `)` ou `;`). | Gere o dump de novo; o importador manteve as colunas lidas até ali. |
+| Tabelas faltando na prévia | O SQL usa outro dialeto do que o escolhido. | Troque o dialeto e confira de novo. |
+
+Se um tipo ou uma cláusula não vier como esperado, veja [Problemas conhecidos](../ajuda/problemas-conhecidos).

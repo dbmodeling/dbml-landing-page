@@ -1,0 +1,9 @@
+// espera: Table `fornecedores` listed in group `compras` does not exist
+Table pedidos {
+  id bigint [pk]
+}
+
+TableGroup compras {
+  pedidos
+  fornecedores
+}

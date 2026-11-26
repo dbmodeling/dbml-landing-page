@@ -1,0 +1,135 @@
+---
+titulo: Problemas conhecidos
+descricao: "Soluções para os problemas mais comuns: macOS danificado, porta em uso, token inválido, conexão recusada, Oracle, VS Code e atualizações."
+secao: ajuda
+ordem: 10
+modalidades: [desktop, web, vscode]
+---
+
+As mensagens abaixo aparecem exatamente assim no produto (a maioria, em inglês). Procure pelo texto que você viu.
+
+## macOS
+
+### "O app está danificado e não pode ser aberto"
+
+O texto vem do macOS (Gatekeeper), não do DB Modeling. Os builds sem assinatura e notarização da Apple recebem a marca de quarentena do navegador, e o macOS diz "danificado" mesmo com o arquivo íntegro.
+
+1. Confira o SHA-256 do arquivo baixado contra o `SHA256SUMS.txt` da release.
+2. Remova a quarentena só do DB Modeling:
+
+   ```bash
+   xattr -dr com.apple.quarantine "/Applications/DB Modeling.app"
+   ```
+
+3. Abra o app de novo. Alternativa sem terminal: botão direito em `DB Modeling.app`, **Abrir**, e confirme.
+
+Não desative o Gatekeeper do sistema inteiro. Veja [Instalação no macOS](../comecar/instalacao-macos).
+
+### "Mova o app para a pasta Aplicativos para atualizar"
+
+O app está rodando de dentro do disco `.dmg` ou de uma pasta isolada pelo macOS (App Translocation). Arraste `DB Modeling.app` para `Aplicativos` e abra de lá.
+
+## Windows
+
+- **Aviso do SmartScreen ao abrir o instalador.** Confira o SHA-256 antes de continuar e só execute se bater com o `SHA256SUMS.txt`.
+- **"Instalado para todos os usuários; atualize baixando o instalador novo".** O app foi instalado sob `Program Files`. O auto-update não pede privilégio de administrador; baixe o instalador novo.
+- **Atualização falha com `dbml run` aberto.** O `dbml.exe` em uso impede a troca. Feche o `dbml run` e tente de novo; a versão anterior continua intacta.
+
+## CLI web (`dbml run`)
+
+### A porta 3000 está em uso
+
+Se a porta pedida está ocupada, o servidor tenta as 50 portas seguintes e imprime a URL com a porta que conseguiu em `Server:`. Use a URL impressa. Para fixar outra porta, passe `--port`:
+
+```bash
+dbml run schema.dbml --port 4000
+```
+
+Se nenhuma porta da faixa estiver livre, o erro é ``no free port for `127.0.0.1` between 3000 and 3050``. Outras mensagens de endereço: ``could not resolve host `nome` `` (nome de `--host` inválido) e ``could not listen on <endereço>``.
+
+### `missing or invalid session token` (HTTP 401)
+
+O servidor gera um token novo a cada execução. Abra a URL **completa** que o terminal imprimiu, com `?token=...`. Se você reiniciou o `dbml run`, a aba antiga tem o token velho: abra a URL nova.
+
+Para um token fixo (por exemplo, atrás de um domínio), use `--token` ou `DBML_TOKEN`:
+
+| Mensagem | Causa |
+|---|---|
+| `--token/DBML_TOKEN needs at least 16 characters` | O token tem menos de 16 caracteres. |
+| `--token/DBML_TOKEN accepts only A-Z a-z 0-9 - _ . ~` | O token tem caractere fora dessa lista. |
+
+### `forbidden host or origin` (HTTP 403)
+
+O servidor só aceita `127.0.0.1`, `localhost`, `[::1]` e o host de `--host`, sempre com a porta, para evitar DNS rebinding. Se você acessa por outro nome (um domínio, um proxy, o IP da máquina na rede), autorize-o com `--allowed-host` (ou `DBML_ALLOWED_HOSTS`). Se o `--host` é `0.0.0.0`, acesse mesmo assim por `127.0.0.1` ou `localhost`, ou autorize o nome usado.
+
+### `too many open connections (limit 256); close another tab` (HTTP 503)
+
+Há conexões demais abertas ao servidor. Feche abas do canvas ou aumente o limite com `--max-connections` (`DBML_MAX_CONNECTIONS`).
+
+### "Sem conexão com o servidor. Edições não serão salvas." (conexão recusada)
+
+Mensagem em inglês: `Disconnected from the server. Edits will not be saved.` O canvas perdeu o WebSocket com o `dbml run`: o servidor foi encerrado (Ctrl+C), a máquina dormiu ou a rede caiu. A faixa muda para "Reconectando ao servidor…". Rode `dbml run` de novo e abra a URL nova. As edições feitas durante a queda não foram salvas.
+
+Se a reconexão falha com ``Connection lost; reconnect and save again`` (em pt-BR, "Conexão interrompida. Reconecte e salve novamente."), recarregue a página.
+
+### "O documento mudou fora desta tela"
+
+Mensagem em inglês: `Document changed outside this editor; reload or reconcile changes`. O arquivo `.dbml` foi alterado por outro programa depois de você abrir o canvas. Exporte suas alterações, recarregue e refaça o que faltou.
+
+### `No .dbml file or folder specified and no previous session found`
+
+Rodou `dbml` sem arquivo e sem sessão anterior. Passe o arquivo ou a pasta: `dbml run schema.dbml`.
+
+### `output file ... already exists (pass --force to overwrite)`
+
+`export`, `docs` e `import` não sobrescrevem um arquivo existente. Use outro nome em `-o` ou `--force`.
+
+## Conexão com o banco
+
+A importação de esquema só lê o catálogo, nunca os dados.
+
+| Mensagem no app | O que verificar |
+|---|---|
+| "O banco recusou a autenticação. Confira o usuário e a senha." | Usuário e senha. |
+| "O banco não respondeu. Confira o host, a porta e se o serviço está rodando." | Host, porta, firewall e se o serviço está de pé. É o caso de conexão recusada (`could not connect: error communicating with database: Connection refused`). |
+| "O certificado TLS do servidor não pôde ser verificado (comum em AWS RDS, GCP Cloud SQL, Azure e Supabase). Mude TLS para Exigir e tente novamente." | Mude o modo TLS para **Exigir TLS (autoassinado)**. Na CLI, `--tls require`. |
+| "Não foi possível ler o esquema. Verifique as permissões de leitura do catálogo." | O usuário precisa de permissão de leitura no catálogo do banco. |
+| "Não foi possível abrir o banco SQLite. Confira o caminho e as permissões do arquivo." | Caminho do arquivo `.db`. |
+| "Não foi possível conectar. Confira os dados da conexão e tente novamente." | Erro genérico: revise a connection string. |
+| "A conexão demorou mais de N s e foi cancelada. Confira o host e a porta." | Rede lenta ou host errado. |
+
+### Oracle não conecta
+
+Não há conexão direta com o Oracle. A opção aparece como "Oracle (em breve)", e a CLI responde `introspection of Oracle is not available yet`. Exporte o DDL do Oracle para um arquivo `.sql` e use [Importar SQL DDL](../guias/importar-sql): a importação de arquivo suporta Oracle.
+
+## VS Code
+
+- **Workspace não confiável.** Mensagem: `Database connection is disabled in untrusted workspaces. Trust this workspace to use it.` O modo Comparar tem a sua: `Compare mode is disabled in untrusted workspaces. Trust this workspace to use it.` Confie no workspace (**Gerenciar Confiança do Workspace**) para usar esses recursos. O canvas e o editor funcionam sem confiança.
+- **Workspace virtual** (vscode.dev, repositório remoto). A conexão com o banco não está disponível.
+- **CLI não encontrada.** Mensagem: ``The dbml CLI ("dbml") was not found. Install it from https://github.com/dbmodeling/dbml/releases (or run the install script from the README) and make sure it is on PATH, or set "dbmodeling.cliPath".`` Instale a CLI ou aponte `dbmodeling.cliPath` para o binário.
+- **CLI antiga.** Mensagem: ``dbml CLI X is too old; this extension needs 0.1.4 or newer.`` Atualize a CLI.
+- **Pedido de confirmação para outro caminho de CLI.** Com `dbmodeling.cliPath` diferente de `dbml`, a extensão pergunta, uma vez por caminho: ``DB Modeling will run "<caminho>" (dbmodeling.cliPath) and send it your database password. Allow?`` Se você recusar, aparece ``Running "<caminho>" is not allowed. Change dbmodeling.cliPath or confirm the prompt.`` Só funciona nas configurações do usuário; um workspace não pode definir esse caminho.
+
+## Linux
+
+- **"Só instalações pelo install.sh ou pelos pacotes .deb/.rpm se atualizam sozinhas; atualize manualmente".** O executável não está no layout esperado (por exemplo, um build de desenvolvimento). Reinstale com `scripts/install.sh`.
+- **"Instalado numa pasta do sistema; atualize pelo gerenciador de pacotes ou pelo install.sh".** O app está num prefixo de sistema (como `/usr`) mas não foi instalado por `.deb`/`.rpm`.
+- **"Sem pkexec neste sistema; baixe o pacote na página de Releases e instale manualmente".** Instalações por `.deb`/`.rpm` precisam do `pkexec` (polkit) para atualizar. Instale o polkit ou baixe o pacote novo.
+- **O `tar` ou o `rsync` não existem.** A atualização da instalação em `~/.local` precisa dos dois. Instale-os pelo gerenciador de pacotes.
+
+Veja também [Atualizações](atualizacoes).
+
+## Atualizações do Desktop
+
+| Texto na barra de título | Significado |
+|---|---|
+| "Falha ao atualizar" | A checagem manual ou a instalação falhou. Ative o botão para tentar de novo. |
+| "Outra janela já está verificando atualizações" | Outra janela do app tem a trava da checagem. Espere. |
+| "Atualização automática indisponível nesta plataforma" | Sistema ou arquitetura sem build de atualização. |
+| "Não foi possível localizar a instalação do app; atualize manualmente" | O app não achou onde está instalado. |
+| "Sem permissão de escrita na pasta do app; atualize manualmente" | A pasta do app é somente leitura para o seu usuário. |
+| "Falha ao reiniciar. Abra o app novamente" | A nova versão já está instalada; abra o app pelo menu de aplicativos. |
+
+## Ainda travado?
+
+Abra uma issue em [github.com/dbmodeling/dbml/issues](https://github.com/dbmodeling/dbml/issues) com o sistema, a modalidade, a versão (`dbml --version` na CLI) e o texto exato da mensagem.

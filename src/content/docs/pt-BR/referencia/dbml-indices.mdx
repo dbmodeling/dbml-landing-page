@@ -1,0 +1,54 @@
+---
+titulo: DBML, Indexes
+descricao: "O bloco Indexes dentro de Table: índices simples, compostos, de expressão, unique, pk, name e type."
+secao: referencia
+ordem: 60
+modalidades: [desktop, web, vscode]
+---
+
+## Sintaxe
+
+O bloco `Indexes` fica dentro de uma `Table`. Cada linha é um índice.
+
+```dbml
+Table usuarios {
+  id bigint [pk]
+  email varchar(255)
+
+  Indexes {
+    email [unique, name: 'idx_usuarios_email']
+    (nome, atualizado_em)
+    `lower(nome)` [type: hash]
+  }
+}
+```
+
+| Forma | Significado |
+|---|---|
+| `coluna` | Índice de uma coluna. |
+| `(a, b)` | Índice composto, na ordem escrita. |
+| `` `expressão` `` | Índice funcional. A expressão entre crases é exportada como está. |
+
+## Configurações
+
+Ficam entre colchetes depois do alvo, separadas por vírgula.
+
+| Configuração | Efeito |
+|---|---|
+| `unique` | Índice único. |
+| `pk` | Chave primária composta pelas colunas do índice. Conta como `pk` para o aviso de tabela sem chave primária. |
+| `name: 'nome'` | Nome do índice. |
+| `type: valor` | Método do índice: `btree`, `hash`, `gin` ou `gist` (sem diferenciar maiúsculas). Outro valor é ignorado. |
+
+Outras configurações (como `note`) são aceitas e ignoradas.
+
+## Exemplo
+
+<ExemploDbml arquivo="ref-indices" />
+
+## Observações
+
+- A palavra-chave `Indexes` não diferencia maiúsculas de minúsculas.
+- Um índice `unique` ou `pk` de uma única coluna faz dela um destino válido de `Ref`, sem o aviso `Referenced column ... is neither pk nor unique`.
+- As edições de índice feitas pela interface viram alterações mínimas no bloco `Indexes`, sem reescrever o resto da tabela.
+- A exportação SQL cria os índices (`CREATE INDEX`, `CREATE UNIQUE INDEX`) e escreve `USING <tipo>` quando há `type`. Índices sem nome recebem um nome gerado (`idx_<tabela>_<n>`).

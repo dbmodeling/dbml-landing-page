@@ -1,0 +1,8 @@
+// espera: Duplicate table `clientes`
+Table clientes {
+  id bigint [pk]
+}
+
+Table clientes {
+  id bigint [pk]
+}

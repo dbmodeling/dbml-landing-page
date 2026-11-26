@@ -1,0 +1,61 @@
+---
+titulo: DBML, Enum
+descricao: Declaração de Enum com valores e notas, uso como tipo de coluna e enums com schema.
+secao: referencia
+ordem: 70
+modalidades: [desktop, web, vscode]
+---
+
+## Sintaxe
+
+```dbml
+Enum [schema.]nome {
+  valor
+  valor [note: 'texto']
+  "valor com espaço"
+}
+```
+
+Um valor por linha. Valores com espaço ou caracteres especiais usam aspas duplas.
+
+| Item | Efeito |
+|---|---|
+| `valor` | Um valor do enum, na ordem escrita. |
+| `[note: '...']` | Nota do valor. |
+| `schema.nome` | Enum dentro de um schema. |
+
+## Usar como tipo
+
+O nome do enum é o tipo da coluna. Com schema, escreva o nome qualificado.
+
+```dbml
+Table pedidos {
+  status status_pedido [not null, default: 'pendente']
+  moeda financeiro.moeda
+}
+```
+
+O `default` de um enum vai entre aspas simples, como texto.
+
+## Exemplo
+
+<ExemploDbml arquivo="ref-enums" />
+
+No canvas, cada enum aparece como um cartão compacto com o selo `ENUM` e a lista de valores. Você pode criar o enum (<Atalho acao="NewEnum" />), renomeá-lo e editar seus valores pelo Inspector. A posição do cartão fica no [sidecar](sidecar-layout) (chave `enum:<nome>`), nunca no `.dbml`.
+
+## Erro comum: enum não declarado
+
+```dbml
+Table pedidos {
+  id bigint [pk]
+  status status_pedido
+}
+```
+
+Diagnóstico: ``Unknown type `status_pedido` on column `status` ``. Declare o `Enum` (em qualquer posição do arquivo) ou use um tipo conhecido. O arquivo `ref-enums.erro.dbml` reproduz o caso.
+
+## Observações
+
+- O enum pode ser declarado antes ou depois das tabelas que o usam.
+- Na exportação SQL para PostgreSQL, o enum vira `CREATE TYPE ... AS ENUM` (com `CREATE SCHEMA IF NOT EXISTS` quando há schema).
+- Outras configurações no cabeçalho do enum são aceitas e ignoradas.

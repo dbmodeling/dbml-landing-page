@@ -1,0 +1,13 @@
+Table usuarios {
+  id bigint [pk, increment]
+  email varchar(255) [not null]
+  nome varchar(120)
+  atualizado_em timestamp
+
+  Indexes {
+    email [unique, name: 'idx_usuarios_email']
+    (nome, atualizado_em)
+    `lower(nome)` [type: hash, name: 'idx_usuarios_nome_lower']
+    atualizado_em [type: btree]
+  }
+}

@@ -1,0 +1,7 @@
+// espera: Table `fornecedores` does not exist
+Table produtos {
+  id bigint [pk]
+  fornecedor_id bigint
+}
+
+Ref: produtos.fornecedor_id > fornecedores.id

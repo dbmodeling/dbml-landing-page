@@ -1,0 +1,85 @@
+---
+titulo: Instalação no Fedora
+descricao: Instale o app Desktop no Fedora 40 ou 41 com o pacote .rpm.
+secao: comecar
+ordem: 60
+modalidades: [desktop]
+---
+
+<Aviso tipo="info">
+O `.rpm` instala para o sistema todo e **não se atualiza sozinho**. Se você prefere uma instalação sem `sudo` que se atualiza dentro do app, use o [`install.sh` sem `--system`](instalacao-linux-script).
+</Aviso>
+
+## Requisitos
+
+- Fedora 40 ou 41 (também aceito pelo script: RHEL, CentOS, Rocky e Alma), arquitetura **x86_64**.
+- Acesso a `sudo`.
+- Uma sessão gráfica (Wayland ou X11) e suporte a Vulkan. O `dnf` instala as bibliotecas necessárias: `glibc`, `libxcb`, `libxkbcommon`, `libxkbcommon-x11`, `libwayland-client`, `vulkan-loader`, `fontconfig` e `freetype`.
+
+## Instalar
+
+1. Baixe `db-modeling-linux-x86_64.rpm` e `SHA256SUMS.txt` em [Releases](https://github.com/dbmodeling/dbml/releases/latest):
+
+   ```bash
+   curl -fLO https://github.com/dbmodeling/dbml/releases/latest/download/db-modeling-linux-x86_64.rpm
+   curl -fLO https://github.com/dbmodeling/dbml/releases/latest/download/SHA256SUMS.txt
+   ```
+
+2. Confira o SHA-256:
+
+   ```bash
+   sha256sum -c SHA256SUMS.txt --ignore-missing
+   ```
+
+   Saída esperada:
+
+   ```text
+   db-modeling-linux-x86_64.rpm: OK
+   ```
+
+3. Instale:
+
+   ```bash
+   sudo dnf install ./db-modeling-linux-x86_64.rpm
+   ```
+
+Atalho: `bash install.sh --system` faz os passos 1 a 3 sozinho (veja [`install.sh`](instalacao-linux-script)).
+
+## Verificar se funcionou
+
+```bash
+db-modeling --version
+```
+
+Saída esperada, com a versão que você instalou:
+
+```text
+db-modeling X.Y.Z
+```
+
+O app também aparece no menu de aplicativos. Para confirmar o pacote, rode `rpm -q db-modeling`.
+
+## Atualizar
+
+Este canal não se atualiza sozinho, e o app não tenta se atualizar quando está em `/usr/bin`. Para atualizar:
+
+1. Baixe o `.rpm` da versão nova e [confira o SHA-256](#instalar).
+2. Rode `sudo dnf install ./db-modeling-linux-x86_64.rpm` de novo. O `dnf` troca a versão antiga pela nova.
+
+Para atualizar sozinho, migre para a [instalação sem `--system`](instalacao-linux-script). Veja também [Atualizações](../ajuda/atualizacoes).
+
+## Desinstalar
+
+```bash
+sudo dnf remove db-modeling
+```
+
+Suas preferências ficam em `~/.config/db-modeling/settings.txt`. Seus arquivos `.dbml` não são tocados.
+
+## Problemas conhecidos
+
+- **Sem atualização automática.** Veja "Atualizar" acima.
+- **Sem a CLI `dbml`.** O `.rpm` entrega só o app Desktop. Para o servidor Web, use a [imagem Docker](instalacao-docker).
+- **Só x86_64.** Não há pacote para ARM.
+- **Conexão Oracle.** Ainda não há. Para Oracle, [importe um arquivo SQL](../guias/importar-sql).
+- Mais casos: [Problemas conhecidos](../ajuda/problemas-conhecidos).

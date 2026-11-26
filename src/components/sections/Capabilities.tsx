@@ -91,10 +91,10 @@ export function Capabilities() {
           </strong>
         </h2>
         <p className="mt-3 text-xs sm:text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
-          New in v0.1.4: connect to a database, import and export SQL, and
-          export diagrams as SVG, PNG, or Mermaid. Everything still runs
-          locally, with <code className="font-mono text-foreground">.dbml</code>{" "}
-          as the single source of truth.
+          Connect to a database, import and export SQL, and export diagrams as
+          SVG, PNG, or Mermaid. Everything runs locally, with{" "}
+          <code className="font-mono text-foreground">.dbml</code> as the single
+          source of truth.
         </p>
       </div>
 

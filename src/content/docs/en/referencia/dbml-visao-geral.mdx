@@ -1,0 +1,89 @@
+---
+titulo: DBML overview
+descricao: "How DB Modeling reads DBML: source of truth, comments, quoted names, schemas and what the diagnostics mean."
+secao: referencia
+ordem: 10
+modalidades: [desktop, web, vscode]
+---
+
+The `.dbml` file is the **source of truth** for your model. The canvas is a view of that text: every visual edit becomes a minimal textual patch to the file, and the comments and formatting you wrote stay as they were.
+
+DB Modeling keeps the file as **valid DBML**. Nothing app-specific is written into it. Positions, relationship styles and viewport live in a separate file, the [layout sidecar](sidecar-layout).
+
+## File structure
+
+A file is a list of top-level blocks. Keywords are case-insensitive (`Table`, `table` and `TABLE` are the same).
+
+| Block | Page |
+|---|---|
+| `Project` | [Project](dbml-project) |
+| `Table` | [Tables](dbml-tabelas) and [Columns](dbml-colunas) |
+| `Ref` | [Relationships](dbml-relacoes) |
+| `Indexes` (inside `Table`) | [Indexes](dbml-indices) |
+| `Enum` | [Enums](dbml-enums) |
+| `TableGroup` | [TableGroups](dbml-tablegroups) |
+| `Note` | [Notes](dbml-notas) |
+
+Example with the basic elements:
+
+<ExemploDbml arquivo="ref-visao-geral" />
+
+## Comments
+
+Only the line comment `//` is supported. It runs to the end of the line and can stand alone or follow a column.
+
+```dbml
+// A comment on its own line.
+Table clientes {
+  id bigint [pk] // comment after the column
+}
+```
+
+<Aviso tipo="cuidado">
+The block comment `/* ... */` from official DBML is **not recognized**. Inside a table it produces linter errors (for example, `Unknown type` on a column named `/`). At the top level it produces the `Unrecognized construct` warning. Use `//` on each line. See [Not supported yet](dbml-nao-suportado).
+</Aviso>
+
+## Quoted names
+
+Plain names use letters, digits and `_`, and do not start with a digit. For names with spaces, accents or other characters, use double quotes. This applies to tables, columns, enums, enum values and groups.
+
+```dbml
+Table "pedido item" {
+  "preço total" decimal(10, 2)
+}
+```
+
+## Schemas
+
+To separate tables and enums by schema, qualify the name as `schema.name`. The same applies in relationships, in `TableGroup` and in the type of an enum column.
+
+```dbml
+Table vendas.clientes {
+  id bigint [pk]
+}
+
+Table vendas.pedidos {
+  id bigint [pk]
+  cliente_id bigint [ref: > vendas.clientes.id]
+}
+```
+
+Two tables with the same name in different schemas (`auth.users` and `billing.users`) are distinct tables. The canvas shows the schema as a badge in the table header. In relationships, `public.clientes` and `clientes` point to the same table when it has no schema.
+
+## Strings
+
+Text uses single quotes: `'text'`. For several lines, use triple quotes (`'''`). Raw SQL expressions, in `default` and `check`, go between backticks: `` `now()` ``. Backticks are exported as-is to SQL.
+
+## Diagnostics
+
+The linter runs on every edit and shows results in the **Problems** panel (<Atalho acao="ShowProblems" />) and as underlines in the editor.
+
+| Severity | When |
+|---|---|
+| `Error` | The DBML is not valid: unknown type, duplicate table, relationship to a missing table, unknown setting. |
+| `Warning` | Probably wrong but still exportable: incompatible types in a relationship, circular dependency, unrecognized construct. |
+| `Info` | A note, such as a table without a primary key. |
+
+Messages have no stable code and appear in English (the web interface translates only a few). The CLI rejects files with an `Error` in the `export` and `diff` commands, with the message `invalid DBML: ...`.
+
+Several element pages show an example that triggers a diagnostic and the exact message.

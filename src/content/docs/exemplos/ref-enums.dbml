@@ -1,0 +1,17 @@
+Enum status_pedido {
+  pendente [note: 'Aguardando pagamento.']
+  pago
+  enviado
+  "em disputa"
+}
+
+Enum financeiro.moeda {
+  brl
+  usd
+}
+
+Table pedidos {
+  id bigint [pk, increment]
+  status status_pedido [not null, default: 'pendente']
+  moeda financeiro.moeda [not null, default: 'brl']
+}

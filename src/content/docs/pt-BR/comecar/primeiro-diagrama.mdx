@@ -1,0 +1,117 @@
+---
+titulo: Primeiro diagrama
+descricao: Em cinco minutos, abra um esquema, edite no canvas e no texto e exporte uma imagem.
+secao: comecar
+ordem: 100
+modalidades: [desktop, web, vscode]
+---
+
+Neste tutorial você usa o esquema de uma loja online. Ele tem clientes, produtos, pedidos e itens de pedido.
+
+<ExemploDbml arquivo="loja" />
+
+## 1. Abra o esquema
+
+Copie o código da aba **Código** acima para um arquivo chamado `loja.dbml`.
+
+<Modalidade so="desktop">
+
+1. Abra o DB Modeling.
+2. Abra o arquivo com <Atalho acao="OpenFile" /> (ou use **Abrir pasta** para ver a pasta inteira na barra lateral).
+
+</Modalidade>
+<Modalidade so="web">
+
+1. Abra um terminal na pasta do arquivo.
+2. Rode:
+
+   ```bash
+   dbml run loja.dbml
+   ```
+
+3. O navegador abre em `http://127.0.0.1:3000/?token=...`. Se não abrir, copie o endereço que o terminal imprime.
+
+</Modalidade>
+<Modalidade so="vscode">
+
+1. Abra a pasta que contém `loja.dbml` no VS Code.
+2. Clique no arquivo na barra lateral. Ele abre no editor de texto.
+3. Clique em **Abrir no canvas visual** na barra de título do editor.
+
+Para começar de um arquivo vazio, use o comando **Novo esquema DBML** na paleta e cole o código.
+
+</Modalidade>
+
+<Captura cena="primeiro-diagrama-aberto" alt="Esquema da loja aberto no canvas, com as quatro tabelas e as relações" />
+
+## 2. Veja o diagrama inteiro
+
+- Ajuste o zoom para caber tudo na tela: <Atalho acao="FitView" />.
+- Reorganize as tabelas automaticamente: <Atalho acao="Relayout" />.
+- Arraste uma tabela para mudar a posição. A posição vai para o arquivo `loja.dbml.layout.json`, não para o `.dbml`.
+
+Use <Atalho acao="OpenPalette" /> para abrir a paleta de comandos e achar qualquer ação pelo nome.
+
+## 3. Edite no canvas
+
+1. Crie uma tabela: <Atalho acao="NewTable" />.
+2. Renomeie para `avaliacoes`: <Atalho acao="RenameSelected" />.
+3. Olhe o texto. Só as linhas novas apareceram. Os comentários e a formatação do resto do arquivo ficaram intactos.
+
+Todo passo tem desfazer: <Atalho acao="Undo" />.
+
+## 4. Edite no texto
+
+1. No código, adicione uma coluna à tabela `produtos`:
+
+   ```dbml
+   Table produtos {
+     id bigint [pk, increment]
+     nome varchar(160) [not null]
+     preco decimal(10, 2) [not null]
+     estoque int [not null, default: 0]
+     ativo boolean [not null, default: true]
+   }
+   ```
+
+2. O canvas mostra a coluna `ativo` na hora.
+3. Alinhe a formatação do documento: <Atalho acao="FormatDocument" />.
+
+<Modalidade so="desktop">
+
+Para ver código e diagrama lado a lado, use a visão dividida: <Atalho acao="ShowSplitView" />.
+
+</Modalidade>
+
+## 5. Siga as relações com o modo Foco
+
+Selecione `pedidos` e ative o modo Foco: <Atalho acao="ToggleFocusMode" />. O canvas destaca a tabela e as vizinhas ligadas por chave estrangeira. Ative de novo para sair. Para achar uma tabela ou coluna pelo nome, use <Atalho acao="QuickSearch" />.
+
+## 6. Salve
+
+<Modalidade so="desktop,vscode">
+
+Salve com <Atalho acao="SaveFile" />.
+
+</Modalidade>
+<Modalidade so="web">
+
+O servidor grava as alterações em `loja.dbml` e em `loja.dbml.layout.json`, na pasta onde você rodou o comando. Para salvar de forma explícita, use <Atalho acao="SaveFile" />.
+
+</Modalidade>
+
+Ao lado do `loja.dbml` passa a existir o `loja.dbml.layout.json`, com posições, cores e zoom. Commite os dois se quiser compartilhar o layout.
+
+## 7. Exporte uma imagem
+
+1. Abra a paleta: <Atalho acao="OpenPalette" />.
+2. Digite **SVG** e escolha a ação de exportar SVG. PNG e JPEG ficam na mesma lista, junto com SQL, Mermaid e documentação.
+
+<Captura cena="primeiro-diagrama-exportar" alt="Paleta de comandos filtrada por SVG, com as opções de exportação de imagem" />
+
+## Próximos passos
+
+- Já tem um banco? [Importe um SQL](../guias/importar-sql) ou [conecte a um banco](../guias/conectar-banco).
+- Veja todas as formas de [exportar](../guias/exportar).
+- Compartilhe com o time: [Hospedar para o time](../guias/hospedar-para-o-time).
+- Consulte todos os atalhos em [Atalhos e comandos](../referencia/atalhos).
