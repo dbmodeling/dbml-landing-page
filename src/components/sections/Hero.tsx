@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DownloadCTA } from "@/components/ui/DownloadCTA";
 import { AsciiMatrixCanvas } from "@/components/ui/AsciiMatrixCanvas";
+import { ROUTE_DOCS } from "@/docs/constants";
 
 export function Hero() {
   return (
@@ -55,7 +57,7 @@ export function Hero() {
             </Button>
 
             <Button asChild variant="ghost" size="default">
-              <a href="#architecture">How it works</a>
+              <Link to={ROUTE_DOCS}>Read the docs</Link>
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">

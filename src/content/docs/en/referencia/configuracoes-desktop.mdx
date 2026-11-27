@@ -1,0 +1,72 @@
+---
+titulo: Desktop settings
+descricao: Keys in the Desktop app settings.txt file, accepted values, defaults and where the file lives on each system.
+secao: referencia
+ordem: 150
+modalidades: [desktop]
+---
+
+The Desktop app stores its preferences in a plain text file, one `key=value` per line. You change almost everything through the interface; edit the file by hand only in specific cases, such as turning off auto-update before the first launch.
+
+## Where it lives
+
+| System | File |
+|---|---|
+| Windows | `%APPDATA%\db-modeling\settings.txt` |
+| Linux | `$XDG_CONFIG_HOME/db-modeling/settings.txt`, or `~/.config/db-modeling/settings.txt` if `XDG_CONFIG_HOME` is not set |
+| macOS | `~/.config/db-modeling/settings.txt` (the app uses this folder, not `~/Library`) |
+
+The same folder also holds `session.json` (open tabs, recent files and each file's viewport) and `update-notice.txt` (the "Updated to X" notice after a restart).
+
+<Aviso tipo="dica">
+Close the app before editing the file: it rewrites `settings.txt` when you change a preference. If the file exists but cannot be read, the app copies the original to `settings.txt.bak`, warns in the window and uses the defaults.
+</Aviso>
+
+## Keys
+
+| Key | Values | Default | Notes |
+|---|---|---|---|
+| `lang` | `pt-BR` or `en` | absent | Interface language. An invalid value is the same as absent. |
+| `mode` | `light` or `dark` | `dark` | Theme. Also toggled from the palette (<Atalho acao="ToggleTheme" />). |
+| `translucent` | `true` or `false` | system-dependent | Translucent interface. Without the key, the app turns it on when the system supports blur. |
+| `sidebar_w` | number from 120 to 1600 | `248` | Sidebar width, in px. Out of range reverts to the default. |
+| `editor_w` | number from 120 to 1600 | `440` | Code editor width, in px. |
+| `inspector_w` | number from 120 to 1600 | `288` | Inspector width, in px. |
+| `col_type_w` | number from 60 to 400 | `110` | Width of the type column in cards, in px. |
+| `ui_scale` | number from 0.75 to 2.0 | `1.0` | Interface scale. Also by <Atalho acao="ZoomInUi" />, <Atalho acao="ZoomOutUi" /> and <Atalho acao="ResetUiZoom" />. |
+| `inspector_auto_hide` | `true` or `false` | `true` | Collapses the Inspector automatically. Only the value `false` turns it off. |
+| `sidebar_open` | `true` or `false` | `false` | Sidebar open. |
+| `inspector_open` | `true` or `false` | `true` | Inspector open. |
+| `onboarding_done` | `true` or `false` | `false` | Marks the guided tour as finished. |
+| `last_seen_version` | text up to 32 characters | absent | Last version whose What's New you saw. |
+| `auto_update` | `true` or `false` | `true` | Automatic update check. Only the value `false` turns it off; any other text keeps it on. |
+
+Unknown lines are ignored.
+
+## Environment variables
+
+| Variable | Effect |
+|---|---|
+| `DBM_UPDATE_EXPLANATION` | Non-empty text turns off **all** update checks (manual included) and is shown in place of the action. Useful for people packaging the app. |
+| `APPDATA`, `XDG_CONFIG_HOME`, `HOME` | Define the configuration folder, in that order of priority. |
+
+Auto-update details are in [Updates](../ajuda/atualizacoes).
+
+## Example
+
+```text
+lang=en
+mode=dark
+translucent=true
+sidebar_w=248
+editor_w=440
+inspector_w=288
+col_type_w=110
+ui_scale=1.00
+inspector_auto_hide=true
+sidebar_open=false
+inspector_open=true
+onboarding_done=true
+auto_update=true
+last_seen_version=0.4.3
+```

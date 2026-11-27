@@ -1,0 +1,85 @@
+---
+titulo: Install on Ubuntu and Debian
+descricao: Install the Desktop app on Ubuntu 22.04/24.04 or Debian with the .deb package.
+secao: comecar
+ordem: 50
+modalidades: [desktop]
+---
+
+<Aviso tipo="info">
+The `.deb` installs system-wide and **does not update itself**. If you prefer a no-`sudo` install that updates from inside the app, use [`install.sh` without `--system`](instalacao-linux-script).
+</Aviso>
+
+## Requirements
+
+- Ubuntu 22.04 or 24.04, or Debian (and derivatives such as Linux Mint and Pop!_OS), **x86_64 (amd64)** architecture.
+- `sudo` access.
+- A graphical session (Wayland or X11) and Vulkan support. `apt` installs the needed libraries: `libc6`, `libxcb1`, `libxkbcommon0`, `libxkbcommon-x11-0`, `libwayland-client0`, `libvulkan1`, `libfontconfig1` and `libfreetype6`.
+
+## Install
+
+1. Download `db-modeling-linux-amd64.deb` and `SHA256SUMS.txt` from [Releases](https://github.com/dbmodeling/dbml/releases/latest):
+
+   ```bash
+   curl -fLO https://github.com/dbmodeling/dbml/releases/latest/download/db-modeling-linux-amd64.deb
+   curl -fLO https://github.com/dbmodeling/dbml/releases/latest/download/SHA256SUMS.txt
+   ```
+
+2. Check the SHA-256:
+
+   ```bash
+   sha256sum -c SHA256SUMS.txt --ignore-missing
+   ```
+
+   Expected output:
+
+   ```text
+   db-modeling-linux-amd64.deb: OK
+   ```
+
+3. Install (the `./` is required so `apt` treats it as a local file):
+
+   ```bash
+   sudo apt install ./db-modeling-linux-amd64.deb
+   ```
+
+Shortcut: `bash install.sh --system` runs steps 1 to 3 for you and installs the dependencies first (see [`install.sh`](instalacao-linux-script)).
+
+## Check that it worked
+
+```bash
+db-modeling --version
+```
+
+Expected output, with the version you installed:
+
+```text
+db-modeling X.Y.Z
+```
+
+The app also shows up in your application menu. To confirm the package, run `dpkg -s db-modeling`.
+
+## Update
+
+This channel does not update itself, and the app does not try to update when it lives in `/usr/bin`. To update:
+
+1. Download the new `.deb` and [check the SHA-256](#install).
+2. Run `sudo apt install ./db-modeling-linux-amd64.deb` again. `apt` replaces the old version with the new one.
+
+To get automatic updates, move to the [install without `--system`](instalacao-linux-script). See also [Updates](../ajuda/atualizacoes).
+
+## Uninstall
+
+```bash
+sudo apt remove db-modeling
+```
+
+Your preferences live in `~/.config/db-modeling/settings.txt`. Your `.dbml` files are not touched.
+
+## Known issues
+
+- **No automatic update.** See "Update" above. The app tells you the install is in a system folder.
+- **No `dbml` CLI.** The `.deb` contains only the Desktop app. For the web server, use the [Docker image](instalacao-docker).
+- **x86_64 only.** There is no ARM package.
+- **Oracle connection.** Not available yet. For Oracle, [import a SQL file](../guias/importar-sql).
+- More cases: [Known issues](../ajuda/problemas-conhecidos).

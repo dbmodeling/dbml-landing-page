@@ -1,0 +1,5 @@
+// espera: Unknown type `vrchar` on column `nome` (did you mean `varchar`?)
+Table clientes {
+  id bigint [pk]
+  nome vrchar(120)
+}

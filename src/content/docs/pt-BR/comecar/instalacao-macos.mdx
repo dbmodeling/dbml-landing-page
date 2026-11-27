@@ -1,0 +1,110 @@
+---
+titulo: Instalação no macOS
+descricao: Instale o DB Modeling no macOS com o .dmg ou o .pkg, e saiba o que fazer com o aviso de app danificado.
+secao: comecar
+ordem: 40
+modalidades: [desktop, web]
+---
+
+## Requisitos
+
+- Mac com **Apple Silicon** (M1 ou mais novo). As releases publicam só o build `arm64`.
+- Mac com chip Intel: não há instalador pronto. É preciso compilar a partir do código-fonte com `./scripts/build-macos.sh intel`.
+
+## Instalar
+
+Escolha um formato.
+
+**`.pkg` (instala o app e a CLI).**
+
+1. Baixe `db-modeling-macos-setup.pkg` em [Releases](https://github.com/dbmodeling/dbml/releases/latest).
+2. [Confira o SHA-256](#conferir-o-sha-256).
+3. Abra o `.pkg` e siga o assistente. Ele instala `DB Modeling.app` em `/Applications` e os comandos `dbml` e `db-modeling` em `/usr/local/bin`.
+
+**`.dmg` (só o app).**
+
+1. Baixe `db-modeling-macos-arm64.dmg`.
+2. Confira o SHA-256.
+3. Abra o `.dmg` e arraste `DB Modeling.app` para a pasta `Applications`.
+
+**Pelo terminal.** O script baixa o `.pkg`, confere o SHA-256 e instala com `sudo`:
+
+```bash
+curl -fsSL https://github.com/dbmodeling/dbml/releases/latest/download/db-modeling-install.sh -o install.sh
+bash install.sh
+```
+
+## Conferir o SHA-256
+
+Baixe `SHA256SUMS.txt` da mesma release e rode, na pasta dos downloads:
+
+```bash
+grep "db-modeling-macos-setup.pkg" SHA256SUMS.txt | shasum -a 256 -c
+```
+
+Saída esperada:
+
+```text
+db-modeling-macos-setup.pkg: OK
+```
+
+Para o `.dmg`, troque o nome do arquivo no comando.
+
+## Verificar se funcionou
+
+Com o `.pkg`:
+
+```bash
+dbml --version
+db-modeling --version
+```
+
+Saída esperada, com a versão que você instalou:
+
+```text
+dbml X.Y.Z
+db-modeling X.Y.Z
+```
+
+Com o `.dmg`, abra o app pelo Launchpad. O comando `dbml` só existe com o `.pkg`.
+
+## Atualizar
+
+- **Pelo app.** O app Desktop checa ao abrir e a cada hora, troca os arquivos e mostra **Reiniciar para atualizar**. Para checar na hora, use **Verificar atualizações** na paleta de comandos (<Atalho acao="OpenPalette" />).
+- **Manual.** Baixe o `.pkg` ou o `.dmg` novo e instale por cima.
+- **CLI `dbml`.** Não se atualiza sozinha. Reinstale com o `.pkg` novo ou rode o `install.sh` de novo.
+
+Veja também [Atualizações](../ajuda/atualizacoes).
+
+## Desinstalar
+
+```bash
+bash install.sh --uninstall
+```
+
+O comando remove `/Applications/DB Modeling.app`, `/usr/local/bin/dbml` e `/usr/local/bin/db-modeling` (pede `sudo`). Sem o script, apague esses três itens à mão. Suas preferências ficam em `~/.config/db-modeling/settings.txt`.
+
+## Problemas conhecidos
+
+### "O app está danificado e não pode ser aberto"
+
+**Causa.** Os builds sem assinatura e notarização da Apple recebem a marca de quarentena do navegador. O Gatekeeper bloqueia o app e usa a palavra "danificado", mas o arquivo não está corrompido.
+
+**Contorno seguro.**
+
+1. Confira o SHA-256 do arquivo baixado (seção acima). Só continue se bater com o `SHA256SUMS.txt`.
+2. Remova a quarentena só do DB Modeling:
+
+   ```bash
+   xattr -dr com.apple.quarantine "/Applications/DB Modeling.app"
+   ```
+
+3. Abra o app de novo.
+
+Alternativa sem terminal: clique com o botão direito em `DB Modeling.app`, escolha **Abrir** e confirme. Não desative o Gatekeeper do sistema inteiro.
+
+### Outros
+
+- **Mac Intel.** Sem instalador publicado (veja Requisitos).
+- **Conexão Oracle.** Ainda não há. Para Oracle, [importe um arquivo SQL](../guias/importar-sql).
+- Mais casos: [Problemas conhecidos](../ajuda/problemas-conhecidos).

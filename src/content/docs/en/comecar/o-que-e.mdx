@@ -1,0 +1,46 @@
+---
+titulo: What is DB Modeling
+descricao: A database diagram editor for DBML, with a canvas and text that stay in sync, in three flavors.
+secao: comecar
+ordem: 10
+modalidades: [desktop, web, vscode]
+---
+
+DB Modeling is a database diagram editor. You describe the schema in [DBML](../referencia/dbml-visao-geral) and edit the same schema as text or on the canvas. Both views stay in sync.
+
+<Captura cena="canvas-inicial" alt="DB Modeling canvas showing the sample store diagram" />
+
+## What you can do with it
+
+- Model tables, columns, relationships, indexes, enums and groups on the canvas or in code.
+- Import an existing schema from a SQL file or from a running database.
+- Export to SQL, PNG, JPEG, SVG, Mermaid `erDiagram`, and HTML or Markdown documentation.
+- Compare the current schema with the Git version.
+
+## The three modes
+
+The core is the same in all three. Pick the one that matches where you already work.
+
+| Mode | What it is | Use it when |
+|---|---|---|
+| **Desktop** | Native app for Windows, macOS and Linux. | You want the full editor, fast, with no browser and with automatic updates. |
+| **Web CLI (`dbml run`)** | A local server that opens the canvas in your browser. It also exports, diffs and imports from the command line. | You prefer the browser, want to script it, or want to host it for your team (see [Host it for your team](../guias/hospedar-para-o-time)). |
+| **VS Code extension** | A visual editor for `.dbml` files inside VS Code. | You already live in VS Code and want the canvas next to the code. |
+
+<Aviso tipo="info">
+Some actions exist in only some modes. For example, automatic updates are Desktop-only. Each page says where its content applies, and the mode selector on the site hides what does not apply to yours.
+</Aviso>
+
+## The file is the source of truth
+
+Your schema is a plain `.dbml` text file. It stays valid DBML, so any other DBML tool can open it.
+
+- **Canvas edits become minimal text changes.** Moving a field or renaming a table changes only the affected lines. Your comments and formatting stay as they are.
+- **Appearance data lives in a separate file next to it.** Table positions, colors, relationship style and zoom are stored in `<schema>.dbml.layout.json` in the same folder. Deleting it only resets the layout. The schema does not change.
+- **Version both files.** Always commit the `.dbml`. Commit the `.layout.json` if your team wants to share the same layout.
+
+## Next steps
+
+1. [Install it](instalacao) on your platform.
+2. Follow the five-minute [first diagram](primeiro-diagrama).
+3. Already have a database? Use [Import SQL](../guias/importar-sql) or [Connect to a database](../guias/conectar-banco).

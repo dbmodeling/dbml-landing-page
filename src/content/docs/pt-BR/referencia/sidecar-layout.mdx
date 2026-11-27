@@ -1,0 +1,90 @@
+---
+titulo: Sidecar de layout
+descricao: Formato do arquivo schema.dbml.layout.json, que guarda posições, estilo das relações e viewport sem tocar no DBML.
+secao: referencia
+ordem: 110
+modalidades: [desktop, web, vscode]
+---
+
+O `.dbml` guarda o **modelo**. O que é só visual fica num arquivo JSON ao lado, o sidecar. Isso mantém o DBML válido e limpo no Git, e permite ignorar o layout no controle de versão se o time preferir.
+
+## Nome e local
+
+O nome é o do arquivo DBML mais `.layout.json`, na mesma pasta:
+
+```text
+loja.dbml
+loja.dbml.layout.json
+```
+
+O app Desktop, o `dbml run` e a extensão do VS Code usam o mesmo arquivo e o mesmo formato. Se o sidecar não existe, o auto-layout posiciona as tabelas.
+
+## Campos
+
+| Campo | Tipo | Significado |
+|---|---|---|
+| `version` | número, opcional | Versão do formato. Pode faltar. |
+| `tables` | objeto | Posição de cada cartão. A chave é o nome da tabela (`schema.tabela` quando tem schema) ou `enum:<nome>` para um enum. O valor é `{ "x": número, "y": número }`. |
+| `colors` | objeto, opcional | Mapa de nome para cor, previsto no formato. As cores de tabela e de grupo vêm do próprio DBML (`headercolor` e `color`). |
+| `edges` | objeto, opcional | Estilo por relação. A chave é `tabela_origem.coluna->tabela_destino.coluna`. O valor é `{ "straight": booleano, "dx": número, "dy": número }`, todos opcionais. |
+| `viewport` | objeto, opcional | Zoom e deslocamento do diagrama: `{ "zoom": número, "pan_x": número, "pan_y": número }`. |
+
+Detalhes de `edges`:
+
+- `straight: true` desenha a relação reta em vez de curva (ação **Relação reta/curva**).
+- `dx` e `dy` deslocam os pontos de controle da curva, quando você ajusta a relação à mão. A ação de redefinir a curva remove o ajuste.
+
+Campos extras que o app não conhece são mantidos ao regravar. Não existem campos como `views` ou `export`: se você os viu em documentos antigos, eles não fazem parte do formato.
+
+## Exemplo real
+
+Este é o sidecar do esquema de exemplo que acompanha o app Desktop:
+
+```json
+{
+  "edges": {},
+  "tables": {
+    "order_items": {
+      "x": 396,
+      "y": 32
+    },
+    "orders": {
+      "x": 32,
+      "y": 32
+    },
+    "products": {
+      "x": 824,
+      "y": 32
+    },
+    "reviews": {
+      "x": 1188,
+      "y": 32
+    },
+    "users": {
+      "x": 32,
+      "y": 348
+    }
+  },
+  "viewport": {
+    "pan_x": 72.43307449773151,
+    "pan_y": 454.6130301358731,
+    "zoom": 0.3783341972190226
+  }
+}
+```
+
+Um relacionamento reto fica assim em `edges`:
+
+```json
+{
+  "edges": {
+    "pedidos.cliente_id->clientes.id": { "straight": true }
+  }
+}
+```
+
+## Observações
+
+- O JSON é gravado com chaves ordenadas e indentação de 2 espaços, para diffs limpos no Git.
+- Apagar o sidecar é seguro: o modelo não depende dele. Você perde as posições e o auto-layout recalcula.
+- Para posicionar de novo todas as tabelas, use **Auto-layout** (<Atalho acao="Relayout" />).

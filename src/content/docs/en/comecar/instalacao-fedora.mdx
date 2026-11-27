@@ -1,0 +1,85 @@
+---
+titulo: Install on Fedora
+descricao: Install the Desktop app on Fedora 40 or 41 with the .rpm package.
+secao: comecar
+ordem: 60
+modalidades: [desktop]
+---
+
+<Aviso tipo="info">
+The `.rpm` installs system-wide and **does not update itself**. If you prefer a no-`sudo` install that updates from inside the app, use [`install.sh` without `--system`](instalacao-linux-script).
+</Aviso>
+
+## Requirements
+
+- Fedora 40 or 41 (the script also accepts RHEL, CentOS, Rocky and Alma), **x86_64** architecture.
+- `sudo` access.
+- A graphical session (Wayland or X11) and Vulkan support. `dnf` installs the needed libraries: `glibc`, `libxcb`, `libxkbcommon`, `libxkbcommon-x11`, `libwayland-client`, `vulkan-loader`, `fontconfig` and `freetype`.
+
+## Install
+
+1. Download `db-modeling-linux-x86_64.rpm` and `SHA256SUMS.txt` from [Releases](https://github.com/dbmodeling/dbml/releases/latest):
+
+   ```bash
+   curl -fLO https://github.com/dbmodeling/dbml/releases/latest/download/db-modeling-linux-x86_64.rpm
+   curl -fLO https://github.com/dbmodeling/dbml/releases/latest/download/SHA256SUMS.txt
+   ```
+
+2. Check the SHA-256:
+
+   ```bash
+   sha256sum -c SHA256SUMS.txt --ignore-missing
+   ```
+
+   Expected output:
+
+   ```text
+   db-modeling-linux-x86_64.rpm: OK
+   ```
+
+3. Install:
+
+   ```bash
+   sudo dnf install ./db-modeling-linux-x86_64.rpm
+   ```
+
+Shortcut: `bash install.sh --system` runs steps 1 to 3 for you (see [`install.sh`](instalacao-linux-script)).
+
+## Check that it worked
+
+```bash
+db-modeling --version
+```
+
+Expected output, with the version you installed:
+
+```text
+db-modeling X.Y.Z
+```
+
+The app also shows up in your application menu. To confirm the package, run `rpm -q db-modeling`.
+
+## Update
+
+This channel does not update itself, and the app does not try to update when it lives in `/usr/bin`. To update:
+
+1. Download the new `.rpm` and [check the SHA-256](#install).
+2. Run `sudo dnf install ./db-modeling-linux-x86_64.rpm` again. `dnf` replaces the old version with the new one.
+
+To get automatic updates, move to the [install without `--system`](instalacao-linux-script). See also [Updates](../ajuda/atualizacoes).
+
+## Uninstall
+
+```bash
+sudo dnf remove db-modeling
+```
+
+Your preferences live in `~/.config/db-modeling/settings.txt`. Your `.dbml` files are not touched.
+
+## Known issues
+
+- **No automatic update.** See "Update" above.
+- **No `dbml` CLI.** The `.rpm` contains only the Desktop app. For the web server, use the [Docker image](instalacao-docker).
+- **x86_64 only.** There is no ARM package.
+- **Oracle connection.** Not available yet. For Oracle, [import a SQL file](../guias/importar-sql).
+- More cases: [Known issues](../ajuda/problemas-conhecidos).

@@ -1,0 +1,160 @@
+---
+titulo: Connect to a database
+descricao: Read the schema of a real database (PostgreSQL, MySQL, SQL Server or SQLite) and generate DBML, read-only, with TLS and a protected password.
+secao: guias
+ordem: 40
+modalidades: [desktop, web, vscode]
+---
+
+You enter the connection, DB Modeling reads the database catalog and generates the DBML with the diagram. It never reads the data in your tables.
+
+<Captura cena="conectar-dialogo" alt="Connect to database window with type PostgreSQL, host, port, database, user, masked password and the message Connected to PostgreSQL with the list of schemas." />
+
+## Support by DBMS
+
+| DBMS | URL scheme | Desktop | Web (`dbml run`) | VS Code | `dbml import --url` |
+|---|---|---|---|---|---|
+| PostgreSQL | `postgres://` | Yes | Yes | Yes | Yes |
+| MySQL / MariaDB | `mysql://` | Yes | Yes | Yes | Yes |
+| SQL Server | `sqlserver://` | Yes | Yes | Yes | Yes |
+| SQLite | file path or `sqlite:` | Yes | Yes | Yes | Yes |
+| Oracle | | Coming soon | Coming soon | Coming soon | Coming soon |
+
+For Oracle, import a DDL script (see [Import SQL DDL](../guias/importar-sql)). Exporting DDL for Oracle already works.
+
+Where the connection happens:
+
+- **Desktop:** the app itself opens the connection, from your machine.
+- **Web:** the `dbml run` server opens the connection. The database must be reachable **from the server machine**, not from your browser.
+- **VS Code:** the extension runs the installed `dbml` CLI. See the requirements below.
+
+## Security
+
+- **Read-only.** Introspection reads only the catalog (tables, columns, indexes, relationships). The app says so in the window: `Read-only: only the catalog is read, never your data.`
+- **Use a user with minimal permissions.** Read permission on the catalog of the schema you want to read is enough.
+- **The password is never printed.** Error messages and the copied connection string show the password masked.
+- **Do not put the password in the URL on the command line.** It ends up in the shell history and in the process list.
+
+<Aviso tipo="cuidado">
+On the Web server, anyone who can reach the server can use the database connection. Keep the session token (the default) and read [Host for your team](../guias/hospedar-para-o-time) before exposing the server on the network.
+</Aviso>
+
+## Prerequisites
+
+- Host, port, database name, user and password (or the path to the SQLite file).
+- A network path from the machine that opens the connection to the database.
+- <Modalidade so="vscode">VS Code desktop, with a **trusted workspace**, and the `dbml` CLI (version 0.1.4 or newer) on the `PATH`. See [Installation](../comecar/instalacao).</Modalidade>
+- <Modalidade so="web">`dbml run` running: the server opens the connection.</Modalidade>
+
+## Steps
+
+### In the app
+
+1. Open the window with <Atalho acao="ConnectDatabase" /> (palette: **Connect to database…**; **File** menu).
+2. Under **Database type**, pick PostgreSQL, MySQL, SQL Server or SQLite. The **Oracle (coming soon)** option shows as disabled.
+3. Fill in **Host**, **Port** (the app suggests the default port: 5432, 3306 or 1433), **Database**, **User** and **Password**. For SQLite, enter the file path.
+4. To read only some schemas, type them in the schemas field, separated by commas (for example `public, sales`). Empty reads every user schema.
+5. The fields and the **connection string** stay in sync. You can paste a ready-made string such as `postgres://user@host:5432/database` and the fields fill in.
+6. Adjust the **SSL / TLS** row if needed (see the table below). The default is `auto` mode.
+7. Click **Test connection**. If it works, the window shows `Connected to <server>. Schemas: <list>.`
+8. Click **Connect**. The app reads the schema and enables the **Replace** and **Insert** buttons, as in the SQL import.
+9. Choose **Replace** (swaps the current schema) or **Insert** (adds to the current one).
+
+The password field shows masked characters.
+
+<Modalidade so="desktop">
+Show or hide the password with <Atalho acao="TogglePasswordVisibility" /> (**Show/hide password**). The shortcut only works while the connection window is open.
+</Modalidade>
+
+<Modalidade so="web,vscode">
+Show or hide the password with the eye button next to the field, or with the **Show/hide connection password** command (no keyboard shortcut).
+</Modalidade>
+
+The **Copy string** button copies the connection string with the password masked (`***`). Paste it into documentation or chat without exposing the password.
+
+### TLS options
+
+In the window, the **SSL / TLS** row has the **Use SSL** switch and the **Verify certificate** checkbox. They map to the CLI modes:
+
+| In the window | `--tls` in the CLI | What it does |
+|---|---|---|
+| **Use SSL** on (default) | `auto` | Verified TLS on remote hosts. On `localhost`, uses the driver default. |
+| **Use SSL** and **Verify certificate** | `verify` | Requires TLS and validates the certificate and host name. |
+| **Use TLS: Require** button (appears on the certificate error) | `require` | Requires TLS **without** validating the certificate. Works for a self-signed certificate. |
+| **Use SSL** off | `disable` | Cleartext. Use only on a trusted network. |
+
+On SQL Server, check **Trust the server certificate (self-signed, e.g. Docker)** or add `?trustServerCertificate=true` to the URL.
+
+### In the CLI
+
+Provide the password with `--password-stdin` or the `DBML_PASSWORD` variable. Never put the password in the URL.
+
+<Abas>
+<Aba titulo="Environment variable">
+```bash
+read -rs DBML_PASSWORD && export DBML_PASSWORD
+dbml import --url postgres://app@db.example.com:5432/loja --schema public -o loja.dbml
+```
+</Aba>
+<Aba titulo="Standard input">
+```bash
+dbml import --url postgres://app@db.example.com:5432/loja --password-stdin -o loja.dbml
+```
+The command reads the password from the first line of standard input.
+</Aba>
+</Abas>
+
+To only test the connection, use `--test`. The output is JSON with the server and the schemas:
+
+```bash
+dbml import --url ./loja.db --test
+```
+
+```json
+{"schemas":[],"server":"SQLite 3.54.1"}
+```
+
+Useful options:
+
+- `--schema NAME` reads only that schema. Repeat it for several.
+- `--tls auto|verify|require|disable` picks the TLS mode.
+- `-o file.dbml` writes the result; `--force` overwrites.
+
+If the URL already has a password and you also pass `--password-stdin` or `DBML_PASSWORD`, the command uses the URL password and warns: `warning: the URL already contains a password; the one from --password-stdin is ignored and the URL's password is used`.
+
+<Modalidade so="vscode">
+### Untrusted workspace
+
+In an untrusted workspace (or a virtual one, such as vscode.dev), the database connection is disabled. The canvas and the DBML editor keep working. To use the connection, trust the workspace (**Workspaces: Manage Workspace Trust**).
+
+The extension uses the CLI path set in `dbmodeling.cliPath` (default `dbml`). It only applies in user settings; a workspace cannot set it. If the path differs from `dbml`, VS Code asks before the first use, because the CLI receives your password.
+</Modalidade>
+
+## If something goes wrong
+
+The app turns the driver error into a short message. Use **Details** in the window to see the original text.
+
+| Message | Likely cause | What to do |
+|---|---|---|
+| `The database rejected authentication. Check the user and password.` | Wrong user or password, or the user cannot log in from that host. | Check the credentials and the database access rule. |
+| `The database did not respond. Check the host, port, and whether the service is running.` | Wrong host or port, firewall or stopped service. | Test with `telnet host port` (or `nc -vz host port`) from the machine that opens the connection. |
+| `The connection took longer than <N> s and was cancelled. Check the host and port.` | Blocked network or unreachable host. | Open the network path or use a VPN. |
+| `The server's TLS certificate could not be verified (common on AWS RDS, GCP Cloud SQL, Azure, and Supabase). Switch TLS to Require and try again.` | Self-signed certificate, or one from a CA the system does not know. | Click **Use TLS: Require** (in the CLI, `--tls require`). |
+| `Could not read the schema. Check permissions to read the catalog.` | The user connects but cannot see the catalog. | Give the user read permission on the catalog of the schema. |
+| `Connected, but no tables were found. Check the database and schema.` | The schema you entered is empty or misspelled. | Check the schemas field. |
+| `Could not open the SQLite database. Check the file path and permissions.` | Wrong path or file without permission. | Use the full path and check permissions. |
+| `Could not connect. Check the connection details and try again.` | Generic error. | Open **Details** and look for the cause in the original text. |
+| `Enter a connection string.` | The field is empty. | Fill in the string or the fields. |
+| `Unknown scheme. Use postgres://, mysql://, sqlserver:// or a SQLite file.` | The URL scheme does not exist. | Fix the prefix. |
+| `This database is not supported yet.` | The string is for a database without connection support, such as Oracle. | Import the DDL (see [Import SQL DDL](../guias/importar-sql)). In the CLI: `introspection of Oracle is not available yet`. |
+| `Enter the host in the connection string.` | The URL has no host. | Add the host. |
+| `Invalid port. Use a number from 1 to 65535.` | Port out of range. | Fix the port. |
+| `Malformed connection string. Format: scheme://user:password@host:port/database.` | The URL is incomplete. | Follow the format, but leave the password out of the URL in the CLI. |
+| `Connecting to a database requires the dbml run server or the dbml CLI on PATH.` (Web) | The canvas was opened without the server. | Open the diagram with `dbml run`. |
+| `The dbml CLI is unavailable. Install it or set dbmodeling.cliPath.` (VS Code) | The extension could not find the CLI. | Install the CLI or set `dbmodeling.cliPath` in user settings. |
+| `dbml CLI <version> is too old; this extension needs 0.1.4 or newer.` (VS Code) | Old CLI. | Update the CLI with `install.sh` or from the Releases. |
+| `Database connection is disabled in untrusted workspaces. Trust this workspace to use it.` (VS Code) | Untrusted workspace. | Trust the workspace. |
+| `Connecting to a database needs the dbml CLI and is not available in VS Code for the Web. Use the desktop version of VS Code.` (VS Code for the Web) | VS Code in the browser cannot run the CLI. | Use VS Code desktop. |
+| `Running "<path>" is not allowed. Change dbmodeling.cliPath or confirm the prompt.` (VS Code) | You denied the CLI path prompt. | Reopen the connection and confirm, or go back to `dbml`. |
+
+If the problem is specific to your DBMS, see [Known issues](../ajuda/problemas-conhecidos).

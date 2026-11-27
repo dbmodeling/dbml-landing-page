@@ -1,0 +1,70 @@
+---
+titulo: DBML, não suportado ainda
+descricao: Elementos da especificação DBML que o DB Modeling ainda não entende e o que o produto faz com cada um hoje.
+secao: referencia
+ordem: 100
+modalidades: [desktop, web, vscode]
+---
+
+Esta página lista o que da especificação DBML (e de ferramentas como o dbdiagram) **ainda não** é entendido. Edições feitas pelo canvas não apagam o que o app não entende, mas esses trechos não são desenhados nem exportados.
+
+## Resumo
+
+| Elemento | O que acontece hoje |
+|---|---|
+| `TablePartial` e `~parcial` | Aviso `Unrecognized construct`; as colunas do parcial não entram no modelo. |
+| Sticky notes (`Note nome { ... }` no nível superior) | Aceita sem diagnóstico, preservada no texto, **não** exibida nem exportada. |
+| `Records` | Palavra reconhecida, mas as linhas do bloco geram `Unrecognized construct`. Os dados não são lidos. |
+| `DiagramView` | Aviso `Unrecognized construct`; ignorado. |
+| Comentário de bloco `/* ... */` | Não reconhecido. Dentro de tabela gera erros. |
+| `Ref nome { ... }` (forma longa em bloco) | `Error`: ``Expected `Ref: table.column > table.column` ``. |
+| `<>` inline (`ref: <> t.c`) | Ignorado em silêncio, sem relação. |
+| Tipos de array (`int[]`) e tipos de várias palavras (`double precision`) | `int[]`: aviso de configurações vazias e tipo guardado como `int`. `double precision`: `Error`. |
+| `checks { ... }` dentro da tabela | Ignorado em silêncio (a configuração `check:` de coluna funciona). |
+| Configurações desconhecidas em `Table`, `Ref`, `Enum`, `TableGroup` e `Indexes` | Aceitas sem erro e ignoradas. Em **colunas**, uma configuração desconhecida é `Error`. |
+| Nome da `Ref` e `database_type` do `Project` | Aceitos e preservados, mas sem efeito. |
+
+## TablePartial
+
+Parciais de tabela, usados para reaproveitar colunas, não são modelados:
+
+```dbml
+TablePartial campos_comuns {
+  criado_em timestamp
+}
+
+Table clientes {
+  id bigint [pk]
+}
+```
+
+Diagnóstico exibido hoje: ``Unrecognized construct: `TablePartial` `` (`Warning`). O linter também marca, linha a linha, os itens soltos do bloco (como `criado_em`). O arquivo `ref-nao-suportado.erro.dbml` reproduz o caso. Para injetar um parcial numa tabela com `~campos_comuns`, o resultado é pior: a linha vira uma coluna chamada `~` e o linter reporta ``Unknown type `campos_comuns` on column `~` ``.
+
+**O que fazer.** Copie as colunas do parcial para cada tabela.
+
+## Sticky notes
+
+Uma `Note` de nível superior com nome é o *sticky note* do DBML oficial. Aqui ela é aceita e mantida no arquivo, mas o canvas não desenha nada e o SQL e a documentação não a incluem. Use a nota da tabela, da coluna ou do projeto. Veja [Notas](dbml-notas).
+
+## Comentários de bloco
+
+O comentário `/* ... */` não é reconhecido. Troque cada linha por `//`:
+
+```dbml
+// em vez de /* explicação */
+Table clientes {
+  id bigint [pk] // em vez de /* chave */
+}
+```
+
+## Ref em bloco
+
+```dbml
+// Não suportado:
+Ref fk_pedidos_clientes {
+  pedidos.cliente_id > clientes.id
+}
+
+// Use:
+Ref fk_pedidos_clientes: pedidos.cliente_id > clientes.id
+```

@@ -1,0 +1,35 @@
+---
+titulo: DBML, Project
+descricao: "O bloco Project: nome do projeto, database_type e a nota que vai para o SQL exportado."
+secao: referencia
+ordem: 20
+modalidades: [desktop, web, vscode]
+---
+
+## Sintaxe
+
+```dbml
+Project nome {
+  database_type: 'PostgreSQL'
+  Note: 'Texto descritivo do projeto.'
+}
+```
+
+O bloco é opcional. Só o primeiro `Project` do arquivo conta.
+
+## O que o produto usa
+
+| Item | Efeito |
+|---|---|
+| `Note: '...'` | É a **nota do projeto**. Aparece no SQL exportado (como `-- Project: ...`) e na documentação gerada por `dbml docs`. |
+| `database_type: '...'` | Aceito e preservado no arquivo, mas o produto **não o usa**. O dialeto do SQL exportado é escolhido na hora da exportação. |
+| Outras chaves | Aceitas sem erro e ignoradas. |
+
+## Exemplo
+
+<ExemploDbml arquivo="ref-project" />
+
+## Observações
+
+- O nome do projeto (`loja` no exemplo) não é exibido nem validado.
+- A nota aceita aspas simples ou triplas. Veja [Notas](dbml-notas).

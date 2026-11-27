@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 .codex/
 .impeccable/
+.vitest/
+
+# Índices gerados no build da documentação (scripts/sync-docs.mjs)
+src/content/docs/manifest.json
+src/content/docs/search-index.json

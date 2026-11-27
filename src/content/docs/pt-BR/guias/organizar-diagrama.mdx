@@ -1,0 +1,120 @@
+---
+titulo: Organizar o diagrama
+descricao: Agrupe tabelas, use cores e notas, aplique auto-layout e navegue por esquemas grandes com modo Foco, minimapa, filtro e legenda.
+secao: guias
+ordem: 50
+modalidades: [desktop, web, vscode]
+---
+
+Um diagrama legível tem domínios claros (grupos), cores com significado, notas onde o nome da coluna não basta e um layout que não esconde as relações. O exemplo abaixo separa o acervo de uma biblioteca da circulação de livros.
+
+<ExemploDbml arquivo="guia-organizar" abas={["codigo", "diagrama"]} altura={420} />
+
+<Captura cena="organizar-grupos" alt="Diagrama da biblioteca com as tabelas autores, livros e exemplares em roxo (grupo acervo) e leitores e emprestimos em laranja (grupo circulacao)." />
+
+## O que fica onde
+
+- Grupos, cores e notas ficam no DBML (`TableGroup`, `headercolor` e `note`). Quem abrir o arquivo em outra ferramenta vê os mesmos dados.
+- Posição das tabelas, estilo das relações (reta ou curva) e zoom ficam no sidecar `<schema>.dbml.layout.json`.
+
+## Pré-requisitos
+
+- Um esquema aberto. Para acompanhar, use o exemplo acima ou o seu.
+- Para ver o texto ao lado do diagrama, use <Atalho acao="ShowSplitView" /> (**Visão Dividido · DBML**).
+
+## Passos
+
+### 1. Agrupe tabelas
+
+1. Selecione uma tabela e use **Shift+clique** nas outras (ou arraste o fundo do canvas para laçar várias).
+2. Agrupe com <Atalho acao="GroupSelection" /> (paleta: **Agrupar tabelas selecionadas**), ou clique em **Agrupar seleção** no inspector.
+3. O grupo nasce com um nome automático (`group_1`, `group_2`, ...). Troque o nome no texto DBML: `TableGroup acervo [color: #9f85e5] { ... }`.
+4. Mova uma tabela para outro grupo pelo campo **Grupo** do inspector.
+5. Tire uma tabela do grupo com <Atalho acao="UngroupSelection" /> (**Desagrupar tabela**).
+
+No DBML, o grupo é um bloco simples:
+
+```dbml
+TableGroup acervo [color: #9f85e5] {
+  autores
+  livros
+  exemplares
+}
+```
+
+### 2. Dê cor às tabelas
+
+1. Selecione a tabela.
+2. No inspector, em **GERAL**, escolha uma cor em **Cor**. São oito: Azul, Ciano, Verde, Lima, Âmbar, Laranja, Rosa e Violeta. **Sem cor** remove a cor.
+3. A escolha vira `headercolor` na tabela: `Table livros [headercolor: #9f85e5] { ... }`.
+
+Escolha poucas cores e dê um sentido a cada uma (por domínio, por equipe, por tipo de dado). A **Legenda** (<Atalho acao="ToggleLegend" />, **Alternar legenda**) lembra o que significam os ícones de chave, FK e as relações.
+
+### 3. Escreva notas
+
+1. Selecione a tabela e use o campo **Nota** do inspector.
+2. Para a nota de uma coluna, abra a coluna em **COLUNAS** e preencha **Nota**.
+
+<Modalidade so="desktop">
+O atalho <Atalho acao="EditTableNote" /> (**Editar nota da tabela**) leva direto ao campo. Só Desktop.
+</Modalidade>
+
+No DBML, a nota é `note: '...'` na tabela ou na coluna.
+
+### 4. Aplique o auto-layout
+
+1. Use <Atalho acao="Relayout" /> (**Auto-layout**).
+2. As tabelas se distribuem em camadas conforme as relações, e as de um mesmo grupo ficam juntas.
+3. Ajuste na mão o que não ficou bom. Arraste a tabela; a posição vai para o sidecar.
+4. Use <Atalho acao="FitView" /> (**Ajustar à tela**) para enquadrar tudo.
+
+### 5. Escolha o estilo da relação
+
+1. Selecione uma relação.
+2. Use **Relação: reta/curva** (sem atalho de teclado) para alternar entre reta e curva.
+3. Para curvar à mão, arraste a alça da relação ou use as setas do teclado. **Relação: restaurar curva automática** desfaz o ajuste.
+
+O estilo fica no sidecar. O DBML não muda.
+
+### 6. Navegue em esquemas grandes
+
+**Modo Foco.** Selecione uma tabela e use <Atalho acao="ToggleFocusMode" /> (paleta: **Modo Foco (vizinhança FK)**). O diagrama esmaece tudo que não é vizinho por chave estrangeira. Use <Atalho acao="CycleFocusDepth" /> (**Modo Foco: alternar 1-hop / 2-hop**) para ver vizinhos diretos (1-hop) ou também os vizinhos dos vizinhos (2-hop). Para sair, use o mesmo atalho de novo.
+
+<Captura cena="organizar-foco" alt="Modo Foco ativo na tabela emprestimos: leitores e exemplares em destaque, as demais tabelas esmaecidas." />
+
+**Minimapa.** <Atalho acao="ToggleMinimap" /> (**Alternar minimapa**) mostra ou esconde uma miniatura do diagrama inteiro.
+
+**Busca rápida.** <Atalho acao="QuickSearch" /> (**Busca rápida (tabelas, colunas, enums)**) acha qualquer item pelo nome.
+
+<Modalidade so="desktop">
+**Filtro do esquema.** <Atalho acao="FilterExplorer" /> (**Alternar filtro do esquema**) filtra a lista de tabelas na barra lateral. A lista mostra **GRUPOS**, **SEM GRUPO** e **TABELAS**.
+</Modalidade>
+
+<Modalidade so="web,vscode">
+**Filtro do esquema.** <Atalho acao="FilterExplorer" /> (**Filtrar tabelas no Explorador**) filtra a lista de tabelas na barra lateral. Abra a lista com <Atalho acao="ShowSchema" /> (**Mostrar esquema (tabelas)**).
+</Modalidade>
+
+**Zoom e mão.** <Atalho acao="ZoomIn" /> e <Atalho acao="ZoomOut" /> mudam o zoom. <Atalho acao="ToolHand" /> (**Ferramenta Mão (mover a vista)**) arrasta a vista; <Atalho acao="ToolSelect" /> volta a selecionar.
+
+<Modalidade so="desktop">
+<Atalho acao="ResetZoom" /> (**Restaurar zoom (100%)**) volta a 100%. Só Desktop.
+</Modalidade>
+
+## Diferenças entre modalidades
+
+| Recurso | Desktop | Web | VS Code |
+|---|---|---|---|
+| Agrupar, cores, notas, auto-layout, modo Foco, minimapa, legenda | Sim | Sim | Sim |
+| Nota da tabela por atalho | Sim | Pelo inspector | Pelo inspector |
+| Restaurar zoom a 100% | Sim | Não | Não |
+| Rótulo do filtro na paleta | **Alternar filtro do esquema** | **Filtrar tabelas no Explorador** | **Filtrar tabelas no Explorador** |
+
+## Se algo der errado
+
+| O que você vê | Causa provável | O que fazer |
+|---|---|---|
+| `Selecione tabelas (Shift+clique) para agrupar.` | Nenhuma tabela selecionada ao agrupar. | Selecione uma ou mais tabelas e repita. |
+| O modo Foco não faz nada | Nenhuma tabela está selecionada. | Selecione uma tabela e ative o modo de novo. |
+| `TableGroup without a name` no painel **Problemas** | O bloco `TableGroup` está sem nome. | Escreva o nome: `TableGroup acervo { ... }`. |
+| O auto-layout não resolveu um esquema grande | Muitas tabelas na mesma região. | Use <Atalho acao="FitView" />, o minimapa e o modo Foco para trabalhar por partes. |
+| Dúvida sobre a sintaxe | Detalhes de `TableGroup`, `headercolor` ou `note`. | Veja [Tabelas e colunas](../referencia/dbml-tabelas). |

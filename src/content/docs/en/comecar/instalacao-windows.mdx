@@ -1,0 +1,72 @@
+---
+titulo: Install on Windows
+descricao: Install the Desktop app and the dbml CLI on Windows 10 or 11 with the official installer.
+secao: comecar
+ordem: 30
+modalidades: [desktop, web]
+---
+
+## Requirements
+
+- Windows 10 or 11, 64-bit (x64).
+- You do not need to be an administrator. The installer asks whether to install for you only or for all users.
+
+## Install
+
+1. Download `db-modeling-windows-setup.exe` from [Releases](https://github.com/dbmodeling/dbml/releases/latest).
+2. (Recommended) [Check the SHA-256](#check-the-sha-256).
+3. Run the installer. Pick the language (Portuguese or English) and the folder.
+4. Tick the tasks you want:
+   - Start Menu shortcut (ticked) and Desktop shortcut (unticked);
+   - associate `.dbml` files with DB Modeling;
+   - **add the `dbml` CLI to PATH**, so you can run `dbml run schema.dbml` in a terminal.
+5. Finish and open DB Modeling.
+
+## Check the SHA-256
+
+Also download `SHA256SUMS.txt` from the same release. In PowerShell, in the downloads folder:
+
+```powershell
+Get-FileHash .\db-modeling-windows-setup.exe -Algorithm SHA256
+Select-String "db-modeling-windows-setup.exe" .\SHA256SUMS.txt
+```
+
+The `Hash` value and the value on the file's line must match (case is ignored). If they differ, delete the file and download it again.
+
+## Check that it worked
+
+Open a new terminal (PATH changes only reach terminals opened after the install) and run:
+
+```powershell
+dbml --version
+```
+
+Expected output, with the version you installed:
+
+```text
+dbml X.Y.Z
+```
+
+If you did not tick the PATH task, the `dbml` command does not exist in the terminal. The Desktop app still opens from the Start Menu.
+
+## Update
+
+- **From the app (per-user install).** The app checks at startup and every hour. When it has downloaded a new version, it shows **Restart to update**. Restarting finishes the swap. To check right away, use **Check for updates** in the command palette (<Atalho acao="OpenPalette" />).
+- **Manual.** Download the new installer and run it over the old one. The installer keeps the tasks you picked before (PATH, `.dbml` association, shortcuts).
+- **All-users install.** Prefer the manual path. Automatic update is designed for the per-user install and never asks for administrator elevation.
+
+See also [Updates](../ajuda/atualizacoes).
+
+## Uninstall
+
+1. Open **Settings > Apps > Installed apps**.
+2. Select **DB Modeling** and choose **Uninstall**.
+
+Your preferences live in `%APPDATA%\db-modeling\settings.txt`. Delete the `db-modeling` folder to remove them. Your `.dbml` files are not touched.
+
+## Known issues
+
+- **SmartScreen warning when opening the installer.** If it appears, check the SHA-256 before continuing. Run it only if the value matches the release's `SHA256SUMS.txt`.
+- **Updating while `dbml run` is open.** If `dbml.exe` is in use, the automatic update fails with its own message and keeps the previous version. Close `dbml run` and try again.
+- **Oracle connection.** Not available yet. For Oracle, [import a SQL file](../guias/importar-sql).
+- Other cases: [Known issues](../ajuda/problemas-conhecidos).

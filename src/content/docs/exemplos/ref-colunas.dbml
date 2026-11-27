@@ -1,0 +1,17 @@
+Table produtos {
+  id bigint [pk, increment]
+  sku varchar(32) [not null, unique]
+  nome varchar(160) [not null, note: 'Nome exibido na vitrine.']
+  descricao text [null]
+  preco decimal(10, 2) [not null, check: `preco >= 0`]
+  estoque int [not null, default: 0]
+  ativo boolean [not null, default: true]
+  moeda char(3) [default: 'BRL']
+  criado_em timestamp [not null, default: `now()`]
+  categoria_id bigint [ref: > categorias.id]
+}
+
+Table categorias {
+  id bigint [pk, increment]
+  nome varchar(80) [not null]
+}

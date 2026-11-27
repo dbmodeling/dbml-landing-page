@@ -1,0 +1,126 @@
+---
+titulo: Install with Docker
+descricao: Run the DB Modeling web server (dbml run) in a container, with a token and allowed hosts.
+secao: comecar
+ordem: 80
+modalidades: [web]
+---
+
+<Aviso tipo="perigo">
+**Read this first.** The container listens on `0.0.0.0`, which means on the network. Anyone who reaches the server with the token can read and write **every** file in the folder mounted at `/workspace`.
+
+- Set a fixed token with `--token` or `DBML_TOKEN` (at least 16 characters, only `A-Z a-z 0-9 - _ . ~`). Without it, the server generates a random token at each start and prints it in the log.
+- Behind a domain or reverse proxy, declare the host with `--allowed-host` or `DBML_ALLOWED_HOSTS`. Undeclared hosts are refused (DNS rebinding protection).
+- **Never use `--public-demo` (`DBML_PUBLIC_DEMO`) with real data.** It turns the token off. Anyone who reaches the server can read and write the folder and use the database connection feature. Use it only for throwaway demos, with a folder holding no real data, on a network with no reachable databases.
+- Publish the port on `127.0.0.1` only when you use it on your own machine, as in the example below.
+</Aviso>
+
+## Requirements
+
+- Docker (or Podman), with Compose v2 if you use `docker compose`.
+- The image is `ghcr.io/dbmodeling/dbml`, based on Debian bookworm.
+- A folder with your `.dbml` files. The container runs as user `dbml` (UID 1000), so the folder must be writable by that UID.
+
+## Install with Docker Compose
+
+1. Create a working folder with a schemas folder and two files.
+
+   `docker-compose.yml`:
+
+   ```yaml
+   services:
+     dbml-web:
+       image: ghcr.io/dbmodeling/dbml:${DBML_IMAGE_TAG:-latest}
+       ports:
+         # This machine only. For a team, see "Host it for your team".
+         - "127.0.0.1:${DBML_PORT:-3000}:3000"
+       environment:
+         # Fixed token (>= 16 characters). Compose refuses to start without it.
+         DBML_TOKEN: ${DBML_TOKEN:?set DBML_TOKEN in the .env file}
+         # Extra accepted hosts, comma-separated. Empty = localhost only.
+         DBML_ALLOWED_HOSTS: ${DBML_ALLOWED_HOSTS:-}
+       volumes:
+         - "${DBML_SCHEMAS_DIR:-./schemas}:/workspace"
+       restart: unless-stopped
+   ```
+
+   `.env` (do not commit this file):
+
+   ```bash
+   DBML_TOKEN=replace-with-a-long-secret
+   DBML_ALLOWED_HOSTS=
+   ```
+
+2. Put your `.dbml` files in `./schemas` and give UID 1000 write access:
+
+   ```bash
+   mkdir -p schemas
+   sudo chown 1000:1000 schemas
+   ```
+
+3. Start the server:
+
+   ```bash
+   docker compose up -d
+   ```
+
+4. Open `http://localhost:3000/?token=replace-with-a-long-secret` (with your token).
+
+To serve another host, such as `dbml.my-company.com` behind an HTTPS proxy, set `DBML_ALLOWED_HOSTS=dbml.my-company.com` and change the port publishing to match your proxy. The full walkthrough is in [Host it for your team](../guias/hospedar-para-o-time).
+
+### Without Compose
+
+```bash
+docker run -d --name dbml-web -p 127.0.0.1:3000:3000 \
+  -e DBML_TOKEN=replace-with-a-long-secret \
+  -v "$(pwd)/schemas:/workspace" \
+  ghcr.io/dbmodeling/dbml:latest
+```
+
+## Check that it worked
+
+```bash
+curl -fsS http://127.0.0.1:3000/health
+docker compose ps
+```
+
+The first command succeeds (HTTP 200) when the server is up. The second shows the `dbml-web` service as `running` and, after a few seconds, `healthy`.
+
+Canvas edits write straight to your `.dbml` and `.dbml.layout.json` in the mounted folder.
+
+## Update
+
+This channel does not update itself. To get the newest version:
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+To pin a version, set `DBML_IMAGE_TAG` in `.env` (for example, `0.4.2`). See the published versions on [Packages](https://github.com/dbmodeling/dbml/pkgs/container/dbml). See also [Updates](../ajuda/atualizacoes).
+
+## Uninstall
+
+```bash
+docker compose down
+docker rmi ghcr.io/dbmodeling/dbml:latest
+```
+
+The `schemas` folder and its files stay.
+
+## Integrity check
+
+The image does not use `SHA256SUMS.txt`, which covers the installers. To be sure of what is running, pin the version and use the image digest:
+
+```bash
+docker image inspect ghcr.io/dbmodeling/dbml:latest --format '{{index .RepoDigests 0}}'
+```
+
+## Known issues
+
+- **The image's default command listens on the network without a fixed token.** That is why the example above requires `DBML_TOKEN` and publishes the port on `127.0.0.1` only.
+- **The server refuses access through a domain or IP.** The host is missing from `DBML_ALLOWED_HOSTS` (with or without port). The browser origin must also match the host.
+- **I cannot save.** The mounted folder must be writable by UID 1000.
+- **Many open tabs.** The default limit is 256 WebSocket connections (one per tab). Change it with `DBML_MAX_CONNECTIONS`.
+- **Oracle connection.** Not available yet. For Oracle, [import a SQL file](../guias/importar-sql).
+- Full option reference: [`dbml` CLI](../referencia/cli). More cases: [Known issues](../ajuda/problemas-conhecidos).

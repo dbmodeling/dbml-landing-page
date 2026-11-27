@@ -1,0 +1,98 @@
+---
+titulo: Updates
+descricao: "How each modality updates: Desktop auto-update, the VS Code Marketplace, install.sh and .deb and .rpm packages."
+secao: ajuda
+ordem: 20
+modalidades: [desktop, web, vscode]
+---
+
+Each modality updates in its own way.
+
+| Modality | How it updates |
+|---|---|
+| Desktop app | By itself, through the app (details below). |
+| VS Code extension | Through the VS Code Marketplace, like any extension. |
+| `dbml` CLI | Does not update itself. Reinstall with `install.sh`, the installer or the `.pkg`. |
+
+## Desktop app
+
+The app looks for a new version **on launch** and **every hour**. When there is one, it downloads, verifies and installs the files in the background and shows **Restart to update** in the title bar. The new version only runs after a restart (on Windows, quitting the app also completes the swap). After the restart, the app shows "Updated to X", with a link to the release notes.
+
+To check right now, use **Check for updates** in the command palette (<Atalho acao="OpenPalette" />). The states in the title bar are: "Checking for updates…", "Downloading update…", "Installing update…", "Up to date", "Restart to update" and "Update failed".
+
+### Turning it on and off
+
+| Mode | How | Effect |
+|---|---|---|
+| Automatic (default) | `auto_update=true` | Checks on launch and every hour. |
+| Manual | Settings, **Update automatically** off (or `auto_update=false` in `settings.txt`, or the **Toggle automatic updates** action) | No automatic requests. **Check for updates** still works. |
+| Disabled | Environment variable `DBM_UPDATE_EXPLANATION` with any text | No checks at all, not even manual. The text appears in place of the action, with a link to the Releases. |
+
+The change takes effect immediately, without restarting. To avoid even the first check, set `auto_update=false` before the first launch. See [Desktop settings](../referencia/configuracoes-desktop).
+
+### What leaves your machine
+
+Only HTTPS requests to GitHub: the manifest (`latest.json`), its signature and, when there is a new version, the installer. The only identifier sent is the `User-Agent` `db-modeling-updater/<version>`. The app sends no system, architecture, machine or user identifier, paths or schema content. GitHub sees your IP address, as with any download. The app honors `HTTPS_PROXY`.
+
+### Security
+
+The manifest is signed (minisign) and the app trusts it only if the signature matches one of the embedded keys. The file's SHA-256 is checked on download and again before installing. The app never installs a version equal to or older than the current one.
+
+### By system
+
+<Abas detectarSo>
+<Aba titulo="Windows" so="windows">
+
+- Updates the **per-user** install. The installer runs silently and a helper program swaps the files on restart.
+- Install under `Program Files` (all users), or a folder without write permission: the app does not update and shows the reason. Download the new installer. The app never asks for administrator privileges.
+- If `dbml run` is open, the update fails cleanly and keeps the current version.
+
+</Aba>
+<Aba titulo="macOS" so="macos">
+
+- **Apple Silicon** only. Releases do not publish an Intel Mac build.
+- The app must be outside an isolated folder: if you see "Move the app to the Applications folder to update", drag it to `Applications`.
+- The app replaces its own `DB Modeling.app`. Without write permission on the folder holding the app, it shows "No write permission on the app folder; update manually".
+
+</Aba>
+<Aba titulo="Linux" so="linux">
+
+- **Tarball in `~/.local`** (`install.sh` without `--system`): the app swaps the `db-modeling.app` folder by itself. Needs `tar` and `rsync` on the `PATH`. It does not use `sudo`.
+- **`.deb`/`.rpm`** (`install.sh --system`): the app downloads the new package, verifies the signature and SHA-256 and installs it with `pkexec dpkg -i` (Debian and Ubuntu) or `pkexec dnf install -y` (Fedora). polkit asks for your password; the app never sees it. Without `pkexec`, the app points to the Releases page. You can also update with `apt` or `dnf`.
+- A development build or an executable outside these layouts does not update.
+
+</Aba>
+</Abas>
+
+## VS Code extension
+
+The extension updates through VS Code's own mechanism (Marketplace, publisher `dbmodeling`). A `.vsix` installed by hand (built with `npm run package` in `vscode-extension`) does not update itself. The extension neither checks nor updates the `dbml` CLI: the database connection uses the installed CLI (version 0.1.4 or newer).
+
+## `install.sh`
+
+The official script installs, updates and uninstalls on Linux and macOS:
+
+```bash
+bash install.sh              # installs the latest release
+bash install.sh --system     # Linux: installs the .deb or .rpm, with sudo
+bash install.sh --uninstall  # removes the user install
+bash install.sh --uninstall --system
+```
+
+On Linux, the default is **without `sudo`**: it installs the tarball in `~/.local/db-modeling.app`, creates the `~/.local/bin/db-modeling` link, the `.desktop` launcher, the icons and the MIME type. This is the install the app updates by itself. With `--system`, the script installs the `.deb` or `.rpm` (and the graphical dependencies) with `sudo`.
+
+The script checks the download's SHA-256 against the same release's `SHA256SUMS.txt` before installing. If it differs, it aborts. Optional variables:
+
+| Variable | Effect | Default |
+|---|---|---|
+| `DBML_VERSION` | Tag to install, such as `v0.4.3`. | The latest release. |
+| `DBML_PREFIX` | Prefix for the user install. | `~/.local` |
+| `DBML_REPO` | `owner/name` repository. | `dbmodeling/dbml` |
+
+Run the script again to get a specific version or to reinstall over the current one.
+
+## Updating by hand
+
+Download the installer for the version you want from [Releases](https://github.com/dbmodeling/dbml/releases) and install over the current one. This was the case for anyone on 0.3.x: 0.4.0 was the first version with auto-update, so 0.3.x had to be replaced by hand once.
+
+If an automatic update fails, see [Known issues](problemas-conhecidos#desktop-updates).

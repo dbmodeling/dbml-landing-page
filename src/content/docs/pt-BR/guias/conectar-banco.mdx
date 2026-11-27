@@ -1,0 +1,160 @@
+---
+titulo: Conectar a um banco
+descricao: Leia o esquema de um banco real (PostgreSQL, MySQL, SQL Server ou SQLite) e gere o DBML, só leitura, com TLS e senha protegida.
+secao: guias
+ordem: 40
+modalidades: [desktop, web, vscode]
+---
+
+Você informa a conexão, o DB Modeling lê o catálogo do banco e gera o DBML com o diagrama. Ele nunca lê os dados das suas tabelas.
+
+<Captura cena="conectar-dialogo" alt="Janela Conectar ao banco com tipo PostgreSQL, host, porta, banco, usuário, senha mascarada e a mensagem Conectado a PostgreSQL com a lista de schemas." />
+
+## Suporte por SGBD
+
+| SGBD | Esquema da URL | Desktop | Web (`dbml run`) | VS Code | `dbml import --url` |
+|---|---|---|---|---|---|
+| PostgreSQL | `postgres://` | Sim | Sim | Sim | Sim |
+| MySQL / MariaDB | `mysql://` | Sim | Sim | Sim | Sim |
+| SQL Server | `sqlserver://` | Sim | Sim | Sim | Sim |
+| SQLite | caminho do arquivo ou `sqlite:` | Sim | Sim | Sim | Sim |
+| Oracle | | Em breve | Em breve | Em breve | Em breve |
+
+Para Oracle, importe um script DDL (veja [Importar SQL DDL](../guias/importar-sql)). Exportar DDL para Oracle já funciona.
+
+Onde a conexão acontece:
+
+- **Desktop:** o próprio app abre a conexão, a partir da sua máquina.
+- **Web:** o servidor `dbml run` abre a conexão. O banco precisa ser alcançável **a partir da máquina do servidor**, não do seu navegador.
+- **VS Code:** a extensão executa a CLI `dbml` instalada. Veja os requisitos abaixo.
+
+## Segurança
+
+- **Somente leitura.** A introspecção lê apenas o catálogo (tabelas, colunas, índices, relações). O app diz isso na janela: `Somente leitura: apenas o catálogo é lido, nunca os seus dados.`
+- **Use um usuário com permissão mínima.** Basta permissão de leitura do catálogo do schema que você quer ler.
+- **A senha nunca é impressa.** As mensagens de erro e a connection string copiada mostram a senha mascarada.
+- **Não coloque a senha na URL na linha de comando.** Ela fica no histórico do shell e na lista de processos.
+
+<Aviso tipo="cuidado">
+No servidor da Web, quem alcança o servidor pode usar a conexão com banco de dados. Mantenha o token de sessão (padrão) e leia [Hospedar para o time](../guias/hospedar-para-o-time) antes de expor o servidor na rede.
+</Aviso>
+
+## Pré-requisitos
+
+- Host, porta, nome do banco, usuário e senha (ou o caminho do arquivo SQLite).
+- Rede liberada da máquina que abre a conexão até o banco.
+- <Modalidade so="vscode">VS Code para desktop, com um **workspace confiável**, e a CLI `dbml` (versão 0.1.4 ou mais nova) no `PATH`. Veja [Instalação](../comecar/instalacao).</Modalidade>
+- <Modalidade so="web">`dbml run` em execução: é o servidor que abre a conexão.</Modalidade>
+
+## Passos
+
+### Pelo app
+
+1. Abra a janela com <Atalho acao="ConnectDatabase" /> (paleta: **Conectar ao banco…**; menu **Arquivo**).
+2. Em **Tipo de banco**, escolha PostgreSQL, MySQL, SQL Server ou SQLite. A opção **Oracle (em breve)** aparece desabilitada.
+3. Preencha os campos **Host**, **Porta** (o app sugere a porta padrão: 5432, 3306 ou 1433), **Banco**, **Usuário** e **Senha**. Para SQLite, informe o caminho do arquivo.
+4. Se quiser ler só alguns schemas, escreva-os no campo de schemas, separados por vírgula (por exemplo `public, sales`). Vazio lê todos os schemas de usuário.
+5. Os campos e a **connection string** ficam sincronizados. Você pode colar uma string pronta, como `postgres://usuario@host:5432/banco`, e os campos se preenchem.
+6. Ajuste a linha **SSL / TLS** se precisar (veja a tabela abaixo). O padrão é o modo `auto`.
+7. Clique em **Testar conexão**. Se der certo, a janela mostra `Conectado a <servidor>. Schemas: <lista>.`
+8. Clique em **Conectar**. O app lê o esquema e libera os botões **Substituir** e **Inserir**, como na importação de SQL.
+9. Escolha **Substituir** (troca o esquema atual) ou **Inserir** (acrescenta ao atual).
+
+O campo de senha mostra os caracteres mascarados.
+
+<Modalidade so="desktop">
+Mostre ou oculte a senha com <Atalho acao="TogglePasswordVisibility" /> (**Mostrar/ocultar senha**). O atalho só vale com a janela de conexão aberta.
+</Modalidade>
+
+<Modalidade so="web,vscode">
+Mostre ou oculte a senha com o botão de olho ao lado do campo, ou pelo comando **Mostrar/ocultar senha da conexão** (sem atalho de teclado).
+</Modalidade>
+
+O botão **Copiar string** copia a connection string com a senha mascarada (`***`). Cole-a em documentação ou chat sem expor a senha.
+
+### Opções de TLS
+
+Na janela, a linha **SSL / TLS** tem a chave **Usar SSL** e a caixa **Verificar certificado**. Elas correspondem aos modos da CLI:
+
+| Na janela | `--tls` na CLI | O que faz |
+|---|---|---|
+| **Usar SSL** ligado (padrão) | `auto` | TLS verificado em hosts remotos. Em `localhost`, usa o padrão do driver. |
+| **Usar SSL** e **Verificar certificado** | `verify` | Exige TLS e valida certificado e nome do host. |
+| Botão **Usar TLS: Exigir** (aparece no erro de certificado) | `require` | Exige TLS **sem** validar o certificado. Serve para certificado autoassinado. |
+| **Usar SSL** desligado | `disable` | Texto claro. Use só em rede confiável. |
+
+No SQL Server, marque **Confiar no certificado do servidor (autoassinado, ex.: Docker)** ou acrescente `?trustServerCertificate=true` à URL.
+
+### Pela CLI
+
+Informe a senha por `--password-stdin` ou pela variável `DBML_PASSWORD`. Nunca coloque a senha na URL.
+
+<Abas>
+<Aba titulo="Variável de ambiente">
+```bash
+read -rs DBML_PASSWORD && export DBML_PASSWORD
+dbml import --url postgres://app@db.exemplo.com:5432/loja --schema public -o loja.dbml
+```
+</Aba>
+<Aba titulo="Entrada padrão">
+```bash
+dbml import --url postgres://app@db.exemplo.com:5432/loja --password-stdin -o loja.dbml
+```
+O comando lê a senha da primeira linha da entrada padrão.
+</Aba>
+</Abas>
+
+Para só testar a conexão, use `--test`. A saída é um JSON com o servidor e os schemas:
+
+```bash
+dbml import --url ./loja.db --test
+```
+
+```json
+{"schemas":[],"server":"SQLite 3.54.1"}
+```
+
+Opções úteis:
+
+- `--schema NOME` lê só aquele schema. Repita para vários.
+- `--tls auto|verify|require|disable` escolhe o modo TLS.
+- `-o arquivo.dbml` grava o resultado; `--force` sobrescreve.
+
+Se a URL já tiver senha e você também passar `--password-stdin` ou `DBML_PASSWORD`, o comando usa a senha da URL e avisa: `warning: the URL already contains a password; the one from --password-stdin is ignored and the URL's password is used`.
+
+<Modalidade so="vscode">
+### Workspace não confiável
+
+Em um workspace não confiável (ou virtual, como vscode.dev), a conexão com o banco fica desativada. O canvas e o editor DBML continuam funcionando. Para usar a conexão, confie no workspace (**Workspaces: Manage Workspace Trust**).
+
+A extensão usa o caminho da CLI definido em `dbmodeling.cliPath` (padrão `dbml`). Só vale nas configurações do usuário; um workspace não consegue defini-lo. Se o caminho for diferente de `dbml`, o VS Code pergunta antes do primeiro uso, porque a CLI recebe a sua senha.
+</Modalidade>
+
+## Se algo der errado
+
+O app traduz o erro do driver em uma mensagem curta. Use **Detalhes** na janela para ver o texto original.
+
+| Mensagem | Causa provável | O que fazer |
+|---|---|---|
+| `O banco recusou a autenticação. Confira o usuário e a senha.` | Usuário ou senha errados, ou o usuário não pode entrar daquele host. | Confira as credenciais e a regra de acesso do banco. |
+| `O banco não respondeu. Confira o host, a porta e se o serviço está rodando.` | Host ou porta errados, firewall ou serviço parado. | Teste com `telnet host porta` (ou `nc -vz host porta`) da máquina que abre a conexão. |
+| `A conexão demorou mais de <N> s e foi cancelada. Confira o host e a porta.` | Rede bloqueada ou host inalcançável. | Libere a rede ou use uma VPN. |
+| `O certificado TLS do servidor não pôde ser verificado (comum em AWS RDS, GCP Cloud SQL, Azure e Supabase). Mude TLS para Exigir e tente novamente.` | Certificado autoassinado ou de uma CA que o sistema não conhece. | Clique em **Usar TLS: Exigir** (na CLI, `--tls require`). |
+| `Não foi possível ler o esquema. Verifique as permissões de leitura do catálogo.` | O usuário conecta, mas não enxerga o catálogo. | Dê ao usuário permissão de leitura do catálogo no schema. |
+| `Conectado, mas nenhuma tabela foi encontrada. Verifique o banco e o schema.` | O schema informado está vazio ou o nome está errado. | Confira o campo de schemas. |
+| `Não foi possível abrir o banco SQLite. Confira o caminho e as permissões do arquivo.` | Caminho errado ou arquivo sem permissão. | Use o caminho completo e confira permissões. |
+| `Não foi possível conectar. Confira os dados da conexão e tente novamente.` | Erro genérico. | Abra **Detalhes** e procure a causa no texto original. |
+| `Informe a connection string.` | O campo está vazio. | Preencha a string ou os campos. |
+| `Esquema desconhecido. Use postgres://, mysql://, sqlserver:// ou um arquivo SQLite.` | O esquema da URL não existe. | Corrija o prefixo. |
+| `Este banco ainda não é suportado.` | A string é de um banco sem suporte de conexão, como Oracle. | Importe o DDL (veja [Importar SQL DDL](../guias/importar-sql)). Na CLI: `introspection of Oracle is not available yet`. |
+| `Informe o host na connection string.` | A URL não tem host. | Acrescente o host. |
+| `Porta inválida. Use um número de 1 a 65535.` | Porta fora do intervalo. | Corrija a porta. |
+| `Connection string malformada. Formato: esquema://usuário:senha@host:porta/banco.` | A URL está incompleta. | Siga o formato, mas deixe a senha fora da URL na CLI. |
+| `Conectar ao banco precisa do servidor dbml run ou da CLI dbml no PATH.` (Web) | O canvas abriu sem o servidor. | Abra o diagrama por `dbml run`. |
+| `CLI dbml indisponível. Instale-a ou configure dbmodeling.cliPath.` (VS Code) | A extensão não achou a CLI. | Instale a CLI ou ajuste `dbmodeling.cliPath` nas configurações do usuário. |
+| `dbml CLI <versão> is too old; this extension needs 0.1.4 or newer.` (VS Code) | CLI antiga. | Atualize a CLI com o `install.sh` ou pelos Releases. |
+| `Database connection is disabled in untrusted workspaces. Trust this workspace to use it.` (VS Code) | Workspace não confiável. | Confie no workspace. |
+| `Connecting to a database needs the dbml CLI and is not available in VS Code for the Web. Use the desktop version of VS Code.` (VS Code Web) | O VS Code no navegador não executa a CLI. | Use o VS Code desktop. |
+| `Running "<caminho>" is not allowed. Change dbmodeling.cliPath or confirm the prompt.` (VS Code) | Você negou o aviso do caminho da CLI. | Reabra a conexão e confirme, ou volte para `dbml`. |
+
+Se o problema for específico do seu SGBD, veja [Problemas conhecidos](../ajuda/problemas-conhecidos).

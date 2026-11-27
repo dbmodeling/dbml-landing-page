@@ -1,0 +1,101 @@
+---
+titulo: DBML, Ref (relações)
+descricao: Relações entre colunas com Ref em linha ou inline, operadores de cardinalidade, chaves compostas e ações de delete e update.
+secao: referencia
+ordem: 50
+modalidades: [desktop, web, vscode]
+---
+
+## Operadores
+
+| Operador | Cardinalidade | Leitura |
+|---|---|---|
+| `>` | muitos para um | a coluna da esquerda é a "muitos"; a da direita é a referenciada |
+| `<` | um para muitos | a coluna da esquerda é a referenciada |
+| `-` | um para um | |
+| `<>` | muitos para muitos | exige tabela de junção; a exportação SQL só avisa |
+
+## Formas de declarar
+
+**No nível superior** (`Ref:`), em uma linha:
+
+```dbml
+Ref: pedidos.cliente_id > clientes.id
+Ref nome_opcional: pedidos.cliente_id > clientes.id [delete: cascade, update: no action]
+```
+
+**Inline**, na configuração da coluna. O operador é lido a partir da coluna atual:
+
+```dbml
+Table pedidos {
+  cliente_id bigint [ref: > clientes.id]
+}
+```
+
+Os dois lados aceitam `schema.tabela.coluna` e o alias da tabela (`C.id`).
+
+## Ações de delete e update
+
+Na forma de nível superior, as ações ficam entre colchetes depois do destino. Na inline, entram na lista de configurações da coluna.
+
+| Chave | Valores |
+|---|---|
+| `delete` | `no action`, `restrict`, `cascade`, `set null`, `set default` |
+| `update` | `no action`, `restrict`, `cascade`, `set null`, `set default` |
+
+```dbml
+Ref: itens_pedido.pedido_id > pedidos.id [delete: cascade]
+```
+
+```dbml
+Table itens_pedido {
+  pedido_id bigint [ref: > pedidos.id, delete: cascade]
+}
+```
+
+## Chaves compostas
+
+Liste as colunas entre parênteses nos dois lados, na mesma ordem e quantidade:
+
+```dbml
+Ref: entregas.(pedido_id, produto_id) > itens_pedido.(pedido_id, produto_id)
+```
+
+A forma composta só existe no nível superior. Colunas em número diferente geram ``Composite foreign key column count mismatch (2 vs 1)``.
+
+## Exemplo
+
+<ExemploDbml arquivo="ref-relacoes" />
+
+## Erro comum: tabela inexistente
+
+```dbml
+Table produtos {
+  id bigint [pk]
+  fornecedor_id bigint
+}
+
+Ref: produtos.fornecedor_id > fornecedores.id
+```
+
+Diagnóstico: ``Table `fornecedores` does not exist``. Para coluna inexistente: ``Column `y` does not exist in `g2` ``. O arquivo `ref-relacoes.erro.dbml` reproduz o primeiro caso.
+
+## Outras mensagens do linter
+
+| Mensagem | Severidade | Causa |
+|---|---|---|
+| ``A column cannot reference itself (`t.id`)`` | Error | Origem e destino são a mesma coluna. |
+| ``Incomplete relation: expected `Ref: table.column > table.column` `` | Error | Faltou operador ou destino. |
+| ``Expected `Ref: table.column > table.column` `` | Error | `Ref` sem `:`. |
+| ``Incompatible types in relation: `a.x` is `int`, but `b.y` is `integer` `` | Warning | Os tipos dos dois lados são diferentes. |
+| ``Referenced column `t.c` is neither `pk` nor `unique` `` | Warning | O destino não é único. |
+| ``Self-referencing FK `t.c` is `not null` without a `default`, which prevents inserting the initial row`` | Warning | Autorreferência obrigatória e sem padrão. |
+| ``Circular foreign key dependency detected: a -> b -> a`` | Warning | Ciclo de chaves estrangeiras entre tabelas. |
+
+## Observações
+
+- O nome opcional (`Ref nome: ...`) é aceito, mas o produto **não o guarda** nem o mostra.
+- A forma longa em bloco do DBML oficial, `Ref nome { a.x > b.y }`, **não é suportada**: gera ``Expected `Ref: table.column > table.column` ``. Veja [Não suportado ainda](dbml-nao-suportado).
+- O operador `<>` **inline** (`ref: <> tabela.coluna`) é ignorado em silêncio: nenhuma relação é criada. Use `Ref: a.x <> b.y` no nível superior.
+- `Ref:` não aceita outras configurações além de `delete` e `update`; as demais são ignoradas.
+- No canvas, você cria e remove relações arrastando entre colunas; o app escreve uma linha `Ref:` no nível superior, sem tocar no resto do arquivo.

@@ -1,0 +1,120 @@
+---
+titulo: Organize the diagram
+descricao: Group tables, use colors and notes, apply auto-layout and move around large schemas with Focus mode, minimap, filter and legend.
+secao: guias
+ordem: 50
+modalidades: [desktop, web, vscode]
+---
+
+A readable diagram has clear domains (groups), colors that mean something, notes where a column name is not enough, and a layout that does not hide the relationships. The example below separates the catalog of a library from the circulation of its books.
+
+<ExemploDbml arquivo="guia-organizar" abas={["codigo", "diagrama"]} altura={420} />
+
+<Captura cena="organizar-grupos" alt="Library diagram with the autores, livros and exemplares tables in purple (group acervo) and leitores and emprestimos in orange (group circulacao)." />
+
+## What lives where
+
+- Groups, colors and notes live in the DBML (`TableGroup`, `headercolor` and `note`). Anyone who opens the file in another tool sees the same data.
+- Table positions, relationship style (straight or curved) and zoom live in the `<schema>.dbml.layout.json` sidecar.
+
+## Prerequisites
+
+- An open schema. To follow along, use the example above or your own.
+- To see the text next to the diagram, use <Atalho acao="ShowSplitView" /> (**Split view · DBML**).
+
+## Steps
+
+### 1. Group tables
+
+1. Select a table and **Shift-click** the others (or drag across the canvas background to lasso several).
+2. Group them with <Atalho acao="GroupSelection" /> (palette: **Group selected tables**), or click **Group selection** in the inspector.
+3. The group gets an automatic name (`group_1`, `group_2`, ...). Rename it in the DBML text: `TableGroup acervo [color: #9f85e5] { ... }`.
+4. Move a table to another group with the **Group** field in the inspector.
+5. Take a table out of its group with <Atalho acao="UngroupSelection" /> (**Ungroup table**).
+
+In DBML, a group is a simple block:
+
+```dbml
+TableGroup acervo [color: #9f85e5] {
+  autores
+  livros
+  exemplares
+}
+```
+
+### 2. Color the tables
+
+1. Select the table.
+2. In the inspector, under **GENERAL**, pick a color in **Color**. There are eight: Blue, Cyan, Green, Lime, Amber, Orange, Pink and Violet. **No color** removes the color.
+3. The choice becomes `headercolor` on the table: `Table livros [headercolor: #9f85e5] { ... }`.
+
+Pick few colors and give each a meaning (by domain, by team, by kind of data). The **Legend** (<Atalho acao="ToggleLegend" />, **Toggle legend**) reminds you what the key and FK icons and the relationships mean.
+
+### 3. Write notes
+
+1. Select the table and use the **Note** field in the inspector.
+2. For a column note, open the column under **COLUMNS** and fill in **Note**.
+
+<Modalidade so="desktop">
+The <Atalho acao="EditTableNote" /> shortcut (**Edit table note**) takes you straight to the field. Desktop only.
+</Modalidade>
+
+In DBML, a note is `note: '...'` on the table or the column.
+
+### 4. Apply auto-layout
+
+1. Use <Atalho acao="Relayout" /> (**Auto-layout**).
+2. The tables spread into layers following the relationships, and the tables of one group stay together.
+3. Fix by hand whatever does not look right. Drag the table; the position goes to the sidecar.
+4. Use <Atalho acao="FitView" /> (**Fit to screen**) to frame everything.
+
+### 5. Choose the relationship style
+
+1. Select a relationship.
+2. Use **Relationship: straight/curved** (no keyboard shortcut) to switch between straight and curved.
+3. To curve it by hand, drag the relationship handle or use the arrow keys. **Relationship: reset automatic curve** undoes the adjustment.
+
+The style goes in the sidecar. The DBML does not change.
+
+### 6. Move around large schemas
+
+**Focus mode.** Select a table and use <Atalho acao="ToggleFocusMode" /> (palette: **Modo Foco (vizinhança FK)**). The diagram dims everything that is not a foreign-key neighbor. Use <Atalho acao="CycleFocusDepth" /> (**Modo Foco: alternar 1-hop / 2-hop**) to see direct neighbors (1-hop) or also the neighbors of neighbors (2-hop). To leave, use the same shortcut again.
+
+<Captura cena="organizar-foco" alt="Focus mode on the emprestimos table: leitores and exemplares highlighted, the other tables dimmed." />
+
+**Minimap.** <Atalho acao="ToggleMinimap" /> (**Alternar minimapa**) shows or hides a thumbnail of the whole diagram.
+
+**Quick search.** <Atalho acao="QuickSearch" /> (**Busca rápida (tabelas, colunas, enums)**) finds any item by name.
+
+<Modalidade so="desktop">
+**Schema filter.** <Atalho acao="FilterExplorer" /> (**Toggle schema filter**) filters the table list in the sidebar. The list shows **GROUPS**, **UNGROUPED** and **TABLES**.
+</Modalidade>
+
+<Modalidade so="web,vscode">
+**Schema filter.** <Atalho acao="FilterExplorer" /> (**Filter tables in Explorer**) filters the table list in the sidebar. Open the list with <Atalho acao="ShowSchema" /> (**Show schema (tables)**).
+</Modalidade>
+
+**Zoom and hand.** <Atalho acao="ZoomIn" /> and <Atalho acao="ZoomOut" /> change the zoom. <Atalho acao="ToolHand" /> (**Hand tool (pan view)**) drags the view; <Atalho acao="ToolSelect" /> goes back to selecting.
+
+<Modalidade so="desktop">
+<Atalho acao="ResetZoom" /> (**Reset zoom (100%)**) goes back to 100%. Desktop only.
+</Modalidade>
+
+## Differences between modalities
+
+| Feature | Desktop | Web | VS Code |
+|---|---|---|---|
+| Group, colors, notes, auto-layout, Focus mode, minimap, legend | Yes | Yes | Yes |
+| Table note by shortcut | Yes | Through the inspector | Through the inspector |
+| Reset zoom to 100% | Yes | No | No |
+| Filter label in the palette | **Toggle schema filter** | **Filter tables in Explorer** | **Filter tables in Explorer** |
+
+## If something goes wrong
+
+| What you see | Likely cause | What to do |
+|---|---|---|
+| `Select tables (Shift-click) to group.` | No table was selected when you grouped. | Select one or more tables and repeat. |
+| Focus mode does nothing | No table is selected. | Select a table and turn the mode on again. |
+| `TableGroup without a name` in the **Problems** panel | The `TableGroup` block has no name. | Add a name: `TableGroup acervo { ... }`. |
+| Auto-layout did not fix a large schema | Too many tables in the same area. | Use <Atalho acao="FitView" />, the minimap and Focus mode to work in parts. |
+| Syntax question | Details of `TableGroup`, `headercolor` or `note`. | See [Tables and columns](../referencia/dbml-tabelas). |

@@ -1,0 +1,12 @@
+// Comentário de linha: o app preserva e nunca reescreve.
+Table vendas.clientes {
+  id bigint [pk, increment] // comentário no fim da linha
+  nome varchar(120) [not null]
+}
+
+// Nomes com espaço ou caracteres especiais precisam de aspas.
+Table "pedido item" {
+  id bigint [pk, increment]
+  "preço total" decimal(10, 2)
+  cliente_id bigint [ref: > vendas.clientes.id]
+}

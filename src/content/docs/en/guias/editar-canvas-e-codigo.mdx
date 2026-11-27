@@ -1,0 +1,118 @@
+---
+titulo: Edit on the canvas and in code
+descricao: Edit the schema from the diagram or from DBML text; both sides stay in sync, with undo, formatting and search.
+secao: guias
+ordem: 20
+modalidades: [desktop, web, vscode]
+---
+
+You edit the same schema in two ways: by dragging and clicking on the diagram, or by writing DBML. Every change on one side shows up on the other right away.
+
+<ExemploDbml arquivo="loja" abas={["codigo", "diagrama"]} />
+
+## How it works
+
+- The `.dbml` file is the source of truth. The canvas keeps no model of its own.
+- A canvas edit becomes a minimal patch to the text. Comments, order and formatting in the rest of the file stay as they were.
+- Table positions, relationship style and zoom live in the file next to it, `<schema>.dbml.layout.json`. The DBML stays valid for any other tool.
+
+## Prerequisites
+
+- An open `.dbml` file. If you do not have one yet, see [Installation](../comecar/instalacao).
+- To see code and diagram side by side, use the **Split** view.
+
+## Steps
+
+### 1. Pick a view
+
+1. Turn on the Split view with <Atalho acao="ShowSplitView" /> (palette: **Split view · DBML**). The editor appears next to the diagram.
+2. Use <Atalho acao="ShowDiagramView" /> (**Diagram view**) to keep only the canvas.
+3. Use <Atalho acao="ToggleEditor" /> (**Toggle DBML editor**) to open and close the editor without changing the view.
+
+<Modalidade so="desktop">
+Only the Desktop has a code-only view: <Atalho acao="ShowCodeView" /> (**Code view (editor only)**).
+</Modalidade>
+
+<Modalidade so="vscode">
+In VS Code, the file opens in the text editor by default. To open the canvas, use the button in the editor title bar or the **Abrir no canvas visual** command. The `dbmodeling.defaultEditor` setting changes this default to `canvas`.
+</Modalidade>
+
+<Captura cena="editar-dividido" alt="Split view: DBML editor on the left and the store diagram on the right, with the pedidos table selected." />
+
+### 2. Edit on the canvas
+
+1. Create a table with <Atalho acao="NewTable" /> (**New table**) and an enum with <Atalho acao="NewEnum" /> (**New enum**).
+2. Click a table to open the inspector. Toggle the panel with <Atalho acao="ToggleInspector" /> (**Toggle inspector**).
+3. In the inspector, edit the table name, color, group and note. Under **COLUMNS**, open a column to change its type, flags (PK, FK, not null, unique), default value, check and note. Under **INDEXES**, add indexes and pick the type.
+4. Create a relationship by dragging from a column to another table. To delete it, select the relationship and press `Del`: this removes the line and the FK column.
+5. Rename the selected table with <Atalho acao="RenameSelected" /> (**Rename table**). Delete it with <Atalho acao="DeleteSelection" /> (**Delete selected tables**).
+
+<Modalidade so="desktop">
+Duplicate the selected table with <Atalho acao="DuplicateTable" /> (**Duplicate table**). This command exists only on the Desktop.
+</Modalidade>
+
+### 3. Use column presets
+
+With a table selected, add ready-made columns from the palette or from the buttons below the column list in the inspector:
+
+| Preset | Palette command |
+|---|---|
+| UUID PK | **Add column preset: UUID PK** |
+| BigInt PK | **Add column preset: BigInt PK** |
+| Timestamps | **Add column preset: Timestamps** |
+| Soft Delete | **Add column preset: Soft Delete** |
+
+Presets have no keyboard shortcut. If the columns already exist, the product warns you and does not duplicate them.
+
+### 4. Edit in code
+
+1. Write DBML in the editor. The diagram updates as you type.
+2. Format the document with <Atalho acao="FormatDocument" /> (**Format document**).
+3. Move the current line with <Atalho acao="MoveLineUp" /> and <Atalho acao="MoveLineDown" /> (**Move line up** and **Move line down**).
+4. Open **Problems** with <Atalho acao="ShowProblems" /> (**Show problems**) to see the linter diagnostics, with the line of each one.
+
+<Modalidade so="desktop">
+To go from the diagram to the text, select a table and use <Atalho acao="RevealInDbml" /> (**Show table in DBML**). Desktop only.
+</Modalidade>
+
+### 5. Undo and redo
+
+- <Atalho acao="Undo" /> (**Undo**) and <Atalho acao="Redo" /> (**Redo**) cover canvas and code edits, in the same history.
+
+### 6. Find and run anything
+
+- <Atalho acao="QuickSearch" /> (**Busca rápida (tabelas, colunas, enums)**) searches tables, columns and enums by name.
+- <Atalho acao="OpenPalette" /> (**Command palette**) lists every command. Type part of the name, then use the arrow keys and `Enter`.
+- <Atalho acao="ShowShortcuts" /> (**Keyboard shortcuts**) shows the full list in the app. The list is also in [Shortcuts](../referencia/atalhos).
+
+### 7. Save
+
+- <Atalho acao="SaveFile" /> (**Save**) writes the `.dbml` and the layout sidecar.
+
+<Modalidade so="web">
+On the Web, the `dbml run` server writes the file to disk. If another program changes the file, the server notices the change (unless you use `--no-watch`).
+</Modalidade>
+
+<Aviso tipo="dica">
+Every command is also in the palette and has a keyboard shortcut where it makes sense. If you cannot find a button, search for its name with <Atalho acao="OpenPalette" />.
+</Aviso>
+
+## Differences between modalities
+
+| Feature | Desktop | Web | VS Code |
+|---|---|---|---|
+| Code-only view | Yes | No | Use the VS Code text editor |
+| Duplicate table | Yes | No | No |
+| Show table in DBML | Yes | No | No |
+| Edit table note by shortcut | Yes (<Atalho acao="EditTableNote" />) | Through the **Note** field in the inspector | Through the **Note** field in the inspector |
+
+## If something goes wrong
+
+| What you see | Likely cause | What to do |
+|---|---|---|
+| `Invalid table name: use letters, numbers and _.` | The name has a space or a symbol. | Use letters, numbers and `_`. The same applies to columns (`Invalid column name: use letters, numbers and _.`) and enum values. |
+| `Table '<name>' not found` | The table was renamed or removed in the text. | Select the table again and repeat the action. |
+| `<table>: columns already exist` | The preset was already applied. | Nothing to do; the product does not duplicate columns. |
+| `The file changed on disk. Save manually to confirm.` | Another program changed the file. | Compare the content and save with <Atalho acao="SaveFile" /> to overwrite, or reopen the file. |
+| `Disconnected from the server. Edits will not be saved.` (Web and VS Code) | The `dbml run` server stopped or the network dropped. | Restart `dbml run`. The app tries to reconnect on its own (`Reconnecting to the server…`). |
+| A DBML error in the **Problems** panel | The text does not follow the syntax. | See [Tables and columns](../referencia/dbml-tabelas) and [Known issues](../ajuda/problemas-conhecidos). |

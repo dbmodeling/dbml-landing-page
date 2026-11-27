@@ -1,0 +1,17 @@
+---
+titulo: VS Code extension
+descricao: Commands, settings and editors of the DB Modeling extension for VS Code, and how it behaves in untrusted workspaces.
+secao: referencia
+ordem: 140
+modalidades: [vscode]
+---
+
+The extension opens `.dbml` files in the visual canvas, with the same core as the other modalities (Wasm), and adds a **Esquemas DBML** sidebar. It requires VS Code 1.85 or newer.
+
+- The default editor for `.dbml` is the text one. To open the canvas, use **Abrir no canvas visual** in the title bar, or set `dbmodeling.defaultEditor` to `canvas`.
+- **Connect to database** uses the `dbml` CLI installed on the machine. The extension requires CLI version 0.1.4 or newer.
+- **Compare** mode uses Git `HEAD`.
+- In **untrusted workspaces**, the canvas and editor work, but the database connection and Compare mode are disabled. In **virtual workspaces** (for example, vscode.dev), the database connection is unavailable. See [Known issues](../ajuda/problemas-conhecidos#vs-code).
+- The extension updates through the VS Code Marketplace. See [Updates](../ajuda/atualizacoes).
+
+<RefVscode />

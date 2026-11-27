@@ -1,0 +1,85 @@
+---
+titulo: Install the VS Code extension
+descricao: Install the DB Modeling extension in VS Code from the Marketplace or from a .vsix file.
+secao: comecar
+ordem: 90
+modalidades: [vscode]
+---
+
+## Requirements
+
+- VS Code 1.85 or newer (or an editor compatible with VS Code extensions).
+- Nothing else to edit and see the canvas: the core is embedded in the extension (Wasm).
+- For **Connect to database**, the `dbml` CLI must be installed. It ships with the [Windows installer](instalacao-windows) and the [macOS](instalacao-macos) `.pkg`. On Linux there is no CLI package (see Known issues).
+
+## Install from the Marketplace
+
+1. In VS Code, open **Extensions** (`Ctrl+Shift+X`, or `Cmd+Shift+X` on macOS).
+2. Search for **DB Modeling** (publisher `dbmodeling`).
+3. Click **Install**.
+
+Or from the terminal:
+
+```bash
+code --install-extension dbmodeling.dbmodeling-vscode
+```
+
+## Install from a `.vsix` file
+
+Use this path if you cannot reach the Marketplace or want a specific version.
+
+1. Get the `.vsix` file for the version you want.
+2. In VS Code, open **Extensions**, click **...** (top right) and choose **Install from VSIX...**. Or from the terminal:
+
+   ```bash
+   code --install-extension dbmodeling-vscode-X.Y.Z.vsix
+   ```
+
+To build the `.vsix` from source:
+
+```bash
+cd vscode-extension
+npm run build
+npm run package
+```
+
+## Check that it worked
+
+1. Open **Extensions** and find **DB Modeling** under "Installed". The version shows next to the name.
+2. Open the VS Code command palette and type **DB Modeling**. You should see the four commands, whose titles are currently in Portuguese: **Abrir DB Modeling** (open the workbench), **Novo esquema DBML** (new schema), **Atualizar lista** (refresh the list) and **Abrir no canvas visual** (open in the visual canvas).
+3. The activity bar gets a **DB Modeling** icon with the **Esquemas DBML** list.
+
+By default, `.dbml` files open in the text editor. Use **Abrir no canvas visual** (button in the editor title bar) to open the canvas. To always open the canvas, set `dbmodeling.defaultEditor` to `canvas`.
+
+## Check integrity
+
+When installed from the Marketplace, VS Code verifies the extension. For a `.vsix` you got from someone else, the app releases' `SHA256SUMS.txt` does **not** list the `.vsix`. Agree on the hash with whoever built it and compare:
+
+```bash
+sha256sum dbmodeling-vscode-X.Y.Z.vsix
+```
+
+## Update
+
+- **Marketplace.** VS Code updates extensions by itself (default). To force it, open **Extensions**, click **...** and choose **Check for Extension Updates**.
+- **`.vsix`.** Install the new version's file over the old one.
+
+The extension has no updater of its own. See also [Updates](../ajuda/atualizacoes).
+
+## Uninstall
+
+In **Extensions**, click the gear on **DB Modeling** and choose **Uninstall**. Or:
+
+```bash
+code --uninstall-extension dbmodeling.dbmodeling-vscode
+```
+
+Your `.dbml` and `.dbml.layout.json` files are not touched.
+
+## Known issues
+
+- **Untrusted or virtual workspace** (for example, vscode.dev). The canvas and the editor work, but **Connect to database** is disabled. Trust the workspace to use the connection.
+- **`dbmodeling.cliPath`.** The extension calls `dbml` from your `PATH`. For another path, set `dbmodeling.cliPath` in your user settings. A workspace cannot set it. A path other than `dbml` asks for confirmation before first use.
+- **No CLI package on Linux.** The Linux packages contain only the Desktop app. To use **Connect to database** on Linux, build the CLI (`cargo build --release -p dbml-cli`) and point `dbmodeling.cliPath` to `target/release/dbml`. Or [import a SQL file](../guias/importar-sql).
+- **Oracle connection.** Not available yet.
+- Command and setting reference: [VS Code extension](../referencia/vscode). More cases: [Known issues](../ajuda/problemas-conhecidos).

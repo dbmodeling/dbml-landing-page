@@ -1,0 +1,60 @@
+// Diff mode baseline: without products.stock and with coupons (removed later).
+Project store {
+  database_type: 'PostgreSQL'
+  Note: 'Sample schema used across the documentation.'
+}
+
+Enum order_status {
+  pending
+  paid
+  shipped
+  canceled
+}
+
+Table customers {
+  id bigint [pk, increment]
+  name varchar(120) [not null]
+  email varchar(255) [not null, unique]
+  created_at timestamp [not null, default: `now()`]
+}
+
+Table products {
+  id bigint [pk, increment]
+  name varchar(160) [not null]
+  price decimal(10, 2) [not null]
+}
+
+Table orders {
+  id bigint [pk, increment]
+  customer_id bigint [not null, ref: > customers.id]
+  status order_status [not null, default: 'pending']
+  created_at timestamp [not null, default: `now()`]
+
+  Indexes {
+    (customer_id, created_at)
+  }
+}
+
+Table order_items {
+  order_id bigint [not null]
+  product_id bigint [not null]
+  quantity int [not null]
+  unit_price decimal(10, 2) [not null]
+
+  Indexes {
+    (order_id, product_id) [pk]
+  }
+}
+
+Ref: order_items.order_id > orders.id [delete: cascade]
+Ref: order_items.product_id > products.id
+
+Table coupons {
+  code varchar(20) [pk]
+  discount decimal(5, 2) [not null]
+}
+
+TableGroup sales [color: #2563EB] {
+  orders
+  order_items
+}

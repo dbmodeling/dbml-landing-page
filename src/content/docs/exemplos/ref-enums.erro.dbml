@@ -1,0 +1,5 @@
+// espera: Unknown type `status_pedido` on column `status`
+Table pedidos {
+  id bigint [pk]
+  status status_pedido
+}

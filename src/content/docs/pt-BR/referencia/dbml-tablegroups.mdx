@@ -1,0 +1,58 @@
+---
+titulo: DBML, TableGroup
+descricao: Agrupe tabelas com TableGroup, escolha a cor do grupo e veja os diagnósticos de grupo mal formado.
+secao: referencia
+ordem: 80
+modalidades: [desktop, web, vscode]
+---
+
+## Sintaxe
+
+```dbml
+TableGroup nome [color: #RRGGBB] {
+  tabela_a
+  schema.tabela_b
+}
+```
+
+O nome pode ter aspas duplas (`TableGroup "contas a receber" { ... }`). Cada linha do bloco é uma tabela, com `schema.` quando ela tem schema.
+
+## Configurações
+
+| Configuração | Valor | Efeito |
+|---|---|---|
+| `color` | cor hexadecimal, como `#2563EB` | Cor do grupo no canvas. |
+
+Outras configurações (como `note`) são aceitas e ignoradas.
+
+## Exemplo
+
+<ExemploDbml arquivo="ref-tablegroups" />
+
+No canvas, as tabelas do grupo aparecem dentro de um contorno com o nome e a cor do grupo. Para agrupar e desagrupar sem editar o texto, use <Atalho acao="GroupSelection" /> e <Atalho acao="UngroupSelection" />.
+
+## Erro comum: tabela inexistente
+
+```dbml
+Table pedidos {
+  id bigint [pk]
+}
+
+TableGroup compras {
+  pedidos
+  fornecedores
+}
+```
+
+Diagnóstico: ``Table `fornecedores` listed in group `compras` does not exist``. O arquivo `ref-tablegroups.erro.dbml` reproduz o caso.
+
+## Outras mensagens do linter
+
+| Mensagem | Causa |
+|---|---|
+| `TableGroup without a name` | `TableGroup { ... }` sem nome. |
+| ``TableGroup `nome` was not closed with `}` `` | Faltou a chave de fechamento. |
+
+## Observações
+
+- Os nomes das tabelas são conferidos contra as `Table` do arquivo, inclusive por alias.

@@ -1,0 +1,157 @@
+---
+titulo: Hospedar para o time
+descricao: Rode o dbml run em um servidor ou contêiner com token fixo, hosts permitidos e limite de conexões, e saiba o que nunca expor sem proteção.
+secao: guias
+ordem: 90
+modalidades: [web]
+---
+
+Você sobe o editor em uma máquina do time e as pessoas abrem o link no navegador, sem instalar nada. Quando o servidor está de pé, o terminal mostra o endereço com o token:
+
+```text
+  File:     /srv/schemas
+  Sidecar:  /srv/schemas.layout.json
+  Server:   http://127.0.0.1:3000/?token=<seu-token>
+
+  AVISO: O servidor escuta em 0.0.0.0, acessível pela rede. Quem tiver a URL com o token de sessão pode ler e editar os arquivos do workspace. Use apenas em redes confiáveis.
+```
+
+<Aviso tipo="perigo">
+**Nunca exponha o servidor sem token.** Quem alcança o servidor lê e grava os arquivos do workspace e pode usar a conexão com banco de dados. `--public-demo` desliga o token e existe só para demos descartáveis, com uma pasta sem dados reais. Não use em um servidor de trabalho, mesmo "só por um dia".
+</Aviso>
+
+## Como a proteção funciona
+
+Por padrão o servidor escuta só em `127.0.0.1` e gera um **token aleatório de 128 bits** a cada execução. As rotas `/ws` e `/api/*` respondem `401` sem o token. O servidor também confere os cabeçalhos `Host` e `Origin` para barrar ataques de DNS rebinding.
+
+| Flag | Variável | O que faz |
+|---|---|---|
+| `--host ENDEREÇO` | | Endereço de escuta. O padrão é `127.0.0.1`. Use `0.0.0.0` para aceitar a rede. |
+| `--token TOKEN` | `DBML_TOKEN` | Token fixo no lugar do aleatório. Mínimo de 16 caracteres, só `A-Z a-z 0-9 - _ . ~`. |
+| `--allowed-host HOST` | `DBML_ALLOWED_HOSTS` | `Host` extra aceito, além do loopback. Repita a flag ou separe por vírgula. |
+| `--max-connections N` | `DBML_MAX_CONNECTIONS` | Máximo de conexões WebSocket (uma por aba aberta). Padrão: 256. |
+| `--public-demo` | `DBML_PUBLIC_DEMO` | **Perigoso.** Desliga o token. |
+| `--no-open` | | Não abre o navegador. Use em servidores. |
+| `--no-watch` | | Não observa mudanças externas nos arquivos. |
+| `-p, --port` | | Porta. O padrão é `3000`. |
+
+O guia de referência completo está em [CLI](../referencia/cli).
+
+## Pré-requisitos
+
+- O binário `dbml` no servidor (veja [Instalação](../comecar/instalacao)) ou o Docker.
+- Uma pasta com os `.dbml` do time.
+- Para acesso fora da máquina, uma rede confiável (VPN, rede da empresa) ou um proxy reverso com HTTPS. O servidor fala HTTP puro.
+
+## Passos
+
+### 1. Gere um token
+
+```bash
+export DBML_TOKEN="$(openssl rand -hex 16)"
+```
+
+O token tem 32 caracteres. Guarde-o como segredo: quem tem a URL com o token edita seus arquivos.
+
+### 2. Suba o servidor
+
+```bash
+dbml run /srv/schemas --host 0.0.0.0 --port 3000 --no-open \
+  --token "$DBML_TOKEN" --allowed-host 192.168.1.5:3000
+```
+
+- A pasta passada (`/srv/schemas`) vira o workspace. Cada `.dbml` dela aparece na barra lateral.
+- `--allowed-host` precisa listar **exatamente** como as pessoas vão acessar. Veja a tabela a seguir.
+
+| Como as pessoas acessam | O que passar em `--allowed-host` |
+|---|---|
+| `http://192.168.1.5:3000` | `192.168.1.5:3000` (com a porta) |
+| `https://dbml.exemplo.com`, por um proxy reverso na porta 443 | `dbml.exemplo.com` (sem a porta) |
+| `http://localhost:3000` no próprio servidor | Nada: o loopback já vale |
+
+Sem a entrada certa, o navegador recebe `forbidden host or origin` (`403`). Curingas (`*`) são ignorados de propósito.
+
+### 3. Compartilhe o link
+
+Envie `http://192.168.1.5:3000/?token=<seu-token>` por um canal privado. Ao abrir, o app guarda o token na sessão do navegador e tira o parâmetro do endereço.
+
+Com `--token`, o link continua válido quando o servidor reinicia. Sem `--token`, o token muda a cada execução.
+
+### 4. Confira a saúde
+
+`GET /health` responde `{"status":"ok"}` sem exigir token. Use em monitoramento e balanceadores.
+
+### 5. Pare o servidor
+
+`Ctrl+C` ou `SIGTERM` (por exemplo, `docker stop`). O servidor termina as gravações pendentes e encerra.
+
+## Docker
+
+A imagem `ghcr.io/dbmodeling/dbml:latest` roda como usuário `dbml` (UID 1000), expõe a porta `3000` e usa a pasta `/workspace`. O comando padrão da imagem é:
+
+```text
+dbml /workspace --host 0.0.0.0 --port 3000 --no-open
+```
+
+Esse comando **não define token**: o servidor gera um token aleatório e o imprime nos logs (`docker logs`). Para um servidor do time, defina o token e os hosts por variáveis de ambiente.
+
+```bash
+docker run -d --name dbml \
+  -p 127.0.0.1:3000:3000 \
+  -e DBML_TOKEN="$DBML_TOKEN" \
+  -e DBML_ALLOWED_HOSTS=dbml.exemplo.com \
+  -v "$PWD/schemas:/workspace" \
+  ghcr.io/dbmodeling/dbml:latest
+```
+
+Com Compose:
+
+```yaml
+services:
+  dbml-web:
+    image: ghcr.io/dbmodeling/dbml:latest
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      DBML_TOKEN: ${DBML_TOKEN}
+      DBML_ALLOWED_HOSTS: dbml.exemplo.com
+    volumes:
+      - ./schemas:/workspace
+    restart: unless-stopped
+```
+
+Pontos de atenção:
+
+- `127.0.0.1:3000:3000` publica a porta só no loopback do host, para o proxy reverso na frente. O `docker-compose.yml` do repositório publica `3000` em todas as interfaces (`"${DBML_PORT:-3000}:3000"`): se for usá-lo, defina `DBML_TOKEN` e `DBML_ALLOWED_HOSTS`.
+- A pasta montada em `/workspace` precisa permitir escrita ao UID 1000, senão as edições não são salvas.
+- O contêiner tem `HEALTHCHECK` em `/health`.
+
+### Proxy reverso
+
+Coloque Nginx, Caddy ou Traefik na frente para ter HTTPS. O proxy deve:
+
+- Preservar o cabeçalho `Host` (o mesmo valor de `--allowed-host`).
+- Aceitar WebSocket em `/ws`.
+
+## Quem pode ver o quê
+
+- Quem tem o token lê e grava **todos** os `.dbml` da pasta. Não existe permissão por pessoa ou por arquivo.
+- A janela **Conectar ao banco** roda no servidor: quem tem o token pode tentar conexões a partir da rede do servidor. Veja [Conectar a um banco](../guias/conectar-banco).
+- Cada aba aberta usa uma conexão WebSocket. Acima do limite, as novas abas recebem `too many open connections (limit <N>); close another tab`. Aumente com `--max-connections`.
+
+## Se algo der errado
+
+| Mensagem | Causa provável | O que fazer |
+|---|---|---|
+| `missing or invalid session token` (`401`) | A URL está sem o token, ou o token mudou após um reinício. | Use o link completo com `?token=`. Para links estáveis, defina `--token`. |
+| `forbidden host or origin` (`403`) | O endereço usado no navegador não está em `--allowed-host`. | Inclua o `Host` exato (com a porta, se houver). Veja a tabela do passo 2. |
+| `too many open connections (limit <N>); close another tab` (`503`) | Abas demais abertas. | Feche abas ou aumente `--max-connections`. |
+| `Error: --token/DBML_TOKEN needs at least 16 characters` | Token curto. | Use 16 caracteres ou mais, por exemplo `openssl rand -hex 16`. |
+| `Error: --token/DBML_TOKEN accepts only A-Z a-z 0-9 - _ . ~` | O token tem espaço ou símbolo. | Use só os caracteres permitidos. |
+| `Error: --max-connections/DBML_MAX_CONNECTIONS must be at least 1` | Valor zero. | Use 1 ou mais. |
+| `Error: No .dbml file or folder specified and no previous session found. Usage: dbml <file.dbml \| folder>` | Faltou a pasta ou o arquivo. | Passe a pasta: `dbml run /srv/schemas`. |
+| ``Error: no free port for `<host>` between <N> and <M>`` | Todas as portas da faixa estão ocupadas. | Libere a porta ou escolha outra com `--port`. |
+| `Error: could not listen on <endereço>` | O sistema negou o uso do endereço ou da porta (por exemplo, portas abaixo de 1024 sem privilégio). | Use uma porta mais alta. |
+| O servidor subiu em outra porta e o link dá `403` | A porta pedida estava ocupada e o servidor usou a próxima livre. | Use a porta mostrada em `Server:` e ajuste `--allowed-host`. Em produção, libere a porta pedida. |
+| O servidor responde, mas as edições não persistem (Docker) | A pasta montada não é gravável para o UID 1000. | Ajuste o dono ou as permissões da pasta. |
+| `Sem conexão com o servidor. Edições não serão salvas.` | O servidor caiu ou o proxy não repassa o WebSocket. | Confira o processo e a configuração do proxy para `/ws`. |

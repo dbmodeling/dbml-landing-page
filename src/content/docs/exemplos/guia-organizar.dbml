@@ -1,0 +1,48 @@
+// Exemplo do guia "Organizar o diagrama": grupos, cores e notas.
+Project biblioteca {
+  database_type: 'PostgreSQL'
+  Note: 'Empréstimo de livros em uma biblioteca de bairro.'
+}
+
+Table autores [headercolor: #9f85e5, note: 'Pessoas que escrevem os livros.'] {
+  id bigint [pk, increment]
+  nome varchar(160) [not null, note: 'Nome como aparece na capa.']
+}
+
+Table livros [headercolor: #9f85e5] {
+  id bigint [pk, increment]
+  autor_id bigint [not null, ref: > autores.id]
+  titulo varchar(200) [not null]
+  isbn varchar(20) [unique]
+}
+
+Table exemplares [headercolor: #9f85e5, note: 'Cada cópia física de um livro.'] {
+  id bigint [pk, increment]
+  livro_id bigint [not null, ref: > livros.id]
+  codigo_barras varchar(32) [not null, unique]
+}
+
+Table leitores [headercolor: #589aed] {
+  id bigint [pk, increment]
+  nome varchar(120) [not null]
+  email varchar(255) [not null, unique]
+}
+
+Table emprestimos [headercolor: #df784e, note: 'Um empréstimo termina quando devolvido_em é preenchido.'] {
+  id bigint [pk, increment]
+  leitor_id bigint [not null, ref: > leitores.id]
+  exemplar_id bigint [not null, ref: > exemplares.id]
+  retirado_em timestamp [not null, default: `now()`]
+  devolvido_em timestamp
+}
+
+TableGroup acervo [color: #9f85e5] {
+  autores
+  livros
+  exemplares
+}
+
+TableGroup circulacao [color: #df784e] {
+  leitores
+  emprestimos
+}

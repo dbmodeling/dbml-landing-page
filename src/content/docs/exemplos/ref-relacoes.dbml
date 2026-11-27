@@ -1,0 +1,51 @@
+Table clientes {
+  id bigint [pk, increment]
+  nome varchar(120) [not null]
+}
+
+Table perfis {
+  id bigint [pk, increment]
+  cliente_id bigint [not null, unique]
+}
+
+Table pedidos {
+  id bigint [pk, increment]
+  // Relação inline: esta coluna aponta para clientes.id (muitos para um).
+  cliente_id bigint [not null, ref: > clientes.id]
+}
+
+Table produtos {
+  id bigint [pk, increment]
+  nome varchar(160) [not null]
+}
+
+Table itens_pedido {
+  pedido_id bigint [not null]
+  produto_id bigint [not null]
+  quantidade int [not null]
+
+  Indexes {
+    (pedido_id, produto_id) [pk]
+  }
+}
+
+// Relação em bloco, com ações de integridade.
+Ref: itens_pedido.pedido_id > pedidos.id [delete: cascade, update: no action]
+Ref: itens_pedido.produto_id > produtos.id [delete: restrict]
+
+// Um para um.
+Ref: perfis.cliente_id - clientes.id
+
+// Chave estrangeira composta.
+Table entregas {
+  pedido_id bigint [not null]
+  produto_id bigint [not null]
+  transportadora varchar(60)
+}
+Ref: entregas.(pedido_id, produto_id) > itens_pedido.(pedido_id, produto_id)
+
+// Muitos para muitos (a exportação SQL avisa que precisa de tabela de junção).
+Table tags {
+  id bigint [pk]
+}
+Ref: produtos.id <> tags.id

@@ -1,0 +1,22 @@
+Table clientes {
+  id bigint [pk, increment]
+}
+
+Table pedidos {
+  id bigint [pk, increment]
+  cliente_id bigint [ref: > clientes.id]
+}
+
+Table financeiro.faturas {
+  id bigint [pk, increment]
+  pedido_id bigint [ref: > pedidos.id]
+}
+
+TableGroup vendas [color: #2563EB] {
+  clientes
+  pedidos
+}
+
+TableGroup "contas a receber" [color: #16A34A] {
+  financeiro.faturas
+}

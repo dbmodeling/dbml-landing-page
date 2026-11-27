@@ -1,0 +1,89 @@
+---
+titulo: DBML, visão geral
+descricao: Como o DB Modeling lê DBML, o que é fonte da verdade, comentários, nomes com aspas, schemas e o que os diagnósticos significam.
+secao: referencia
+ordem: 10
+modalidades: [desktop, web, vscode]
+---
+
+O arquivo `.dbml` é a **fonte da verdade** do seu modelo. O canvas é uma visão desse texto: toda edição visual vira um patch textual mínimo no arquivo, e os comentários e a formatação que você escreveu ficam como estavam.
+
+O DB Modeling mantém o arquivo como **DBML válido**. Nada específico do app é gravado nele. Posições, estilo das relações e viewport ficam num arquivo separado, o [sidecar de layout](sidecar-layout).
+
+## Estrutura de um arquivo
+
+Um arquivo é uma lista de blocos no nível superior. As palavras-chave não diferenciam maiúsculas de minúsculas (`Table`, `table` e `TABLE` valem o mesmo).
+
+| Bloco | Página |
+|---|---|
+| `Project` | [Project](dbml-project) |
+| `Table` | [Tabelas](dbml-tabelas) e [Colunas](dbml-colunas) |
+| `Ref` | [Relações](dbml-relacoes) |
+| `Indexes` (dentro de `Table`) | [Índices](dbml-indices) |
+| `Enum` | [Enums](dbml-enums) |
+| `TableGroup` | [TableGroups](dbml-tablegroups) |
+| `Note` | [Notas](dbml-notas) |
+
+Exemplo com os elementos de base:
+
+<ExemploDbml arquivo="ref-visao-geral" />
+
+## Comentários
+
+Só o comentário de linha `//` é suportado. Ele vai até o fim da linha e pode aparecer sozinho ou depois de uma coluna.
+
+```dbml
+// Comentário sozinho na linha.
+Table clientes {
+  id bigint [pk] // comentário depois da coluna
+}
+```
+
+<Aviso tipo="cuidado">
+O comentário de bloco `/* ... */` do DBML oficial **não é reconhecido**. Dentro de uma tabela ele gera erros no linter (por exemplo, `Unknown type` na coluna `/`). No nível superior gera o aviso `Unrecognized construct`. Use `//` em cada linha. Veja [Não suportado ainda](dbml-nao-suportado).
+</Aviso>
+
+## Nomes com aspas
+
+Nomes simples usam letras, dígitos e `_`, e não começam por dígito. Para nomes com espaço, acento ou outros caracteres, use aspas duplas. Isso vale para tabelas, colunas, enums, valores de enum e grupos.
+
+```dbml
+Table "pedido item" {
+  "preço total" decimal(10, 2)
+}
+```
+
+## Schemas
+
+Para separar tabelas e enums por schema, qualifique o nome com `schema.nome`. O mesmo vale em relações, em `TableGroup` e no tipo de uma coluna de enum.
+
+```dbml
+Table vendas.clientes {
+  id bigint [pk]
+}
+
+Table vendas.pedidos {
+  id bigint [pk]
+  cliente_id bigint [ref: > vendas.clientes.id]
+}
+```
+
+Duas tabelas com o mesmo nome em schemas diferentes (`auth.users` e `billing.users`) são tabelas distintas. O canvas mostra o schema num selo no cabeçalho da tabela. Nas relações, `public.clientes` e `clientes` apontam para a mesma tabela quando ela não tem schema.
+
+## Strings
+
+Texto usa aspas simples: `'texto'`. Para várias linhas, use aspas triplas (`'''`). Expressões SQL cruas, em `default` e `check`, vão entre crases: `` `now()` ``. As crases são exportadas como estão para o SQL.
+
+## Diagnósticos
+
+O linter roda a cada edição e mostra os resultados no painel **Problemas** (<Atalho acao="ShowProblems" />) e sublinhados no editor.
+
+| Severidade | Quando |
+|---|---|
+| `Error` | O DBML não é válido: tipo desconhecido, tabela duplicada, relação para tabela inexistente, configuração desconhecida. |
+| `Warning` | Algo provavelmente errado, mas exportável: tipos incompatíveis numa relação, dependência circular, construção não reconhecida. |
+| `Info` | Observação, como tabela sem chave primária. |
+
+As mensagens não têm código estável e aparecem em inglês (a interface web traduz só algumas). A CLI recusa arquivos com `Error` nos comandos `export` e `diff`, com a mensagem `invalid DBML: ...`.
+
+Várias páginas de elemento mostram um exemplo que gera um diagnóstico e a mensagem exata.

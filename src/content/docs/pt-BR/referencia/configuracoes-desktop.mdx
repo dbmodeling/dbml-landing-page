@@ -1,0 +1,72 @@
+---
+titulo: Configurações do Desktop
+descricao: Chaves do arquivo settings.txt do app Desktop, valores aceitos, padrões e onde o arquivo fica em cada sistema.
+secao: referencia
+ordem: 150
+modalidades: [desktop]
+---
+
+O app Desktop guarda suas preferências num arquivo de texto simples, com uma linha `chave=valor`. Você muda quase tudo pela interface; edite o arquivo à mão só em casos específicos, como desligar o auto-update antes da primeira abertura.
+
+## Onde fica
+
+| Sistema | Arquivo |
+|---|---|
+| Windows | `%APPDATA%\db-modeling\settings.txt` |
+| Linux | `$XDG_CONFIG_HOME/db-modeling/settings.txt`, ou `~/.config/db-modeling/settings.txt` se `XDG_CONFIG_HOME` não existir |
+| macOS | `~/.config/db-modeling/settings.txt` (o app usa essa pasta, e não `~/Library`) |
+
+Na mesma pasta ficam também `session.json` (abas abertas, arquivos recentes e viewport de cada arquivo) e `update-notice.txt` (aviso de "Atualizado para X" depois do reinício).
+
+<Aviso tipo="dica">
+Feche o app antes de editar o arquivo: ele regrava `settings.txt` quando você muda uma preferência. Se o arquivo existir mas não puder ser lido, o app copia o original para `settings.txt.bak`, avisa na janela e usa os padrões.
+</Aviso>
+
+## Chaves
+
+| Chave | Valores | Padrão | Observações |
+|---|---|---|---|
+| `lang` | `pt-BR` ou `en` | ausente | Idioma da interface. Valor inválido equivale a ausente. |
+| `mode` | `light` ou `dark` | `dark` | Tema. Também alterna pela paleta (<Atalho acao="ToggleTheme" />). |
+| `translucent` | `true` ou `false` | depende do sistema | Interface translúcida. Sem a chave, o app liga quando o sistema suporta desfoque. |
+| `sidebar_w` | número de 120 a 1600 | `248` | Largura da barra lateral, em px. Fora da faixa volta ao padrão. |
+| `editor_w` | número de 120 a 1600 | `440` | Largura do editor de código, em px. |
+| `inspector_w` | número de 120 a 1600 | `288` | Largura do Inspector, em px. |
+| `col_type_w` | número de 60 a 400 | `110` | Largura da coluna de tipo nos cartões, em px. |
+| `ui_scale` | número de 0.75 a 2.0 | `1.0` | Escala da interface. Também por <Atalho acao="ZoomInUi" />, <Atalho acao="ZoomOutUi" /> e <Atalho acao="ResetUiZoom" />. |
+| `inspector_auto_hide` | `true` ou `false` | `true` | Recolhe o Inspector sozinho. Só o valor `false` desliga. |
+| `sidebar_open` | `true` ou `false` | `false` | Barra lateral aberta. |
+| `inspector_open` | `true` ou `false` | `true` | Inspector aberto. |
+| `onboarding_done` | `true` ou `false` | `false` | Marca o tour guiado como concluído. |
+| `last_seen_version` | texto de até 32 caracteres | ausente | Última versão cujas Novidades você viu. |
+| `auto_update` | `true` ou `false` | `true` | Checagem automática de atualização. Só o valor `false` desliga; qualquer outro texto mantém ligado. |
+
+Linhas desconhecidas são ignoradas.
+
+## Variáveis de ambiente
+
+| Variável | Efeito |
+|---|---|
+| `DBM_UPDATE_EXPLANATION` | Texto não vazio desliga **toda** checagem de atualização (inclusive a manual) e é mostrado no lugar da ação. Útil para quem empacota o app. |
+| `APPDATA`, `XDG_CONFIG_HOME`, `HOME` | Definem a pasta de configuração, nessa ordem de prioridade. |
+
+Detalhes do auto-update em [Atualizações](../ajuda/atualizacoes).
+
+## Exemplo
+
+```text
+lang=pt-BR
+mode=dark
+translucent=true
+sidebar_w=248
+editor_w=440
+inspector_w=288
+col_type_w=110
+ui_scale=1.00
+inspector_auto_hide=true
+sidebar_open=false
+inspector_open=true
+onboarding_done=true
+auto_update=true
+last_seen_version=0.4.3
+```

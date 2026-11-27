@@ -1,0 +1,70 @@
+---
+titulo: DBML not supported yet
+descricao: DBML specification elements DB Modeling does not understand yet and what the product does with each one today.
+secao: referencia
+ordem: 100
+modalidades: [desktop, web, vscode]
+---
+
+This page lists what from the DBML specification (and from tools such as dbdiagram) is **not yet** understood. Edits made through the canvas do not delete what the app does not understand, but those parts are neither drawn nor exported.
+
+## Summary
+
+| Element | What happens today |
+|---|---|
+| `TablePartial` and `~partial` | `Unrecognized construct` warning; the partial's columns do not enter the model. |
+| Sticky notes (top-level `Note name { ... }`) | Accepted without a diagnostic, kept in the text, **not** displayed or exported. |
+| `Records` | Keyword recognized, but the block lines give `Unrecognized construct`. The data is not read. |
+| `DiagramView` | `Unrecognized construct` warning; ignored. |
+| Block comment `/* ... */` | Not recognized. Inside a table it produces errors. |
+| `Ref name { ... }` (long block form) | `Error`: ``Expected `Ref: table.column > table.column` ``. |
+| Inline `<>` (`ref: <> t.c`) | Silently ignored, no relationship. |
+| Array types (`int[]`) and multi-word types (`double precision`) | `int[]`: empty-settings warning and the type is stored as `int`. `double precision`: `Error`. |
+| `checks { ... }` inside a table | Silently ignored (the column `check:` setting works). |
+| Unknown settings on `Table`, `Ref`, `Enum`, `TableGroup` and `Indexes` | Accepted without error and ignored. On **columns**, an unknown setting is an `Error`. |
+| `Ref` name and `Project` `database_type` | Accepted and kept, but with no effect. |
+
+## TablePartial
+
+Table partials, used to reuse columns, are not modeled:
+
+```dbml
+TablePartial campos_comuns {
+  criado_em timestamp
+}
+
+Table clientes {
+  id bigint [pk]
+}
+```
+
+Diagnostic shown today: ``Unrecognized construct: `TablePartial` `` (`Warning`). The linter also flags, line by line, the loose items in the block (such as `criado_em`). The file `ref-nao-suportado.erro.dbml` reproduces the case. If you inject a partial into a table with `~campos_comuns`, the result is worse: the line becomes a column named `~` and the linter reports ``Unknown type `campos_comuns` on column `~` ``.
+
+**What to do.** Copy the partial's columns into each table.
+
+## Sticky notes
+
+A named top-level `Note` is the official DBML *sticky note*. Here it is accepted and kept in the file, but the canvas draws nothing and SQL and documentation leave it out. Use the table, column or project note. See [Notes](dbml-notas).
+
+## Block comments
+
+The `/* ... */` comment is not recognized. Replace each line with `//`:
+
+```dbml
+// instead of /* explanation */
+Table clientes {
+  id bigint [pk] // instead of /* key */
+}
+```
+
+## Ref as a block
+
+```dbml
+// Not supported:
+Ref fk_pedidos_clientes {
+  pedidos.cliente_id > clientes.id
+}
+
+// Use:
+Ref fk_pedidos_clientes: pedidos.cliente_id > clientes.id
+```

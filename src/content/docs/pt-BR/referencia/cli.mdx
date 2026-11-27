@@ -1,0 +1,29 @@
+---
+titulo: CLI dbml
+descricao: "Referência dos comandos e opções da CLI dbml: run, export, docs, diff e import, com variáveis de ambiente e códigos de saída."
+secao: referencia
+ordem: 130
+modalidades: [web]
+---
+
+A CLI `dbml` serve o canvas no navegador (`dbml run`) e faz tarefas em lote sem abrir a interface: exportar SQL, gerar documentação, comparar arquivos e importar esquemas.
+
+```bash
+dbml run schema.dbml            # abre o canvas no navegador
+dbml schema.dbml                # atalho para o mesmo
+dbml export schema.dbml --format sql --dialect postgres -o schema.sql
+dbml diff antes.dbml depois.dbml
+```
+
+Pontos de atenção:
+
+- `dbml serve` é um alias de `dbml run`.
+- Sem `-o`, `export`, `docs` e `import` escrevem na saída padrão. Com `-o`, o arquivo não é sobrescrito sem `--force`.
+- `export` e `diff` recusam um arquivo com erro de DBML e dizem a linha e a coluna.
+- `dbml diff` sai com `0` quando os arquivos são iguais, `1` quando diferem e `2` em erro.
+- A sessão do servidor sempre usa um token. Ao escutar fora do loopback (`127.0.0.1`), o servidor mostra um aviso no terminal. Veja o guia de hospedagem e [Problemas conhecidos](../ajuda/problemas-conhecidos).
+- A senha da conexão com o banco vai por `--password-stdin` ou `DBML_PASSWORD`, nunca pela linha de comando.
+
+O texto de ajuda de cada opção vem do próprio `dbml --help` e aparece em inglês.
+
+<RefCli />

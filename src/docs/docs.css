@@ -1,0 +1,39 @@
+/* Estilos da aba Docs: tokens de sintaxe, realce de âncora e detalhes do prose. */
+
+  :root {
+    /* Tokens de sintaxe do DESIGN.md (Syntax Purple / Emerald / Sky) */
+    --syntax-purple: 263 70% 50%;       /* #6d28d9 */
+    --syntax-emerald: 162 93% 24%;      /* #047857 */
+    --syntax-sky: 200 97% 32%;          /* #0369a1 */
+  }
+  .dark {
+    --syntax-purple: 270 95% 75%;       /* #c084fc */
+    --syntax-emerald: 158 64% 52%;      /* #34d399 */
+    --syntax-sky: 199 89% 60%;          /* #38bdf8 */
+  }
+
+.docs-tok-kw { color: hsl(var(--syntax-purple)); font-weight: 600; }
+.docs-tok-con { color: hsl(var(--syntax-emerald)); }
+.docs-tok-ty { color: hsl(var(--syntax-sky)); }
+.docs-tok-num { color: hsl(var(--syntax-sky)); }
+.docs-tok-fn { color: hsl(var(--signal)); }
+.docs-tok-str { color: hsl(var(--foreground)); opacity: 0.82; }
+.docs-tok-com { color: hsl(var(--muted-foreground)); font-style: italic; }
+
+/* Âncora de destino: título ou linha de tabela piscam em Signal Blush */
+@keyframes docs-anchor-flash {
+  0%, 60% { background-color: hsl(var(--signal-soft)); box-shadow: inset 2px 0 0 hsl(var(--signal)); }
+  100% { background-color: transparent; box-shadow: inset 2px 0 0 transparent; }
+}
+.docs-anchor-flash { animation: docs-anchor-flash 2.4s ease-out; }
+tr.docs-anchor-flash > td { background-color: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-anchor-flash { animation: none; background-color: hsl(var(--signal-soft)); }
+}
+
+.docs-diagram { background: hsl(var(--card)); }
+
+/* Itens de lista e parágrafos dentro de avisos/abas não herdam margens duplas */
+.docs-prose li > ul, .docs-prose li > ol { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+.docs-prose > :where(*):first-child { margin-top: 0; }

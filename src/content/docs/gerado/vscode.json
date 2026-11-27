@@ -1,0 +1,68 @@
+{
+  "versao": "0.4.3",
+  "comandos": [
+    {
+      "id": "dbmodeling.newFile",
+      "titulo": "Novo esquema DBML",
+      "categoria": "DB Modeling"
+    },
+    {
+      "id": "dbmodeling.openCanvas",
+      "titulo": "Abrir no canvas visual",
+      "categoria": "DB Modeling"
+    },
+    {
+      "id": "dbmodeling.openWorkbench",
+      "titulo": "Abrir DB Modeling",
+      "categoria": "DB Modeling"
+    },
+    {
+      "id": "dbmodeling.refresh",
+      "titulo": "Atualizar lista",
+      "categoria": "DB Modeling"
+    }
+  ],
+  "configuracoes": [
+    {
+      "chave": "dbmodeling.cliPath",
+      "tipo": "string",
+      "padrao": "dbml",
+      "escopo": "machine",
+      "descricao": "Caminho da CLI `dbml` usada por \"Conectar ao banco\" (importação somente leitura do esquema). Só vale nas configurações do usuário; um workspace não pode defini-lo. Um caminho diferente de `dbml` pede confirmação antes do primeiro uso."
+    },
+    {
+      "chave": "dbmodeling.defaultEditor",
+      "tipo": "string",
+      "padrao": "text",
+      "escopo": "application",
+      "descricao": "Editor padrão para arquivos .dbml.",
+      "valores": [
+        {
+          "valor": "text",
+          "descricao": "Abre .dbml no editor de texto (diffs e conflitos do Source Control continuam em texto). Use o botão da barra de título para abrir o canvas."
+        },
+        {
+          "valor": "canvas",
+          "descricao": "Abre .dbml no canvas visual por padrão (grava workbench.editorAssociations nas configurações do usuário)."
+        }
+      ]
+    }
+  ],
+  "editores": [
+    {
+      "id": "dbmodeling.editor",
+      "nome": "Canvas DB Modeling",
+      "padroes": [
+        "*.dbml"
+      ],
+      "prioridade": "option"
+    }
+  ],
+  "workspace_nao_confiavel": "Em workspaces não confiáveis a conexão com o banco (execução da CLI dbml) fica desativada; o canvas e o editor DBML continuam disponíveis.",
+  "workspace_nao_confiavel_suporte": "limited",
+  "configuracoes_restritas": [
+    "dbmodeling.cliPath"
+  ],
+  "workspace_virtual": "Em workspaces virtuais (vscode.dev, repositórios remotos) o canvas e a edição DBML funcionam; a conexão com banco (CLI dbml) não está disponível.",
+  "workspace_virtual_suporte": "limited"
+}
